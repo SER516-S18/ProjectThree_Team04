@@ -83,11 +83,11 @@ public class App extends JFrame {
 
         if(_type == App.TYPE_CLIENT) {
             viewMenu = new ClientView(this);
-            this.setTitle("SER516 P2T4: Client");
+            this.setTitle("Client - SER516 Project Two: Team 4");
             Log.i("Application initializing as a Client", App.class);
         } else if(_type == App.TYPE_SERVER) {
             viewMenu = new ServerView(this);
-            this.setTitle("SER516 P2T4: Server");
+            this.setTitle("Server - SER516 Project Two: Team 4");
             Log.i("Application initializing as a Server", App.class);
         }
 
