@@ -78,12 +78,15 @@ public class Terminal {
         if(line.equalsIgnoreCase("help")) {
             Log.d("Valid commands include:" +
                     "\n\t- \"init (client | server)\" to initialize the app as a client or server" +
+                    "\n\t- \"port (#)\" to set the communication port number" +
                     "\n\t- \"help\" to view this help list.", Terminal.class);
         } else if (line.toLowerCase().startsWith("init") && words.length == 2) {
             if(words[1].equalsIgnoreCase("server"))
                 App.getInstance().setType(App.TYPE_SERVER);
             else if(words[1].equalsIgnoreCase("client"))
                 App.getInstance().setType(App.TYPE_CLIENT);
+        } else if (line.toLowerCase().startsWith("port") && words.length == 2 && Util.isInteger(words[1])) {
+            App.getInstance().port = Integer.parseInt(words[1]);
         } else {
             Log.d("Invalid command, type \"help\" for list of all commands", Terminal.class);
         }
