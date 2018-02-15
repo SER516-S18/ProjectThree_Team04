@@ -1,5 +1,7 @@
 package edu.asu.ser516.projecttwo.team04.ui;
 
+import edu.asu.ser516.projecttwo.team04.util.Log;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -25,23 +27,35 @@ public class App extends JFrame {
     public void setType(int type) {
         if(type != TYPE_CLIENT && type != TYPE_SERVER)
             throw new IllegalArgumentException("Type must be TYPE_CLIENT or TYPE_SERVER");
-        else
+        else {
             _type = type;
+            this.updateType();
+        }
     }
 
     public void init() {
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-        if(_type == App.TYPE_CLIENT)
-            menu = new AppClient(this);
-        else if(_type == App.TYPE_SERVER)
-            menu = new AppServer(this);
-
-        this.add(menu);
-
+        this.setTitle("SER516 Project Two: Team 4");
+        this.updateType();
         this.setVisible(true);
 
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+    }
+
+    private void updateType() {
+        menu = null;
+
+        if(_type == App.TYPE_CLIENT) {
+            menu = new AppClient(this);
+            this.setTitle("SER516 P2T4: Client");
+            Log.i("Application initializing as a Client", App.class);
+        } else if(_type == App.TYPE_SERVER) {
+            menu = new AppServer(this);
+            this.setTitle("SER516 P2T4: Server");
+            Log.i("Application initializing as a Server", App.class);
+        }
+
+        this.add(menu);
     }
 }

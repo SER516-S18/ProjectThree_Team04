@@ -50,14 +50,16 @@ public class Console {
     }
 
     public static void handle(String line) {
+        String[] words = line.split(" ");
         if(line.equalsIgnoreCase("help")) {
             Log.d("Valid commands include:" +
-                    "\n\t- Uh, we don't have much yet." +
+                    "\n\t- \"init (client | server)\" to initialize the app as a client or server" +
                     "\n\t- \"help\" to view this help list.", Console.class);
-        } else if (line.equalsIgnoreCase("server")) {
-            App.getInstance().setType(App.TYPE_SERVER);
-        } else if (line.equalsIgnoreCase("client")) {
-            App.getInstance().setType(App.TYPE_CLIENT);
+        } else if (line.toLowerCase().startsWith("init") && words.length == 2) {
+            if(words[1].equalsIgnoreCase("server"))
+                App.getInstance().setType(App.TYPE_SERVER);
+            else if(words[1].equalsIgnoreCase("client"))
+                App.getInstance().setType(App.TYPE_CLIENT);
         } else {
             Log.d("Invalid command, type \"help\" for list of all commands", Console.class);
         }
