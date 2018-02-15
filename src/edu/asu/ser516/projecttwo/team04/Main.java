@@ -1,8 +1,16 @@
 package edu.asu.ser516.projecttwo.team04;
 
 import edu.asu.ser516.projecttwo.team04.ui.App;
-import edu.asu.ser516.projecttwo.team04.util.Console;
+import edu.asu.ser516.projecttwo.team04.util.Terminal;
 import edu.asu.ser516.projecttwo.team04.util.Log;
+
+/**
+ * Main, contains Java main, arg processing, console initialization, and UI initialization
+ *
+ * @author  David Henderson (dchende2@asu.edu)
+ * @version 1.0
+ * @since   2018-02-15
+ */
 
 public class Main {
     private Main() {}
@@ -10,13 +18,18 @@ public class Main {
     public static void main(final String[] args) {
         Log.setPolicies(Log.POLICY.VERBOSE);
 
-        // Args
+        // Argument processing (to console)
         if (args.length > 0) {
             for (int i = 0; i < args.length; i++) {
                 String arg = args[i];
 
+                // Args - Log mode
+                if (arg.equalsIgnoreCase("-d") || arg.equalsIgnoreCase("--dev")) {
+                    Log.setPoliciesFromArg(args[i + 1]);
+                }
+
                 // Args - Pass others to console
-                if(arg.startsWith("-") && i < args.length - 1) {
+                else if(arg.startsWith("-") && i < args.length - 1) {
                     String line = "";
                     for (int j = i + 1; j < args.length; j++) {
                         String argj = args[j];
@@ -26,7 +39,7 @@ public class Main {
                         if ((argj.startsWith("-") || j == args.length - 1) && line.length() > 0) {
                             String temp = arg.substring(1) + line;
                             Log.i("Passing program argument \"" + temp + "\" to console", Main.class);
-                            Console.handle(temp);
+                            Terminal.handle(temp);
                             break;
                         }
                     }
@@ -35,7 +48,7 @@ public class Main {
         }
 
         // Start console
-        Console.get().start();
+        Terminal.get().start();
 
         // Start UI
         App.getInstance().init();
