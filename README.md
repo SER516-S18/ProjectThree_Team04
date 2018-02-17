@@ -9,5 +9,5 @@
 - Paulo Jaime
 - Saheb Johar
 - Jeb Johnson
-- Arjun Kalluri
+- Nagarjuna Kalluri
 - Sai Saran Kandimalla
