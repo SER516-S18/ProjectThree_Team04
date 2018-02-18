@@ -12,3 +12,4 @@
 - Jeb Johnson
 - Nagarjuna Kalluri
 - Sai Saran Kandimalla
+- Vineesha Kasam
