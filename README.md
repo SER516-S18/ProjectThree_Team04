@@ -5,6 +5,7 @@
 >
 - David Henderson ([@david-henderson](https://github.com/david-henderson) | dchende2 | davidhenderson@asu.edu)
 - Shreyas Hosahalli Govindaraja
+- Drishty Kapoor
 - Yiru Hu
 - Paulo Jaime
 - Saheb Johar
