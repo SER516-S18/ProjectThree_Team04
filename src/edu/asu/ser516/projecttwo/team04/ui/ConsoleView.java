@@ -26,7 +26,7 @@ public class ConsoleView extends JPanel {
 
     public void init() {
         this.setLayout(new BorderLayout());
-        this.setBorder(new EmptyBorder(8, 8, 8, 8));
+        this.setBorder(BorderFactory.createLineBorder(Color.black));
 
         labelHeader = new JLabel("Console:");
         labelHeader.setFont(UIStandards.DEFAULT_FONT);
@@ -34,14 +34,13 @@ public class ConsoleView extends JPanel {
 
         textareaLog = new JTextArea();
         textareaLog.setEditable(false);
-        textareaLog.setRows(8);
+        textareaLog.setRows(5);
         textareaLog.setOpaque(false);
         textareaLog.setFont(UIStandards.DEFAULT_FONT);
+        textareaLog.setLineWrap(true);
+        textareaLog.setWrapStyleWord(true);
+        this.add(textareaLog, BorderLayout.CENTER);
 
-        scrollpaneLog = new JScrollPane(textareaLog);
-        scrollpaneLog.setOpaque(false);
-        scrollpaneLog.setBorder(null);
-        this.add(scrollpaneLog, BorderLayout.CENTER);
 
         textfieldInput = new JTextField();
         textfieldInput.setOpaque(false);
