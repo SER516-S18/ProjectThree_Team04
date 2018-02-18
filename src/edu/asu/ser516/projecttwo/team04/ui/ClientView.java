@@ -21,8 +21,8 @@ public class ClientView extends JPanel {
 
         ClientModel.get().addListener(new ClientListener() {
             @Override
-            public void inputChanged(Integer newest, Integer min, Integer max, Integer avg) {
-                labelTemp.setText("Newest " + newest + " | Min " + min + " | Max " + max + " | Avg " + avg);
+            public void inputChanged(Integer min, Integer max, Integer avg) {
+                labelTemp.setText("Min " + min + " | Max " + max + " | Avg " + avg);
             }
 
             @Override

@@ -128,7 +128,7 @@ public class AppView extends JFrame {
 
             ClientModel.get().addListener(new ClientListener() {
                 @Override
-                public void inputChanged(Integer newest, Integer min, Integer max, Integer avg) {}
+                public void inputChanged(Integer min, Integer max, Integer avg) {}
 
                 @Override
                 public void started() {

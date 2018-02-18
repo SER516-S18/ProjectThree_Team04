@@ -38,11 +38,14 @@ public class ClientModel {
 
     private int PORT;
     private InetAddress HOST;
+    private int FREQUENCY;
+    private int CHANNEL_COUNT;
 
     private ArrayList<ClientListener> listeners = new ArrayList<>();
     private Socket socket;
     private boolean run = false;
 
+    private ArrayList<ClientChannel> channels = new ArrayList<>();
     private ArrayList<Integer> valueList = new ArrayList<>();
     private Integer valueMin = null;
     private Integer valueMax = null;
@@ -55,6 +58,8 @@ public class ClientModel {
     private ClientModel(int port, InetAddress host) {
         this.setHost(host);
         this.setPort(port);
+        this.setFrequency(5);
+        this.setChannelCount(1);
     }
 
     /**
@@ -66,7 +71,15 @@ public class ClientModel {
 
         try {
             socket = new Socket(HOST, PORT);
-            new Thread(new ClientWorker(socket)).start();
+
+            // Start an endpoint for the client to listen on
+            ClientEndpoint endpoint = new ClientEndpoint(socket);
+            new Thread(endpoint).start();
+
+            // Start a worker to deal with the input gathered from the endpoint
+            new Thread(new ClientWorker(endpoint)).start();
+
+            // Notify the client is now running
             run = true;
             this.notifyClientStarted();
         } catch (IOException e) {
@@ -144,9 +157,9 @@ public class ClientModel {
         }
     }
 
-    private void notifyClientInputChanged(Integer newest, Integer min, Integer max, Integer avg) {
+    private void notifyClientInputChanged(Integer min, Integer max, Integer avg) {
         for(ClientListener listener : listeners) {
-            listener.inputChanged(newest, min, max, avg);
+            listener.inputChanged(min, max, avg);
         }
     }
 
@@ -190,14 +203,67 @@ public class ClientModel {
         this.setHost(LOCALHOST);
     }
 
-    private class ClientWorker implements Runnable {
-        private Scanner scannerIn;
-        private PrintWriter writeOut;
+    /**
+     * Setter for client's frequency
+     * @param freq Client's frequency, must be > 0
+     */
+    public void setFrequency(int freq) {
+        if(freq < 1)
+            throw new IllegalArgumentException("Frequency must be greater than zero");
 
-        private ClientWorker(Socket socket) {
+        FREQUENCY = freq;
+    }
+
+    /**
+     * Getter for client's frequency
+     * @return frequency
+     */
+    public int getFrequency() {
+        return FREQUENCY;
+    }
+
+    /**
+     * Setter for channel count
+     * @param count Number of channels, must be > 0
+     */
+    public void setChannelCount(int count) {
+        if(count < 1)
+            throw new IllegalArgumentException("Channel count must be greater than zero");
+        else {
+            if(count > CHANNEL_COUNT) {
+                // Adding channels
+                for(int i = 0; i < count - CHANNEL_COUNT; i++) {
+                    channels.add(new ClientChannel());
+                }
+            } else if(count < CHANNEL_COUNT) {
+                // Removing channels
+                for(int i = CHANNEL_COUNT; i > count; i--) {
+                    channels.remove(i);
+                }
+            }
+
+            CHANNEL_COUNT = count;
+        }
+    }
+
+    /**
+     * Getter for channel count
+     * @return Number of channels
+     */
+    public int getChannelCount() {
+        return CHANNEL_COUNT;
+    }
+
+    /**
+     * ClientEndpoint - Class that simply continues to get input from the server at the server's frequency
+     */
+    private class ClientEndpoint implements Runnable {
+        private Scanner scannerIn;
+        private Integer value;
+
+        private ClientEndpoint(Socket socket) {
             try {
                 scannerIn = new Scanner(socket.getInputStream());
-                writeOut = new PrintWriter(socket.getOutputStream(), true);
             } catch (IOException e) {
                 Log.w("Client failed to read input stream (" + e.getMessage() + ")", ClientModel.class);
             }
@@ -205,37 +271,80 @@ public class ClientModel {
 
         @Override
         public void run() {
-            while(ClientModel.this.run && scannerIn.hasNext()) {
-                int value = scannerIn.nextInt();
+            while (ClientModel.this.run && scannerIn.hasNext()) {
+                value = scannerIn.nextInt();
+            }
+        }
 
-                // First value edge case
-                if(valueList.size() == 0) {
-                    valueMin = value;
-                    valueMax = value;
-                    valueAvg = value;
+        /**
+         * getValue - Gets the most recently received value
+         * @param clear - Whether to clear the value to null after getting
+         * @return value - Most recent value (or or null if not available)
+         */
+        public Integer getValue(boolean clear) {
+            if(clear) {
+                Integer temp = value;
+                value = null;
+                return temp;
+            } else {
+                return value;
+            }
+        }
+    }
+
+    private class ClientChannel {
+        ArrayList<Integer> values = new ArrayList<>();
+    }
+
+    private class ClientWorker implements Runnable {
+        private ClientEndpoint input;
+
+        private ClientWorker(ClientEndpoint endpoint) {
+            input = endpoint;
+        }
+
+        @Override
+        public void run() {
+            while(ClientModel.this.run) {
+                Integer value = input.getValue(false);
+
+                if(value != null) {
+                    // First value edge case
+                    if (valueList.size() == 0) {
+                        valueMin = value;
+                        valueMax = value;
+                        valueAvg = value;
+                    }
+
+                    // Average
+                    ClientModel.this.valueList.add(value);
+                    valueAvg = 0;
+                    for (int val : valueList)
+                        valueAvg += val;
+                    valueAvg /= valueList.size();
+
+                    // Minimum
+                    if (value < ClientModel.this.valueMin)
+                        ClientModel.this.valueMin = value;
+
+                    // Maximum
+                    if (value > ClientModel.this.valueMax)
+                        ClientModel.this.valueMax = value;
+
+                    // Notify listeners of the new value
+                    ClientModel.this.notifyClientInputChanged(valueMin, valueMax, valueAvg);
                 }
 
-                // Average
-                ClientModel.this.valueList.add( value );
-                valueAvg = 0;
-                for(int val : valueList)
-                    valueAvg += val;
-                valueAvg /= valueList.size();
-
-                // Minimum
-                if(value < ClientModel.this.valueMin)
-                    ClientModel.this.valueMin = value;
-
-                // Maximum
-                if(value > ClientModel.this.valueMax)
-                    ClientModel.this.valueMax = value;
-
-                // Notify listeners of the new value
-                ClientModel.this.notifyClientInputChanged(value, valueMin, valueMax, valueAvg);
+                // Sleep to meet Client's frequency
+                try {
+                    Thread.sleep(1000 / ClientModel.this.FREQUENCY);
+                } catch (InterruptedException e) {
+                    Log.w("Interrupted exception thrown while waiting for client frequency", ClientModel.class);
+                }
             }
 
             // We're no longer running, send null values
-            ClientModel.this.notifyClientInputChanged(null, null, null, null);
+            ClientModel.this.notifyClientInputChanged(null, null, null);
         }
     }
 }
