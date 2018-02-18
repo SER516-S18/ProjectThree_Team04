@@ -62,6 +62,7 @@ public class ClientModel {
 
         run = false;
         socket = null;
+        Log.i("Client shutdown successfully", ClientModel.class);
     }
 
     /**
@@ -109,7 +110,7 @@ public class ClientModel {
 
         @Override
         public void run() {
-            while(ClientModel.this.run) {
+            while(ClientModel.this.run && scannerIn.hasNext()) {
                 int val = scannerIn.nextInt();
                 Log.v("Client got " + val, ClientModel.class);
             }
