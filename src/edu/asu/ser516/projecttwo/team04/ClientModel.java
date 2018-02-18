@@ -5,6 +5,7 @@ import edu.asu.ser516.projecttwo.team04.listeners.ClientListener;
 import edu.asu.ser516.projecttwo.team04.util.Log;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -187,10 +188,12 @@ public class ClientModel {
 
     private class ClientWorker implements Runnable {
         private Scanner scannerIn;
+        private PrintWriter writeOut;
 
         private ClientWorker(Socket socket) {
             try {
                 scannerIn = new Scanner(socket.getInputStream());
+                writeOut = new PrintWriter(socket.getOutputStream(), true);
             } catch (IOException e) {
                 Log.w("Client failed to read input stream (" + e.getMessage() + ")", ClientModel.class);
             }

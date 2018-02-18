@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadLocalRandom;
@@ -200,22 +201,22 @@ public class ServerModel {
     }
 
     public class ServerWorker implements Runnable {
-        private final Socket client;
+        private final Socket socket;
         private final int id;
-        private DataOutputStream streamOut;
         private PrintWriter writeOut;
+        private Scanner scannerIn;
 
         public ServerWorker(Socket c, int clientID) {
-            client = c;
+            socket = c;
             this.id = clientID;
 
             try {
-                streamOut = new DataOutputStream(client.getOutputStream());
-                writeOut = new PrintWriter(streamOut, true);
+                writeOut = new PrintWriter(socket.getOutputStream(), true);
+                scannerIn = new Scanner(socket.getInputStream());
             } catch(IOException e1) {
                 Log.e("Failed to initialize data stream with client #" + id + " (" + e1.getMessage() + ")", ServerModel.class);
                 try {
-                    client.close();
+                    socket.close();
                 } catch(IOException e2) {
                     Log.e("Failed to close connection with client #" + id + " (" + e2.getMessage() + ")", ServerModel.class);
                 }
@@ -224,7 +225,7 @@ public class ServerModel {
 
         @Override
         public void run() {
-            while(ServerModel.this.run && client.isConnected()) {
+            while(ServerModel.this.run && socket.isConnected()) {
                 int val = ThreadLocalRandom.current().nextInt(ServerModel.this.VALUE_MIN, ServerModel.this.VALUE_MAX + 1);
                 writeOut.println(val);
 
