@@ -82,6 +82,7 @@ public class ServerModel {
 
         run = false;
         serverSocket = null;
+        Log.i("Server shutdown successfully", ServerModel.class);
     }
 
     /**

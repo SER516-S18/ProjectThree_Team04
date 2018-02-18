@@ -53,5 +53,26 @@ public class Main {
 
         // Start UI
         App.getInstance().init();
+
+        // Development testing
+        try {
+            ServerModel server = new ServerModel();
+            ClientModel client = new ClientModel();
+
+            // Loop starting up and shutting down in two second intervals
+            while(true) {
+                Thread.sleep(2000);
+
+                client.shutdown();
+                server.shutdown();
+
+                Thread.sleep(2000);
+
+                server.start();
+                client.start();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
