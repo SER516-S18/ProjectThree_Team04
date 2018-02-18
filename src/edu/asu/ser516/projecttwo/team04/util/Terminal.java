@@ -1,5 +1,7 @@
 package edu.asu.ser516.projecttwo.team04.util;
 
+import edu.asu.ser516.projecttwo.team04.ClientModel;
+import edu.asu.ser516.projecttwo.team04.ServerModel;
 import edu.asu.ser516.projecttwo.team04.ui.AppView;
 
 import java.util.Scanner;
@@ -86,7 +88,10 @@ public class Terminal {
             else if(words[1].equalsIgnoreCase("client"))
                 AppView.get().setType(AppView.TYPE_CLIENT);
         } else if (line.toLowerCase().startsWith("port") && words.length == 2 && Util.isInteger(words[1])) {
-            // TODO Removing from UI, put in model - AppView.get().port = Integer.parseInt(words[1]);
+            int port = Integer.parseInt(words[1]);
+            ClientModel.get().setPort(port);
+            ServerModel.get().setPort(port);
+            Log.d("Port set to " + port, Terminal.class);
         } else {
             Log.d("Invalid command, type \"help\" for list of all commands", Terminal.class);
         }
