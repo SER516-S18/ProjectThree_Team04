@@ -34,7 +34,7 @@ public class ConsoleView extends JPanel {
 
         textareaLog = new JTextArea();
         textareaLog.setEditable(false);
-        textareaLog.setRows(5);
+        textareaLog.setRows(8);
         textareaLog.setOpaque(false);
         textareaLog.setFont(UIStandards.DEFAULT_FONT);
         textareaLog.setLineWrap(true);
@@ -53,6 +53,11 @@ public class ConsoleView extends JPanel {
             textfieldInput.setText("");
         });
         this.add(textfieldInput, BorderLayout.PAGE_END);
+
+        scrollpaneLog = new JScrollPane(textareaLog);
+        scrollpaneLog.setOpaque(false);
+        scrollpaneLog.setBorder(null);
+        this.add(scrollpaneLog, BorderLayout.CENTER);
 
         // Subscribe and listen to new records
         Log.addRecordListener(record -> {
