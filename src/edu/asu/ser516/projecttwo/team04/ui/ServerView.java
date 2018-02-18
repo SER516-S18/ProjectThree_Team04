@@ -7,6 +7,7 @@ import javax.swing.*;
 
 /**
  * ServerView, the main UI for the server application
+ * @author  David Henderson (dchende2@asu.edu)
  */
 public class ServerView extends JPanel {
     private AppView parent;

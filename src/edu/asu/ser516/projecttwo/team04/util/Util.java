@@ -2,6 +2,7 @@ package edu.asu.ser516.projecttwo.team04.util;
 
 /**
  * Util, a utilities class for misc. functions
+ * @author  David Henderson (dchende2@asu.edu)
  */
 
 public class Util {

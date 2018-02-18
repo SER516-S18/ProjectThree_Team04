@@ -13,6 +13,7 @@ import java.awt.*;
 
 /**
  * AppView, the main app singleton frame that contains either the client or server UI
+ * @author  David Henderson (dchende2@asu.edu)
  */
 public class AppView extends JFrame {
     public static final int TYPE_CLIENT = 0;

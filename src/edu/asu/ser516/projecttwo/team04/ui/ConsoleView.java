@@ -9,6 +9,7 @@ import java.awt.*;
 
 /**
  * ConsoleView, UI element to display system messages through a console
+ * @author  David Henderson (dchende2@asu.edu)
  */
 public class ConsoleView extends JPanel {
     private JLabel labelHeader;

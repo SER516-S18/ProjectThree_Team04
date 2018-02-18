@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 /**
  * Log, a class that handles all system logging, to both terminal and console
+ * @author  David Henderson (dchende2@asu.edu)
  */
 public class Log {
     /**

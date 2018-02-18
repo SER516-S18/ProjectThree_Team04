@@ -7,6 +7,7 @@ import javax.swing.*;
 
 /**
  * ClientView, the main UI for the client application
+ * @author  David Henderson (dchende2@asu.edu)
  */
 public class ClientView extends JPanel {
     private AppView parent;

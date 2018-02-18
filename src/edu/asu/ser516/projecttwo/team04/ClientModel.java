@@ -1,6 +1,5 @@
 package edu.asu.ser516.projecttwo.team04;
 
-import com.sun.deploy.util.SessionState;
 import edu.asu.ser516.projecttwo.team04.listeners.ClientListener;
 import edu.asu.ser516.projecttwo.team04.util.Log;
 
@@ -11,6 +10,11 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+/**
+ * ClientModel, the main model for client
+ * @author  David Henderson (dchende2@asu.edu)
+ */
 
 public class ClientModel {
     private static InetAddress LOCALHOST;

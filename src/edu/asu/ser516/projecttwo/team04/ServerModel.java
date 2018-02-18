@@ -3,7 +3,6 @@ package edu.asu.ser516.projecttwo.team04;
 import edu.asu.ser516.projecttwo.team04.listeners.ServerListener;
 import edu.asu.ser516.projecttwo.team04.util.Log;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
@@ -16,7 +15,9 @@ import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * ServerModel - The center model for the server
+ * @author  David Henderson (dchende2@asu.edu)
  */
+
 @SuppressWarnings("unused")
 public class ServerModel {
     private static ServerModel _instance = null;
