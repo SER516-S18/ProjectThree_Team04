@@ -14,6 +14,7 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * ServerModel - The center model for the server
  */
+@SuppressWarnings("unused")
 public class ServerModel {
     private int VALUE_MIN;
     private int VALUE_MAX;
@@ -23,8 +24,7 @@ public class ServerModel {
     private ServerSocket serverSocket;
     private ExecutorService executors = Executors.newCachedThreadPool();
     private int clientID = 0;
-    private Thread thread;
-    private boolean run;
+    private boolean run = false;
 
     public ServerModel() {
         this(0, 1024, 5, 1516);
@@ -49,18 +49,18 @@ public class ServerModel {
         run = true;
         try {
             serverSocket = new ServerSocket(PORT);
-            thread = new Thread(() -> {
+            new Thread(() -> {
                 while (run) {
                     try {
                         Socket clientSocket = serverSocket.accept();
                         executors.execute(new ServerWorker(clientSocket, ++clientID));
+                        Log.v("Client #" + clientID + " connected successfully", ServerModel.class);
                     } catch(IOException e) {
                         Log.e("Failed to accept a socket connection to a client on port " + PORT, ServerModel.class);
                     }
                 }
-            });
+            }).start();
 
-            thread.start();
             Log.i("Server started on port " + PORT, ServerModel.class);
         } catch(IOException e) {
             Log.e("Failed to open a socket for the server on port " + PORT, ServerModel.class);
@@ -71,6 +71,9 @@ public class ServerModel {
      * shutdown - A method called to shut down the server
      */
     public void shutdown() {
+        if(!run)
+            throw new IllegalArgumentException("Server is already stopped");
+
         try {
             serverSocket.close();
         } catch (IOException e) {
@@ -79,7 +82,6 @@ public class ServerModel {
 
         run = false;
         serverSocket = null;
-        thread = null;
     }
 
     /**
@@ -92,7 +94,7 @@ public class ServerModel {
 
     /**
      * Setter for server's frequency
-     * @param freq
+     * @param freq Server's frequency
      */
     public void setFrequency(int freq) {
         if(freq < 1)
@@ -111,7 +113,7 @@ public class ServerModel {
 
     /**
      * Setter for the server's minimum value to send
-     * @param min
+     * @param min Minimum value the server will send
      */
     public void setValueMin(int min) {
         if(min > VALUE_MAX)
@@ -130,7 +132,7 @@ public class ServerModel {
 
     /**
      * Setter for the server's maximum value to send
-     * @param max
+     * @param max Maximum value the server will send
      */
     public void setValueMax(int max) {
         if(max < VALUE_MIN)
@@ -158,7 +160,7 @@ public class ServerModel {
 
     /**
      * Getter for server's port
-     * @return port
+     * @return port Server's port
      */
     public int getPort() {
         return PORT;
@@ -185,13 +187,15 @@ public class ServerModel {
                     Log.e("Failed to close connection with client #" + id + " (" + e2.getMessage() + ")", ServerModel.class);
                 }
             }
+
+            this.run();
         }
 
         @Override
         public void run() {
             while(client.isConnected()) {
                 int val = ThreadLocalRandom.current().nextInt(ServerModel.this.VALUE_MIN, ServerModel.this.VALUE_MAX + 1);
-                writeOut.print(val);
+                writeOut.println(val);
 
                 try {
                     Thread.sleep(1000 / ServerModel.this.FREQUENCY);
