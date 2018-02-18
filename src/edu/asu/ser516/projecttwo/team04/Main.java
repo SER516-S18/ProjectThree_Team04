@@ -6,6 +6,7 @@ import edu.asu.ser516.projecttwo.team04.util.Log;
 
 /**
  * Main, contains Java main, arg processing, console initialization, and UI initialization
+ * Pass "-init server" or "-init client" to start the program as a server or client
  *
  * @author  David Henderson (dchende2@asu.edu)
  * @version 1.0

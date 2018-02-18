@@ -86,7 +86,7 @@ public class Terminal {
             else if(words[1].equalsIgnoreCase("client"))
                 App.getInstance().setType(App.TYPE_CLIENT);
         } else if (line.toLowerCase().startsWith("port") && words.length == 2 && Util.isInteger(words[1])) {
-            App.getInstance().port = Integer.parseInt(words[1]);
+            // TODO Removing from UI, put in model - App.getInstance().port = Integer.parseInt(words[1]);
         } else {
             Log.d("Invalid command, type \"help\" for list of all commands", Terminal.class);
         }

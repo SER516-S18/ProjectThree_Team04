@@ -23,7 +23,6 @@ public class App extends JFrame {
         return _instance;
     }
 
-    public int port = 1516;
     private int _type = TYPE_CLIENT;
     private AppToolbar viewToolbar;
     private JPanel viewMenu;
@@ -82,13 +81,13 @@ public class App extends JFrame {
         }
 
         if(_type == App.TYPE_CLIENT) {
+            Log.i("Application initializing as a Client", App.class);
             viewMenu = new ClientView(this);
             this.setTitle("Client - SER516 Project Two: Team 4");
-            Log.i("Application initializing as a Client", App.class);
         } else if(_type == App.TYPE_SERVER) {
+            Log.i("Application initializing as a Server", App.class);
             viewMenu = new ServerView(this);
             this.setTitle("Server - SER516 Project Two: Team 4");
-            Log.i("Application initializing as a Server", App.class);
         }
 
         this.add(viewMenu, BorderLayout.CENTER);
