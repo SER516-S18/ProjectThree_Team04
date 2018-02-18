@@ -1,24 +1,28 @@
 package edu.asu.ser516.projecttwo.team04.ui;
 
-import edu.asu.ser516.projecttwo.team04.util.UIStandards;
+import edu.asu.ser516.projecttwo.team04.ClientModel;
+import edu.asu.ser516.projecttwo.team04.ServerModel;
+import edu.asu.ser516.projecttwo.team04.listeners.ClientListener;
+import edu.asu.ser516.projecttwo.team04.listeners.ServerListener;
 import edu.asu.ser516.projecttwo.team04.util.Log;
+import edu.asu.ser516.projecttwo.team04.util.UIStandards;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 /**
- * App, the main app singleton frame that contains either the client or server UI
+ * AppView, the main app singleton frame that contains either the client or server UI
  */
-public class App extends JFrame {
+public class AppView extends JFrame {
     public static final int TYPE_CLIENT = 0;
     public static final int TYPE_SERVER = 1;
 
-    private static App _instance = null;
+    private static AppView _instance = null;
 
-    public static App getInstance() {
+    public static AppView get() {
         if(_instance == null)
-            _instance = new App();
+            _instance = new AppView();
 
         return _instance;
     }
@@ -28,7 +32,7 @@ public class App extends JFrame {
     private JPanel viewMenu;
     private ConsoleView viewConsole;
 
-    private App() {}
+    private AppView() {}
 
     /**
      * Set whether the app is a client or server
@@ -44,7 +48,7 @@ public class App extends JFrame {
     }
 
     /**
-     * Initialize the App frame UI
+     * Initialize the AppView frame UI
      */
     public void init() {
         this.setMinimumSize(new Dimension(800, 600));
@@ -72,7 +76,7 @@ public class App extends JFrame {
     }
 
     /**
-     * Update the App with the correct UI (either client or server)
+     * Update the AppView with the correct UI (either client or server)
      */
     private void updateType() {
         if(viewMenu != null) {
@@ -80,12 +84,12 @@ public class App extends JFrame {
             viewMenu = null;
         }
 
-        if(_type == App.TYPE_CLIENT) {
-            Log.i("Application initializing as a Client", App.class);
+        if(_type == AppView.TYPE_CLIENT) {
+            Log.i("Application initializing as a Client", AppView.class);
             viewMenu = new ClientView(this);
             this.setTitle("Client - SER516 Project Two: Team 4");
-        } else if(_type == App.TYPE_SERVER) {
-            Log.i("Application initializing as a Server", App.class);
+        } else if(_type == AppView.TYPE_SERVER) {
+            Log.i("Application initializing as a Server", AppView.class);
             viewMenu = new ServerView(this);
             this.setTitle("Server - SER516 Project Two: Team 4");
         }
@@ -98,7 +102,7 @@ public class App extends JFrame {
     /**
      * AppToolbar, the toolbar with the start/stop button
      */
-    private static class AppToolbar extends JToolBar {
+    private class AppToolbar extends JToolBar {
         private JButton buttonToggle;
 
         public AppToolbar() {
@@ -107,11 +111,63 @@ public class App extends JFrame {
             this.setFloatable(false);
             this.add(Box.createHorizontalGlue());
 
-            buttonToggle = new JButton("Start / Stop");
+            ServerModel.get().addListener(new ServerListener() {
+                @Override
+                public void started() {
+                    if(AppView.this.isServer())
+                        buttonToggle.setText("Stop");
+                }
+
+                @Override
+                public void shutdown() {
+                    if(AppView.this.isServer())
+                        buttonToggle.setText("Start");
+                }
+            });
+
+            ClientModel.get().addListener(new ClientListener() {
+                @Override
+                public void inputChanged(Integer newest, Integer min, Integer max, Integer avg) {}
+
+                @Override
+                public void started() {
+                    if(AppView.this.isClient())
+                        buttonToggle.setText("Stop");
+                }
+
+                @Override
+                public void shutdown() {
+                    if(AppView.this.isClient())
+                        buttonToggle.setText("Start");
+                }
+            });
+
+            buttonToggle = new JButton("Start");
             buttonToggle.setFont(UIStandards.DEFAULT_FONT);
             buttonToggle.setBackground(UIStandards.BACKGROUND_PINK);
             buttonToggle.setFocusPainted(false);
+            buttonToggle.addActionListener(e -> {
+                if(AppView.this.isServer()) {
+                    if (ServerModel.get().isRunning())
+                        ServerModel.get().shutdown();
+                    else
+                        ServerModel.get().start();
+                } else {
+                    if(ClientModel.get().isRunning())
+                        ClientModel.get().shutdown();
+                    else
+                        ClientModel.get().start();
+                }
+            });
             this.add(buttonToggle);
         }
+    }
+
+    public boolean isClient() {
+        return _type == TYPE_CLIENT;
+    }
+
+    public boolean isServer() {
+        return  _type == TYPE_SERVER;
     }
 }

@@ -1,7 +1,7 @@
 package edu.asu.ser516.projecttwo.team04.ui;
 
-import edu.asu.ser516.projecttwo.team04.util.UIStandards;
 import edu.asu.ser516.projecttwo.team04.util.Log;
+import edu.asu.ser516.projecttwo.team04.util.UIStandards;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

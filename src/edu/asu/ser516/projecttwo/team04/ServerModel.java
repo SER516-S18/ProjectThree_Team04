@@ -1,5 +1,6 @@
 package edu.asu.ser516.projecttwo.team04;
 
+import edu.asu.ser516.projecttwo.team04.listeners.ServerListener;
 import edu.asu.ser516.projecttwo.team04.util.Log;
 
 import java.io.DataOutputStream;
@@ -7,6 +8,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadLocalRandom;
@@ -16,31 +18,39 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 @SuppressWarnings("unused")
 public class ServerModel {
+    private static ServerModel _instance = null;
+
+    public static ServerModel get() {
+        if(_instance == null)
+            _instance = new ServerModel();
+
+        return _instance;
+    }
+
     private int VALUE_MIN;
     private int VALUE_MAX;
     private int FREQUENCY;
     private int PORT;
 
+    private ArrayList<ServerListener> listeners = new ArrayList<>();
     private ServerSocket serverSocket;
     private ExecutorService executors = Executors.newCachedThreadPool();
     private int clientID = 0;
     private boolean run = false;
 
-    public ServerModel() {
+    private ServerModel() {
         this(0, 1024, 5, 1516);
     }
 
-    public ServerModel(int min, int max, int frequency, int port) {
+    private ServerModel(int min, int max, int frequency, int port) {
         this.setValueMin(min);
         this.setValueMax(max);
         this.setFrequency(frequency);
         this.setPort(port);
-
-        this.start();
     }
 
     /**
-     * start - A method called to start the server (called automatically in constructor)
+     * start - A method called to start the server
      */
     public void start() {
         if(run)
@@ -61,7 +71,7 @@ public class ServerModel {
                 }
             }).start();
 
-            Log.i("Server started on port " + PORT, ServerModel.class);
+            this.notifyServerStarted();
         } catch(IOException e) {
             Log.e("Failed to open a socket for the server on port " + PORT, ServerModel.class);
         }
@@ -75,14 +85,15 @@ public class ServerModel {
             throw new IllegalArgumentException("Server is already stopped");
 
         try {
-            serverSocket.close();
+            if(serverSocket != null)
+                serverSocket.close();
         } catch (IOException e) {
             Log.w("Failed to close server socket (" + e.getMessage() + ")", ServerModel.class);
         }
 
         run = false;
         serverSocket = null;
-        Log.i("Server shutdown successfully", ServerModel.class);
+        this.notifyServerShutdown();
     }
 
     /**
@@ -91,6 +102,27 @@ public class ServerModel {
      */
     public boolean isRunning() {
         return run;
+    }
+
+    public void addListener(ServerListener listener) {
+        if(listener == null)
+            throw new IllegalArgumentException("Listener must not be null");
+        else
+            listeners.add(listener);
+    }
+
+    private void notifyServerShutdown() {
+        Log.i("Server shutdown successfully", ServerModel.class);
+        for(ServerListener listener : listeners) {
+            listener.shutdown();
+        }
+    }
+
+    private void notifyServerStarted() {
+        Log.i("Server started on port " + PORT, ServerModel.class);
+        for(ServerListener listener : listeners) {
+            listener.started();
+        }
     }
 
     /**
@@ -188,13 +220,11 @@ public class ServerModel {
                     Log.e("Failed to close connection with client #" + id + " (" + e2.getMessage() + ")", ServerModel.class);
                 }
             }
-
-            this.run();
         }
 
         @Override
         public void run() {
-            while(client.isConnected()) {
+            while(ServerModel.this.run && client.isConnected()) {
                 int val = ThreadLocalRandom.current().nextInt(ServerModel.this.VALUE_MIN, ServerModel.this.VALUE_MAX + 1);
                 writeOut.println(val);
 

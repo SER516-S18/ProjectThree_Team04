@@ -1,8 +1,8 @@
 package edu.asu.ser516.projecttwo.team04;
 
-import edu.asu.ser516.projecttwo.team04.ui.App;
-import edu.asu.ser516.projecttwo.team04.util.Terminal;
+import edu.asu.ser516.projecttwo.team04.ui.AppView;
 import edu.asu.ser516.projecttwo.team04.util.Log;
+import edu.asu.ser516.projecttwo.team04.util.Terminal;
 
 /**
  * Main, contains Java main, arg processing, console initialization, and UI initialization
@@ -52,27 +52,6 @@ public class Main {
         Terminal.get().start();
 
         // Start UI
-        App.getInstance().init();
-
-        // Development testing
-        try {
-            ServerModel server = new ServerModel();
-            ClientModel client = new ClientModel();
-
-            // Loop starting up and shutting down in two second intervals
-            while(true) {
-                Thread.sleep(2000);
-
-                client.shutdown();
-                server.shutdown();
-
-                Thread.sleep(2000);
-
-                server.start();
-                client.start();
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        AppView.get().init();
     }
 }

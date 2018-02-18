@@ -1,6 +1,6 @@
 package edu.asu.ser516.projecttwo.team04.util;
 
-import edu.asu.ser516.projecttwo.team04.ui.App;
+import edu.asu.ser516.projecttwo.team04.ui.AppView;
 
 import java.util.Scanner;
 
@@ -82,11 +82,11 @@ public class Terminal {
                     "\n\t- \"help\" to view this help list.", Terminal.class);
         } else if (line.toLowerCase().startsWith("init") && words.length == 2) {
             if(words[1].equalsIgnoreCase("server"))
-                App.getInstance().setType(App.TYPE_SERVER);
+                AppView.get().setType(AppView.TYPE_SERVER);
             else if(words[1].equalsIgnoreCase("client"))
-                App.getInstance().setType(App.TYPE_CLIENT);
+                AppView.get().setType(AppView.TYPE_CLIENT);
         } else if (line.toLowerCase().startsWith("port") && words.length == 2 && Util.isInteger(words[1])) {
-            // TODO Removing from UI, put in model - App.getInstance().port = Integer.parseInt(words[1]);
+            // TODO Removing from UI, put in model - AppView.get().port = Integer.parseInt(words[1]);
         } else {
             Log.d("Invalid command, type \"help\" for list of all commands", Terminal.class);
         }
