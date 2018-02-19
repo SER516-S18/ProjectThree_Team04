@@ -31,7 +31,7 @@ public class ConsoleView extends JPanel {
 
         textareaLog = new JTextArea();
         textareaLog.setEditable(false);
-        textareaLog.setRows(8);
+        textareaLog.setRows(6);
         textareaLog.setOpaque(false);
         textareaLog.setFont(UIStandards.SMALL_FONT);
         textareaLog.setLineWrap(true);
