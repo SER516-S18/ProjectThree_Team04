@@ -7,6 +7,10 @@ import edu.asu.ser516.projecttwo.team04.util.Log;
 import edu.asu.ser516.projecttwo.team04.util.UIStandards;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -19,7 +23,9 @@ import java.text.NumberFormat;
  */
 public class ClientView extends JPanel {
     private AppView parent;
-    private JLabel labelTemp;
+    private JTextPane maxValTextPanel;
+    private JTextPane minValTextPanel;
+    private JTextPane avgValTextPanel;
 
     public ClientView(AppView appView) {
         parent = appView;
@@ -38,6 +44,7 @@ public class ClientView extends JPanel {
         clientPanel.add(graphView);
 
         JLabel maxValLabel = new JLabel(AppConstants.HIGHEST_VALUE_STRING, JLabel.CENTER);
+        maxValLabel.setFont(UIStandards.DEFAULT_FONT);
         maxValLabel.setHorizontalAlignment(JLabel.CENTER);
         maxValLabel.setVerticalAlignment(JLabel.CENTER);
 
@@ -48,7 +55,9 @@ public class ClientView extends JPanel {
         maxValLabelPanel.add(maxValLabel);
         clientPanel.add(maxValLabelPanel);
 
-        JTextPane maxValTextPanel = new JTextPane();
+        maxValTextPanel = new JTextPane();
+        maxValTextPanel.setText("-");
+        maxValTextPanel.setFont(UIStandards.DEFAULT_FONT);
         maxValTextPanel.setEditable(false);
         maxValTextPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         maxValTextPanel.setBounds(650, 16, 86, 59);
@@ -56,6 +65,7 @@ public class ClientView extends JPanel {
         clientPanel.add(maxValTextPanel);
 
         JLabel minValLabel = new JLabel(AppConstants.LOWEST_VALUE_STRING, JLabel.CENTER);
+        minValLabel.setFont(UIStandards.DEFAULT_FONT);
         minValLabel.setHorizontalAlignment(JLabel.CENTER);
         minValLabel.setVerticalAlignment(JLabel.CENTER);
 
@@ -66,25 +76,30 @@ public class ClientView extends JPanel {
         minValLabelPanel.add(minValLabel);
         clientPanel.add(minValLabelPanel);
 
-        JTextPane minValTextPanel = new JTextPane();
+        minValTextPanel = new JTextPane();
+        minValTextPanel.setText("-");
+        minValTextPanel.setFont(UIStandards.DEFAULT_FONT);
         minValTextPanel.setEditable(false);
         minValTextPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         minValTextPanel.setBounds(650, 91, 86, 59);
         minValTextPanel.setBackground(UIStandards.BACKGROUND_BLUE);
         clientPanel.add(minValTextPanel);
 
-        JLabel average = new JLabel(AppConstants.AVERAGE_VALUE_STRING, JLabel.CENTER);
-        average.setHorizontalAlignment(JLabel.CENTER);
-        average.setVerticalAlignment(JLabel.CENTER);
+        JLabel averageLabel = new JLabel(AppConstants.AVERAGE_VALUE_STRING, JLabel.CENTER);
+        averageLabel.setFont(UIStandards.DEFAULT_FONT);
+        averageLabel.setHorizontalAlignment(JLabel.CENTER);
+        averageLabel.setVerticalAlignment(JLabel.CENTER);
 
         JPanel avgValLabelPanel = new JPanel();
         avgValLabelPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         avgValLabelPanel.setBounds(555, 166, 88, 59);
         avgValLabelPanel.setBackground(UIStandards.BACKGROUND_BLUE);
-        avgValLabelPanel.add(average);
+        avgValLabelPanel.add(averageLabel);
         clientPanel.add(avgValLabelPanel);
 
-        JTextPane avgValTextPanel = new JTextPane();
+        avgValTextPanel = new JTextPane();
+        avgValTextPanel.setText("-");
+        avgValTextPanel.setFont(UIStandards.DEFAULT_FONT);
         avgValTextPanel.setEditable(false);
         avgValTextPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         avgValTextPanel.setBounds(650, 166, 86, 59);
@@ -92,6 +107,7 @@ public class ClientView extends JPanel {
         clientPanel.add(avgValTextPanel);
 
         JLabel channelLabel = new JLabel(AppConstants.CHANNELS_VALUE_STRING, JLabel.CENTER);
+        channelLabel.setFont(UIStandards.DEFAULT_FONT);
         channelLabel.setHorizontalAlignment(JLabel.CENTER);
         channelLabel.setVerticalAlignment(JLabel.CENTER);
 
@@ -102,22 +118,21 @@ public class ClientView extends JPanel {
         channelLabelPanel.add(channelLabel);
         clientPanel.add(channelLabelPanel);
 
-        JComboBox<String> channelValue = new JComboBox<>(UIStandards.NUMBER_OF_CHANNELS);
+        JSpinner channelValue = new JSpinner( new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1) );
         channelValue.setVisible(true);
         channelValue.setBorder(BorderFactory.createLineBorder(Color.black));
         channelValue.setBounds(650, 246, 86, 59);
-        channelValue.setBackground(UIStandards.BACKGROUND_BLUE);
-        channelValue.addActionListener(new ActionListener() {
-
+        channelValue.getEditor().getComponent(0).setBackground(UIStandards.BACKGROUND_BLUE);
+        channelValue.addChangeListener(new ChangeListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                String selectedValue = (String) channelValue.getSelectedItem();
-                Log.e("Channel selected - " + selectedValue, ClientView.class);
+            public void stateChanged(ChangeEvent e) {
+                ClientModel.get().setChannelCount((Integer) channelValue.getValue());
             }
         });
         clientPanel.add(channelValue);
 
         JLabel frequencyLabel = new JLabel(AppConstants.FREQUENCY_VALUE_STRING, JLabel.CENTER);
+        frequencyLabel.setFont(UIStandards.DEFAULT_FONT);
         frequencyLabel.setHorizontalAlignment(JLabel.CENTER);
         frequencyLabel.setVerticalAlignment(JLabel.CENTER);
 
@@ -132,6 +147,31 @@ public class ClientView extends JPanel {
         frequencyTextPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         frequencyTextPanel.setBounds(650, 326, 86, 59);
         frequencyTextPanel.setBackground(UIStandards.BACKGROUND_PINK);
+        frequencyTextPanel.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent event) {
+                try {
+                    int freq = Integer.parseInt(frequencyTextPanel.getText());
+                    ClientModel.get().setFrequency(freq);
+                } catch(NumberFormatException e) {
+                    Log.w("Invalid frequency entered, must be an integer (" + e.getMessage() + ")", ClientView.class);
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent event) {
+                try {
+                    int freq = Integer.parseInt(frequencyTextPanel.getText());
+                    ClientModel.get().setFrequency(freq);
+                } catch(NumberFormatException e) {
+                    Log.w("Invalid frequency entered, must be an integer (" + e.getMessage() + ")", ClientView.class);
+                }
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) { }
+        });
+        frequencyTextPanel.setText(Integer.toString(ClientModel.get().getFrequency()));
         clientPanel.add(frequencyTextPanel);
 
         parent.add(clientPanel);
@@ -140,12 +180,14 @@ public class ClientView extends JPanel {
         ClientModel.get().addListener(new ClientListener() {
             @Override
             public void changedValues() {
-                labelTemp.setText("Min " + ClientModel.get().getMinimum() + " | Max " + ClientModel.get().getMaximum() + " | Avg " + ClientModel.get().getAverage() + " | Channels " + ClientModel.get().getChannelCount());
+                ClientView.this.minValTextPanel.setText( ClientModel.get().getMinimum() == null ? "-" : Integer.toString(ClientModel.get().getMinimum()) );
+                ClientView.this.maxValTextPanel.setText( ClientModel.get().getMaximum() == null ? "-" : Integer.toString(ClientModel.get().getMaximum()) );
+                ClientView.this.avgValTextPanel.setText( ClientModel.get().getAverage() == null ? "-" : Integer.toString(ClientModel.get().getAverage()) );
             }
 
             @Override
             public void changedChannelCount(int count) {
-                labelTemp.setText("Min " + ClientModel.get().getMinimum() + " | Max " + ClientModel.get().getMaximum() + " | Avg " + ClientModel.get().getAverage() + " | Channels " + count);
+
             }
 
             @Override
