@@ -90,11 +90,24 @@ public class AppView extends JFrame {
             viewMenu = new ClientView(this);
             this.setTitle("Client - SER516 Project Two: Team 4");
             this.viewToolbar.label.setText("Client");
+
+            if (ClientModel.get().isRunning()) {
+                this.viewToolbar.buttonToggle.setText("Stop");
+            } else {
+                this.viewToolbar.buttonToggle.setText("Start");
+            }
+
         } else if(_type == AppView.TYPE_SERVER) {
             Log.i("Application initializing as a Server", AppView.class);
             viewMenu = new ServerView(this);
             this.setTitle("Server - SER516 Project Two: Team 4");
             this.viewToolbar.label.setText("Server");
+
+            if (ServerModel.get().isRunning()) {
+                this.viewToolbar.buttonToggle.setText("Stop");
+            } else {
+                this.viewToolbar.buttonToggle.setText("Start");
+            }
         }
 
         this.add(viewMenu, BorderLayout.CENTER);
