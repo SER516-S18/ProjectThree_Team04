@@ -1,15 +1,18 @@
 package edu.asu.ser516.projecttwo.team04;
 
+import com.sun.deploy.util.SessionState;
 import edu.asu.ser516.projecttwo.team04.listeners.ClientListener;
 import edu.asu.ser516.projecttwo.team04.util.Log;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * ClientModel, the main model for client
@@ -41,9 +44,10 @@ public class ClientModel {
     private int FREQUENCY;
     private int CHANNEL_COUNT;
 
+    private ExecutorService executors = Executors.newCachedThreadPool();
     private ArrayList<ClientListener> listeners = new ArrayList<>();
-    private Socket socket;
     private boolean run = false;
+    private ClientWorker worker;
 
     private ArrayList<ClientChannel> channels = new ArrayList<>();
     private ArrayList<Integer> valueList = new ArrayList<>();
@@ -60,6 +64,9 @@ public class ClientModel {
         this.setPort(port);
         this.setFrequency(5);
         this.setChannelCount(1);
+
+        // Shutdown client on program shutdown
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> ClientModel.this.shutdown()));
     }
 
     /**
@@ -69,21 +76,16 @@ public class ClientModel {
         if(run)
             throw new IllegalArgumentException("Server is already running");
 
+        run = true;
         try {
-            socket = new Socket(HOST, PORT);
-
-            // Start an endpoint for the client to listen on
-            ClientEndpoint endpoint = new ClientEndpoint(socket);
-            new Thread(endpoint).start();
-
-            // Start a worker to deal with the input gathered from the endpoint
-            new Thread(new ClientWorker(endpoint)).start();
+            // Start worker to gather and handle input from server
+            worker = new ClientWorker( new Socket(HOST, PORT) );
 
             // Notify the client is now running
-            run = true;
             this.notifyClientStarted();
         } catch (IOException e) {
             Log.e("Failed to connect to server at " + HOST.getCanonicalHostName() + " port " + PORT + " (" + e.getMessage() + ")", ClientModel.class);
+            run = false;
         }
     }
 
@@ -94,16 +96,17 @@ public class ClientModel {
         if(!run)
             throw new IllegalArgumentException("Server is already stopped");
 
-        try {
-            if(socket != null)
-                socket.close();
-        } catch (IOException e) {
-            Log.w("Failed to close socket to server (" + e.getMessage() + ")", ServerModel.class);
+        run = false;
+
+        while(worker != null && worker.isRunning()) {
+            try {
+                Thread.sleep(100L);
+            } catch (InterruptedException e) {
+                Log.w("Failed to wait for worker while shutting down", ClientModel.class);
+            }
         }
 
-        run = false;
-        socket = null;
-
+        worker = null;
         valueList.clear();
         valueMin = null;
         valueMax = null;
@@ -230,6 +233,7 @@ public class ClientModel {
         if(count < 1)
             throw new IllegalArgumentException("Channel count must be greater than zero");
         else {
+            // Create new channels on clientside
             if(count > CHANNEL_COUNT) {
                 // Adding channels
                 for(int i = 0; i < count - CHANNEL_COUNT; i++) {
@@ -237,7 +241,7 @@ public class ClientModel {
                 }
             } else if(count < CHANNEL_COUNT) {
                 // Removing channels
-                for(int i = CHANNEL_COUNT; i > count; i--) {
+                for(int i = CHANNEL_COUNT - 1; i > count; i--) {
                     channels.remove(i);
                 }
             }
@@ -257,23 +261,47 @@ public class ClientModel {
     /**
      * ClientEndpoint - Class that simply continues to get input from the server at the server's frequency
      */
-    private class ClientEndpoint implements Runnable {
-        private Scanner scannerIn;
-        private Integer value;
+    private class ClientWorker {
+        private ObjectInputStream streamIn;
+        private ObjectOutputStream streamOut;
 
-        private ClientEndpoint(Socket socket) {
+        private ClientOutputHandler outputHandler;
+        private ClientInputListener inputListener;
+        private ClientInputHandler inputHandler;
+
+        private ClientWorker(Socket socket) {
             try {
-                scannerIn = new Scanner(socket.getInputStream());
+                streamOut = new ObjectOutputStream(socket.getOutputStream());
+                streamIn = new ObjectInputStream(socket.getInputStream());
+
+                outputHandler = new ClientOutputHandler(this);
+                executors.submit(outputHandler);
+
+                inputListener = new ClientInputListener(this);
+                executors.submit(inputListener);
+
+                inputHandler = new ClientInputHandler(this);
+                executors.submit(inputHandler);
             } catch (IOException e) {
                 Log.w("Client failed to read input stream (" + e.getMessage() + ")", ClientModel.class);
             }
         }
 
-        @Override
-        public void run() {
-            while (ClientModel.this.run && scannerIn.hasNext()) {
-                value = scannerIn.nextInt();
-            }
+        private boolean isRunning() {
+            return (outputHandler != null && outputHandler.running &&
+                    inputListener != null && inputListener.running &&
+                    inputHandler != null && inputHandler.running);
+        }
+    }
+
+    private class ClientInputListener implements Runnable {
+        private boolean running;
+        private ClientWorker worker;
+        private ArrayList<Integer> value;
+
+        private ClientInputListener(ClientWorker worker) {
+            this.worker = worker;
+            this.running = false;
         }
 
         /**
@@ -281,58 +309,159 @@ public class ClientModel {
          * @param clear - Whether to clear the value to null after getting
          * @return value - Most recent value (or or null if not available)
          */
-        public Integer getValue(boolean clear) {
+        public ArrayList<Integer> getValue(boolean clear) {
             if(clear) {
-                Integer temp = value;
+                ArrayList<Integer> temp = value;
                 value = null;
                 return temp;
             } else {
                 return value;
             }
         }
+
+        @Override
+        public void run() {
+            running = true;
+
+            while (ClientModel.this.run) {
+                Datagram data;
+                try {
+                    data = (Datagram) worker.streamIn.readObject();
+                    if(data == null)
+                        continue;
+
+                    if(data.type == Datagram.TYPE.PAYLOAD) {
+                        value = (ArrayList<Integer>) data.data;
+                    } else if(data.type == Datagram.TYPE.SHUTDOWN) {
+                        Log.i("Server is disconnecting from client", ClientModel.class);
+                        ClientModel.this.shutdown();
+                    }
+                } catch(ClassNotFoundException e) {
+                    if(ClientModel.this.run)
+                        Log.w("Failed to read in object from stream (Class not found: " + e.getMessage() + ")", ClientModel.class);
+                    continue;
+                } catch(IOException e) {
+                    if(ClientModel.this.run) {
+                        Log.e("Failed to read in object from stream, shutting down (IOException: " + e.getMessage() + ")", ClientModel.class);
+                        ClientModel.this.shutdown();
+                    }
+                    continue;
+                }
+            }
+
+            try {
+                worker.streamIn.close();
+            } catch (IOException e) {
+                Log.w("Failed to gracefully close input socket (" + e.getMessage() + ")", ClientModel.class);
+            }
+
+            running = false;
+        }
     }
 
-    private class ClientChannel {
-        ArrayList<Integer> values = new ArrayList<>();
-    }
+    private class ClientOutputHandler implements Runnable {
+        private boolean running;
+        private ClientWorker worker;
+        private ArrayList<Datagram> datagrams = new ArrayList<>();
 
-    private class ClientWorker implements Runnable {
-        private ClientEndpoint input;
+        private ClientOutputHandler(ClientWorker worker) {
+            this.worker = worker;
+            this.running = false;
+        }
 
-        private ClientWorker(ClientEndpoint endpoint) {
-            input = endpoint;
+        private synchronized void sendDatagram(Datagram data) {
+            datagrams.add(data);
         }
 
         @Override
         public void run() {
+            running = true;
+
             while(ClientModel.this.run) {
-                Integer value = input.getValue(false);
-
-                if(value != null) {
-                    // First value edge case
-                    if (valueList.size() == 0) {
-                        valueMin = value;
-                        valueMax = value;
-                        valueAvg = value;
+                if(datagrams.size() > 0) {
+                    Datagram data = datagrams.get(0);
+                    try {
+                        worker.streamOut.writeObject(data);
+                        worker.streamOut.flush();
+                        datagrams.remove(0);
+                    } catch (IOException e) {
+                        Log.w("Failed send server data from client", ClientModel.class);
                     }
+                }
 
-                    // Average
-                    ClientModel.this.valueList.add(value);
-                    valueAvg = 0;
-                    for (int val : valueList)
-                        valueAvg += val;
-                    valueAvg /= valueList.size();
+                try {
+                    Thread.sleep(20L);
+                } catch (InterruptedException e) {
+                    Log.w("Failed to sleep in client output (" + e.getMessage() + ")", ClientModel.class);
+                }
+            }
 
-                    // Minimum
-                    if (value < ClientModel.this.valueMin)
-                        ClientModel.this.valueMin = value;
+            // Gracefully disconnect from server
+            try {
+                worker.streamOut.writeObject(new Datagram(Datagram.TYPE.SHUTDOWN, null));
+                worker.streamOut.flush();
+                worker.streamOut.close();
+            } catch (IOException e) {
+                Log.w("Failed to notify graceful disconnect with server (" + e.getMessage() + ")", ClientModel.class);
+            }
 
-                    // Maximum
-                    if (value > ClientModel.this.valueMax)
-                        ClientModel.this.valueMax = value;
+            running = false;
+        }
+    }
 
-                    // Notify listeners of the new value
-                    ClientModel.this.notifyClientInputChanged(valueMin, valueMax, valueAvg);
+    private class ClientInputHandler implements Runnable {
+        private boolean running;
+        private ClientWorker worker;
+
+        private ClientInputHandler(ClientWorker worker) {
+            this.worker = worker;
+            this.running = false;
+        }
+
+        @Override
+        public void run() {
+            running = true;
+
+            while(ClientModel.this.run) {
+                ArrayList<Integer> values = worker.inputListener.getValue(true);
+
+                if(values != null) {
+                    if(values.size() != CHANNEL_COUNT) {
+                        worker.outputHandler.sendDatagram(new Datagram(Datagram.TYPE.SETTING, CHANNEL_COUNT));
+                    } else {
+                        for(int i = 0; i < values.size(); i++) {
+                            Integer value = values.get(i);
+                            if(value == null)
+                                continue;
+
+                            channels.get(i).add(value);
+
+                            // First value edge case
+                            if (valueList.size() == 0) {
+                                valueMin = value;
+                                valueMax = value;
+                                valueAvg = value;
+                            }
+
+                            // Average
+                            ClientModel.this.valueList.add(value);
+                            valueAvg = 0;
+                            for (int val : valueList)
+                                valueAvg += val;
+                            valueAvg /= valueList.size();
+
+                            // Minimum
+                            if (value < ClientModel.this.valueMin)
+                                ClientModel.this.valueMin = value;
+
+                            // Maximum
+                            if (value > ClientModel.this.valueMax)
+                                ClientModel.this.valueMax = value;
+
+                            // Notify listeners of the new value
+                            ClientModel.this.notifyClientInputChanged(valueMin, valueMax, valueAvg);
+                        }
+                    }
                 }
 
                 // Sleep to meet Client's frequency
@@ -343,8 +472,23 @@ public class ClientModel {
                 }
             }
 
-            // We're no longer running, send null values
-            ClientModel.this.notifyClientInputChanged(null, null, null);
+            running = false;
+        }
+    }
+
+    private class ClientChannel {
+        private ArrayList<Integer> values;
+
+        private ClientChannel() {
+            values = new ArrayList<>();
+        }
+
+        private void add(Integer value) {
+            values.add(value);
+        }
+
+        public Integer getLast() {
+            return values.get(values.size());
         }
     }
 }

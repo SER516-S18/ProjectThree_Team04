@@ -4,11 +4,11 @@ import edu.asu.ser516.projecttwo.team04.listeners.ServerListener;
 import edu.asu.ser516.projecttwo.team04.util.Log;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadLocalRandom;
@@ -49,6 +49,9 @@ public class ServerModel {
         this.setValueMax(max);
         this.setFrequency(frequency);
         this.setPort(port);
+
+        // Shutdown server on program shutdown
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> ServerModel.this.shutdown()));
     }
 
     /**
@@ -64,9 +67,10 @@ public class ServerModel {
             new Thread(() -> {
                 while (run) {
                     try {
+                        // Accept new connections
                         Socket clientSocket = serverSocket.accept();
-                        executors.execute(new ServerWorker(clientSocket, ++clientID));
-                        Log.v("Client #" + clientID + " connected successfully", ServerModel.class);
+                        new ServerWorker(clientSocket, ++clientID);
+                        Log.i("Client #" + clientID + " connected successfully", ServerModel.class);
                     } catch(IOException e) {
                         Log.e("Failed to accept a socket connection to a client on port " + PORT, ServerModel.class);
                     }
@@ -201,19 +205,90 @@ public class ServerModel {
         return PORT;
     }
 
-    public class ServerWorker implements Runnable {
-        private final Socket socket;
-        private final int id;
-        private PrintWriter writeOut;
-        private Scanner scannerIn;
+    private int getRandom() {
+        return ThreadLocalRandom.current().nextInt(ServerModel.this.VALUE_MIN, ServerModel.this.VALUE_MAX + 1);
+    }
 
-        public ServerWorker(Socket c, int clientID) {
-            socket = c;
-            this.id = clientID;
+    public class ServerWorker {
+        private final int id;
+        private boolean run;
+        private int channels = 1;
+        private ObjectOutputStream streamOut;
+        private ObjectInputStream streamIn;
+
+        public ServerWorker(Socket socket, int clientID) {
+            id = clientID;
+            run = true;
 
             try {
-                writeOut = new PrintWriter(socket.getOutputStream(), true);
-                scannerIn = new Scanner(socket.getInputStream());
+                streamOut = new ObjectOutputStream(socket.getOutputStream());
+                streamIn = new ObjectInputStream(socket.getInputStream());
+
+                Runnable output = () -> {
+                    while(ServerWorker.this.run && ServerModel.this.run) {
+                        ArrayList<Integer> values = new ArrayList<>();
+                        for(int i = 0; i < channels; i++) {
+                            values.add(ServerModel.this.getRandom());
+                        }
+
+                        Datagram data = new Datagram(Datagram.TYPE.PAYLOAD, values);
+
+                        try {
+                            streamOut.writeObject(data);
+                            streamOut.flush();
+                        } catch(IOException e) {
+                            Log.w("Failed to send data to client #" + id + " (" + e.getMessage() + ")", ServerModel.class);
+                        }
+
+                        try {
+                            Thread.sleep(1000 / ServerModel.this.FREQUENCY);
+                        } catch (InterruptedException e) {
+                            Log.w("Interrupted exception thrown while waiting in client #" + id, ServerModel.class);
+                        }
+                    }
+
+                    // Gracefully disconnect client
+                    try {
+                        streamOut.writeObject(new Datagram(Datagram.TYPE.SHUTDOWN, null));
+                        streamOut.flush();
+                        streamOut.close();
+                    } catch (IOException e) {
+                        Log.w("Failed to notify graceful disconnect with client (" + e.getMessage() + ")", ServerModel.class);
+                    }
+                };
+
+                Runnable input = () -> {
+                    while(ServerWorker.this.run && ServerModel.this.run) {
+                        Datagram data;
+                        try {
+                            data = (Datagram) streamIn.readObject();
+                            if(data == null)
+                                continue;
+
+                            if(data.type == Datagram.TYPE.SETTING) {
+                                Integer count = (Integer) data.data;
+                                if(count != null && count != channels) {
+                                    channels = (Integer) data.data;
+                                    Log.i("Client #" + id + " changed channel count to " + channels, ServerModel.class);
+                                }
+                            } else if(data.type == Datagram.TYPE.SHUTDOWN) {
+                                ServerWorker.this.disconnect();
+                                Log.i("Client #" + id + " disconnected successfully", ServerModel.class);
+                            }
+                        } catch(ClassNotFoundException e) {
+                            Log.w("Failed to read in object from stream, disconnecting (Class not found: " + e.getMessage() + ")", ServerModel.class);
+                            this.disconnect();
+                            continue;
+                        } catch(IOException e) {
+                            Log.w("Failed to read in object from stream, disconnecting (IOException: " + e.getMessage() + ")", ServerModel.class);
+                            this.disconnect();
+                            continue;
+                        }
+                    }
+                };
+
+                executors.submit(output);
+                executors.submit(input);
             } catch(IOException e1) {
                 Log.e("Failed to initialize data stream with client #" + id + " (" + e1.getMessage() + ")", ServerModel.class);
                 try {
@@ -224,17 +299,19 @@ public class ServerModel {
             }
         }
 
-        @Override
-        public void run() {
-            while(ServerModel.this.run && socket.isConnected()) {
-                int val = ThreadLocalRandom.current().nextInt(ServerModel.this.VALUE_MIN, ServerModel.this.VALUE_MAX + 1);
-                writeOut.println(val);
+        public void disconnect() {
+            ServerWorker.this.run = false;
 
-                try {
-                    Thread.sleep(1000 / ServerModel.this.FREQUENCY);
-                } catch (InterruptedException e) {
-                    Log.w("Interrupted exception thrown while waiting in client #" + id, ServerModel.class);
-                }
+            try {
+                streamOut.close();
+            } catch(IOException e) {
+                Log.w("Failed to gracefully close output stream to client #" + id, ServerWorker.class);
+            }
+
+            try {
+                streamIn.close();
+            } catch(IOException e) {
+                Log.w("Failed to gracefully close input stream to client #" + id, ServerWorker.class);
             }
         }
     }
