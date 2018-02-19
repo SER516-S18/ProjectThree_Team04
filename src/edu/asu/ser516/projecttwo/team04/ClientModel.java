@@ -10,6 +10,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -65,7 +67,10 @@ public class ClientModel {
         this.setChannelCount(1);
 
         // Shutdown client on program shutdown
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> ClientModel.this.shutdown()));
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            if(ClientModel.this.isRunning())
+                ClientModel.this.shutdown();
+        }));
     }
 
     /**
@@ -97,6 +102,7 @@ public class ClientModel {
 
         run = false;
 
+        // Wait for the worker to shut down gracefully
         while(worker != null && worker.isRunning()) {
             try {
                 Thread.sleep(100L);
@@ -115,7 +121,15 @@ public class ClientModel {
     }
 
     /**
-     * Gets the maximum, if any
+     * getChannels - The list of channels
+     * @return List of all channels
+     */
+    public List<ClientChannel> getChannels() {
+        return Collections.unmodifiableList(channels);
+    }
+
+    /**
+     * getMaximum - Gets the maximum, if any
      * @return Maximum or null, if there are no values
      */
     public Integer getMaximum() {
@@ -123,7 +137,7 @@ public class ClientModel {
     }
 
     /**
-     * Gets the minimum, if any
+     * getMinimum - Gets the minimum, if any
      * @return Minimum or null, if there are no values
      */
     public Integer getMinimum() {
@@ -131,7 +145,7 @@ public class ClientModel {
     }
 
     /**
-     * Gets the average, if any
+     * getAverage - Gets the average, if any
      * @return Average or null, if there are no values
      */
     public Integer getAverage() {
@@ -159,9 +173,15 @@ public class ClientModel {
         }
     }
 
-    private void notifyClientInputChanged(Integer min, Integer max, Integer avg) {
+    private void notifyValuesChanged() {
         for(ClientListener listener : listeners) {
-            listener.inputChanged(min, max, avg);
+            listener.changedValues();
+        }
+    }
+
+    private void notifyChannelCountChanged() {
+        for(ClientListener listener : listeners) {
+            listener.changedChannelCount(CHANNEL_COUNT);
         }
     }
 
@@ -246,6 +266,7 @@ public class ClientModel {
             }
 
             CHANNEL_COUNT = count;
+            this.notifyChannelCountChanged();
         }
     }
 
@@ -258,7 +279,7 @@ public class ClientModel {
     }
 
     /**
-     * ClientEndpoint - Class that simply continues to get input from the server at the server's frequency
+     * ClientWorker - Class that contains the input listener and handler, and the output handler
      */
     private class ClientWorker {
         private ObjectInputStream streamIn;
@@ -270,6 +291,7 @@ public class ClientModel {
 
         private ClientWorker(Socket socket) {
             try {
+                // Open streams, start handlers and listeners
                 streamOut = new ObjectOutputStream(socket.getOutputStream());
                 streamIn = new ObjectInputStream(socket.getInputStream());
 
@@ -286,6 +308,10 @@ public class ClientModel {
             }
         }
 
+        /**
+         * isRunning - Considered running if all three listeners/handlers are running
+         * @return If ClientWorker is running
+         */
         private boolean isRunning() {
             return (outputHandler != null && outputHandler.running &&
                     inputListener != null && inputListener.running &&
@@ -293,6 +319,9 @@ public class ClientModel {
         }
     }
 
+    /**
+     * ClientInputListener - Necessary because server may send values at a different frequency
+     */
     private class ClientInputListener implements Runnable {
         private boolean running;
         private ClientWorker worker;
@@ -325,13 +354,16 @@ public class ClientModel {
             while (ClientModel.this.run) {
                 Datagram data;
                 try {
+                    // Get data
                     data = (Datagram) worker.streamIn.readObject();
                     if(data == null)
                         continue;
 
                     if(data.type == Datagram.TYPE.PAYLOAD) {
+                        // If it's payload, set it as the new value
                         value = (ArrayList<Integer>) data.data;
                     } else if(data.type == Datagram.TYPE.SHUTDOWN) {
+                        // Server is notifying this client it intends to shutdown
                         Log.i("Server is disconnecting from client", ClientModel.class);
                         ClientModel.this.shutdown();
                     }
@@ -348,6 +380,7 @@ public class ClientModel {
                 }
             }
 
+            // Attempt to gracefully shut down input
             try {
                 worker.streamIn.close();
             } catch (IOException e) {
@@ -358,6 +391,9 @@ public class ClientModel {
         }
     }
 
+    /**
+     * ClientOutputHandler - Outputs datagrams to the server (e.g., channel count, shutdown message)
+     */
     private class ClientOutputHandler implements Runnable {
         private boolean running;
         private ClientWorker worker;
@@ -368,6 +404,10 @@ public class ClientModel {
             this.running = false;
         }
 
+        /**
+         * sendDatagram - Adds datagram to queue to send to server
+         * @param data Datagram to send to server
+         */
         private synchronized void sendDatagram(Datagram data) {
             datagrams.add(data);
         }
@@ -377,6 +417,7 @@ public class ClientModel {
             running = true;
 
             while(ClientModel.this.run) {
+                // If we have any data to send
                 if(datagrams.size() > 0) {
                     Datagram data = datagrams.get(0);
                     try {
@@ -408,6 +449,9 @@ public class ClientModel {
         }
     }
 
+    /**
+     * ClientInputHandler - Handles input at the client's set frequency
+     */
     private class ClientInputHandler implements Runnable {
         private boolean running;
         private ClientWorker worker;
@@ -422,12 +466,15 @@ public class ClientModel {
             running = true;
 
             while(ClientModel.this.run) {
+                // Get the most recent input at our own client's frequency
                 ArrayList<Integer> values = worker.inputListener.getValue(true);
 
                 if(values != null) {
                     if(values.size() != CHANNEL_COUNT) {
+                        // If the values sent aren't the correct number of channels, notify server of correct count
                         worker.outputHandler.sendDatagram(new Datagram(Datagram.TYPE.SETTING, CHANNEL_COUNT));
                     } else {
+                        // For each value, add to the correct channel (and calculate min/max/avg)
                         for(int i = 0; i < values.size(); i++) {
                             Integer value = values.get(i);
                             if(value == null)
@@ -458,7 +505,7 @@ public class ClientModel {
                                 ClientModel.this.valueMax = value;
 
                             // Notify listeners of the new value
-                            ClientModel.this.notifyClientInputChanged(valueMin, valueMax, valueAvg);
+                            ClientModel.this.notifyValuesChanged();
                         }
                     }
                 }
@@ -475,19 +522,24 @@ public class ClientModel {
         }
     }
 
-    private class ClientChannel {
+    /**
+     * ClientChannel - Represents the data values in a channel
+     */
+    public static class ClientChannel {
         private ArrayList<Integer> values;
 
         private ClientChannel() {
             values = new ArrayList<>();
         }
-
         private void add(Integer value) {
             values.add(value);
         }
 
         public Integer getLast() {
             return values.get(values.size());
+        }
+        public List<Integer> getValues() {
+            return Collections.unmodifiableList(values);
         }
     }
 }

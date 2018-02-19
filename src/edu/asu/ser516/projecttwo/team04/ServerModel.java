@@ -51,7 +51,10 @@ public class ServerModel {
         this.setPort(port);
 
         // Shutdown server on program shutdown
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> ServerModel.this.shutdown()));
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            if(ServerModel.this.isRunning())
+                ServerModel.this.shutdown();
+        }));
     }
 
     /**
@@ -205,10 +208,17 @@ public class ServerModel {
         return PORT;
     }
 
+    /**
+     * getRandom
+     * @return A random value between the server's min and max, inclusive
+     */
     private int getRandom() {
         return ThreadLocalRandom.current().nextInt(ServerModel.this.VALUE_MIN, ServerModel.this.VALUE_MAX + 1);
     }
 
+    /**
+     * ServerWorker - A worker that handles output and input to an individual client
+     */
     public class ServerWorker {
         private final int id;
         private boolean run;
@@ -224,15 +234,17 @@ public class ServerModel {
                 streamOut = new ObjectOutputStream(socket.getOutputStream());
                 streamIn = new ObjectInputStream(socket.getInputStream());
 
+                // Output to the client
                 Runnable output = () -> {
                     while(ServerWorker.this.run && ServerModel.this.run) {
+                        // Create a 'packet' with a value for each channel the client has
                         ArrayList<Integer> values = new ArrayList<>();
                         for(int i = 0; i < channels; i++) {
                             values.add(ServerModel.this.getRandom());
                         }
-
                         Datagram data = new Datagram(Datagram.TYPE.PAYLOAD, values);
 
+                        // Send the 'packet' to the client
                         try {
                             streamOut.writeObject(data);
                             streamOut.flush();
@@ -240,6 +252,7 @@ public class ServerModel {
                             Log.w("Failed to send data to client #" + id + " (" + e.getMessage() + ")", ServerModel.class);
                         }
 
+                        // Sleep to match the server's set frequency to send data
                         try {
                             Thread.sleep(1000 / ServerModel.this.FREQUENCY);
                         } catch (InterruptedException e) {
@@ -257,21 +270,25 @@ public class ServerModel {
                     }
                 };
 
+                // Handle input from a client
                 Runnable input = () -> {
                     while(ServerWorker.this.run && ServerModel.this.run) {
                         Datagram data;
                         try {
+                            // Wait until data arrives
                             data = (Datagram) streamIn.readObject();
                             if(data == null)
                                 continue;
 
                             if(data.type == Datagram.TYPE.SETTING) {
+                                // If the data is to set the channel count, handle it
                                 Integer count = (Integer) data.data;
                                 if(count != null && count != channels) {
                                     channels = (Integer) data.data;
                                     Log.i("Client #" + id + " changed channel count to " + channels, ServerModel.class);
                                 }
                             } else if(data.type == Datagram.TYPE.SHUTDOWN) {
+                                // If the data is to notify the client intends to shutdown, disconnect
                                 ServerWorker.this.disconnect();
                                 Log.i("Client #" + id + " disconnected successfully", ServerModel.class);
                             }

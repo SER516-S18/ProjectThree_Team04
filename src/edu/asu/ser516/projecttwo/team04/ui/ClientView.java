@@ -21,19 +21,20 @@ public class ClientView extends JPanel {
 
         ClientModel.get().addListener(new ClientListener() {
             @Override
-            public void inputChanged(Integer min, Integer max, Integer avg) {
-                labelTemp.setText("Min " + min + " | Max " + max + " | Avg " + avg + " | Channels " + ClientModel.get().getChannelCount());
+            public void changedValues() {
+                labelTemp.setText("Min " + ClientModel.get().getMinimum() + " | Max " + ClientModel.get().getMaximum() + " | Avg " + ClientModel.get().getAverage() + " | Channels " + ClientModel.get().getChannelCount());
             }
 
             @Override
-            public void started() {
-
+            public void changedChannelCount(int count) {
+                labelTemp.setText("Min " + ClientModel.get().getMinimum() + " | Max " + ClientModel.get().getMaximum() + " | Avg " + ClientModel.get().getAverage() + " | Channels " + count);
             }
 
             @Override
-            public void shutdown() {
+            public void started() {}
 
-            }
+            @Override
+            public void shutdown() {}
         });
     }
 }

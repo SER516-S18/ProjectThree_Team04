@@ -9,7 +9,8 @@ package edu.asu.ser516.projecttwo.team04.listeners;
  */
 
 public interface ClientListener {
-    public void inputChanged(Integer min, Integer max, Integer avg);
+    public void changedValues();
+    public void changedChannelCount(int count);
     public void started();
     public void shutdown();
 }
