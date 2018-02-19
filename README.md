@@ -5,7 +5,7 @@
 >
 - David Henderson ([@david-henderson](https://github.com/david-henderson) | dchende2 | davidhenderson@asu.edu)
 - Shreyas Hosahalli Govindaraja ([@shreyashg027](https://github.com/shreyashg027))
-- Drishty Kapoor ([@Drishtykapoor](https://github.com/Drishtykapoor))
+- Drishty Kapoor ([@Drishtykapoor](https://github.com/Drishtykapoor)| dkapoor3 | dkapoor3@asu.edu)
 - Yiru Hu
 - Paulo Jaime
 - Saheb Johar ([@sahebjohar92](https://github.com/sahebjohar92))
