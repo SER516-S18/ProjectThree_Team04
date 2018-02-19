@@ -5,10 +5,7 @@ import edu.asu.ser516.projecttwo.team04.util.Terminal;
 import edu.asu.ser516.projecttwo.team04.util.UIStandards;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * ConsoleView, UI element to display system messages through a console
