@@ -5,10 +5,7 @@ import edu.asu.ser516.projecttwo.team04.util.Terminal;
 import edu.asu.ser516.projecttwo.team04.util.UIStandards;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * ConsoleView, UI element to display system messages through a console
@@ -34,7 +31,7 @@ public class ConsoleView extends JPanel {
 
         textareaLog = new JTextArea();
         textareaLog.setEditable(false);
-        textareaLog.setRows(5);
+        textareaLog.setRows(8);
         textareaLog.setOpaque(false);
         textareaLog.setFont(UIStandards.SMALL_FONT);
         textareaLog.setLineWrap(true);
@@ -53,6 +50,11 @@ public class ConsoleView extends JPanel {
             textfieldInput.setText("");
         });
         this.add(textfieldInput, BorderLayout.PAGE_END);
+
+        scrollpaneLog = new JScrollPane(textareaLog);
+        scrollpaneLog.setOpaque(false);
+        scrollpaneLog.setBorder(null);
+        this.add(scrollpaneLog, BorderLayout.CENTER);
 
         // Subscribe and listen to new records
         Log.addRecordListener(record -> {

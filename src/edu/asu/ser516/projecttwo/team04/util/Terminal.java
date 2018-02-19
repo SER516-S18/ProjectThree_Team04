@@ -81,6 +81,7 @@ public class Terminal {
             Log.d("Valid commands include:" +
                     "\n\t- \"init (client | server)\" to initialize the app as a client or server" +
                     "\n\t- \"port (#)\" to set the communication port number" +
+                    "\n\t- \"channels (#)\" to set the number of channels in a client" +
                     "\n\t- \"help\" to view this help list.", Terminal.class);
         } else if (line.toLowerCase().startsWith("init") && words.length == 2) {
             if(words[1].equalsIgnoreCase("server"))
@@ -92,6 +93,13 @@ public class Terminal {
             ClientModel.get().setPort(port);
             ServerModel.get().setPort(port);
             Log.d("Port set to " + port, Terminal.class);
+        } else if(line.toLowerCase().startsWith("channels") && words.length == 2 && Util.isInteger(words[1])) {
+            if(AppView.get().isClient()) {
+                ClientModel.get().setChannelCount(Integer.parseInt(words[1]));
+                Log.d("Channel count set to " + words[1], Terminal.class);
+            } else {
+                Log.d("Failed to set channel count (Must be a client app to set channels)", Terminal.class);
+            }
         } else {
             Log.d("Invalid command, type \"help\" for list of all commands", Terminal.class);
         }
