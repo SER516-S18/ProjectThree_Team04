@@ -89,10 +89,12 @@ public class AppView extends JFrame {
             Log.i("Application initializing as a Client", AppView.class);
             viewMenu = new ClientView(this);
             this.setTitle("Client - SER516 Project Two: Team 4");
+            this.viewToolbar.label.setText("Client");
         } else if(_type == AppView.TYPE_SERVER) {
             Log.i("Application initializing as a Server", AppView.class);
             viewMenu = new ServerView(this);
             this.setTitle("Server - SER516 Project Two: Team 4");
+            this.viewToolbar.label.setText("Server");
         }
 
         this.add(viewMenu, BorderLayout.CENTER);
@@ -105,6 +107,7 @@ public class AppView extends JFrame {
      */
     private class AppToolbar extends JToolBar {
         private JButton buttonToggle;
+        private Label label;
 
         public AppToolbar() {
             this.setBackground(UIStandards.BACKGROUND_BLUE);
@@ -112,10 +115,14 @@ public class AppView extends JFrame {
             this.setFloatable(false);
             this.add(Box.createHorizontalGlue());
 
-            if(AppView.this.isClient())
-                this.add(new Label("Client"));
-            else
-                this.add(new Label("Server"));
+            if(AppView.this.isClient()) {
+                label = new Label("Client");
+                this.add(label);
+            }
+            else {
+                label = new Label("Server");
+                this.add(label);
+            }
 
             ServerModel.get().addListener(new ServerListener() {
                 @Override

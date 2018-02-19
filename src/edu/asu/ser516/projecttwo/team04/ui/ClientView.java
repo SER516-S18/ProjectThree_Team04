@@ -44,7 +44,7 @@ public class ClientView extends JPanel {
         clientPanel.add(graphView);
 
         JLabel maxValLabel = new JLabel(AppConstants.HIGHEST_VALUE_STRING, JLabel.CENTER);
-        maxValLabel.setFont(UIStandards.DEFAULT_FONT);
+        maxValLabel.setFont(UIStandards.SMALL_FONT);
         maxValLabel.setHorizontalAlignment(JLabel.CENTER);
         maxValLabel.setVerticalAlignment(JLabel.CENTER);
 
@@ -57,7 +57,7 @@ public class ClientView extends JPanel {
 
         maxValTextPanel = new JTextPane();
         maxValTextPanel.setText("-");
-        maxValTextPanel.setFont(UIStandards.DEFAULT_FONT);
+        maxValTextPanel.setFont(UIStandards.SMALL_FONT);
         maxValTextPanel.setEditable(false);
         maxValTextPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         maxValTextPanel.setBounds(650, 16, 86, 59);
@@ -65,7 +65,7 @@ public class ClientView extends JPanel {
         clientPanel.add(maxValTextPanel);
 
         JLabel minValLabel = new JLabel(AppConstants.LOWEST_VALUE_STRING, JLabel.CENTER);
-        minValLabel.setFont(UIStandards.DEFAULT_FONT);
+        minValLabel.setFont(UIStandards.SMALL_FONT);
         minValLabel.setHorizontalAlignment(JLabel.CENTER);
         minValLabel.setVerticalAlignment(JLabel.CENTER);
 
@@ -78,7 +78,7 @@ public class ClientView extends JPanel {
 
         minValTextPanel = new JTextPane();
         minValTextPanel.setText("-");
-        minValTextPanel.setFont(UIStandards.DEFAULT_FONT);
+        minValTextPanel.setFont(UIStandards.SMALL_FONT);
         minValTextPanel.setEditable(false);
         minValTextPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         minValTextPanel.setBounds(650, 91, 86, 59);
@@ -86,7 +86,7 @@ public class ClientView extends JPanel {
         clientPanel.add(minValTextPanel);
 
         JLabel averageLabel = new JLabel(AppConstants.AVERAGE_VALUE_STRING, JLabel.CENTER);
-        averageLabel.setFont(UIStandards.DEFAULT_FONT);
+        averageLabel.setFont(UIStandards.SMALL_FONT);
         averageLabel.setHorizontalAlignment(JLabel.CENTER);
         averageLabel.setVerticalAlignment(JLabel.CENTER);
 
@@ -99,7 +99,7 @@ public class ClientView extends JPanel {
 
         avgValTextPanel = new JTextPane();
         avgValTextPanel.setText("-");
-        avgValTextPanel.setFont(UIStandards.DEFAULT_FONT);
+        avgValTextPanel.setFont(UIStandards.SMALL_FONT);
         avgValTextPanel.setEditable(false);
         avgValTextPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         avgValTextPanel.setBounds(650, 166, 86, 59);
@@ -107,7 +107,7 @@ public class ClientView extends JPanel {
         clientPanel.add(avgValTextPanel);
 
         JLabel channelLabel = new JLabel(AppConstants.CHANNELS_VALUE_STRING, JLabel.CENTER);
-        channelLabel.setFont(UIStandards.DEFAULT_FONT);
+        channelLabel.setFont(UIStandards.SMALL_FONT);
         channelLabel.setHorizontalAlignment(JLabel.CENTER);
         channelLabel.setVerticalAlignment(JLabel.CENTER);
 
@@ -132,7 +132,7 @@ public class ClientView extends JPanel {
         clientPanel.add(channelValue);
 
         JLabel frequencyLabel = new JLabel(AppConstants.FREQUENCY_VALUE_STRING, JLabel.CENTER);
-        frequencyLabel.setFont(UIStandards.DEFAULT_FONT);
+        frequencyLabel.setFont(UIStandards.SMALL_FONT);
         frequencyLabel.setHorizontalAlignment(JLabel.CENTER);
         frequencyLabel.setVerticalAlignment(JLabel.CENTER);
 
