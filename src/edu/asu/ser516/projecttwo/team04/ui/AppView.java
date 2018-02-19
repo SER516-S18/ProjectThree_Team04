@@ -112,6 +112,11 @@ public class AppView extends JFrame {
             this.setFloatable(false);
             this.add(Box.createHorizontalGlue());
 
+            if(AppView.this.isClient())
+                this.add(new Label("Client"));
+            else
+                this.add(new Label("Server"));
+
             ServerModel.get().addListener(new ServerListener() {
                 @Override
                 public void started() {
