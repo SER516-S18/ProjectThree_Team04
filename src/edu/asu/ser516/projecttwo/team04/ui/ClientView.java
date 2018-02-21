@@ -12,10 +12,18 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.NumberFormatter;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.NumberFormat;
+import java.util.Random;
 
 /**
  * ClientView, the main UI for the client application
@@ -36,11 +44,19 @@ public class ClientView extends JPanel {
         clientPanel.setBounds(5, 50, 780, 400);
         clientPanel.setLayout(null);
 
+        PlotGraph plotGraph = new PlotGraph();
+        ChartPanel plottingChart = new ChartPanel(plotGraph.graph);
+        plottingChart.setLocation(0, 0);
+        plottingChart.setSize(new Dimension(520,400));
+        plotGraph.graph.setBackgroundPaint(UIStandards.BACKGROUND_PINK);
+        
+        
         JPanel graphView = new JPanel();
         graphView.setBackground(UIStandards.BACKGROUND_PINK);
         graphView.setBounds(15, 15, 520, 370);
         graphView.setLayout(null);
         graphView.setBorder(BorderFactory.createLineBorder(Color.black));
+        graphView.add(plottingChart);
         clientPanel.add(graphView);
 
         JLabel maxValLabel = new JLabel(AppConstants.HIGHEST_VALUE_STRING, JLabel.CENTER);
@@ -197,4 +213,40 @@ public class ClientView extends JPanel {
             public void shutdown() {}
         });
     }
+}
+
+
+/**
+ * Class to plot the graph on client server depending on number of channels selected 
+ * @author  Sai Saran Kandimalla. 
+ */
+
+class PlotGraph
+{
+	 JFreeChart graph;
+		
+	   public PlotGraph() {
+			 this.graph= ChartFactory.createLineChart(
+			         "Display",
+			         "Number","Value",
+			         createDataset(),
+			         PlotOrientation.VERTICAL,
+			         true,true,false);
+	}
+
+	/*
+	 * Method that creates datasets to plot the graph receiving the random values from server.
+	 * this method creates number of datasets equal to number of channels
+	 */
+	   private DefaultCategoryDataset createDataset( ) {
+		      DefaultCategoryDataset dataset = new DefaultCategoryDataset( );
+		      Random randomNumber = new Random();
+		      
+		      for(int i=1;i<=30;i++)
+		      {
+		    	  dataset.addValue((Number)randomNumber.nextInt(1024), "values", i);
+		      }
+		      
+		      return dataset;
+		   }	
 }
