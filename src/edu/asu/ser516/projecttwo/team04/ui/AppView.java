@@ -2,7 +2,7 @@ package edu.asu.ser516.projecttwo.team04.ui;
 
 import edu.asu.ser516.projecttwo.team04.ClientModel;
 import edu.asu.ser516.projecttwo.team04.ServerModel;
-import edu.asu.ser516.projecttwo.team04.constants.UIConstants;
+import edu.asu.ser516.projecttwo.team04.constants.ColorConstants;
 import edu.asu.ser516.projecttwo.team04.listeners.ClientListener;
 import edu.asu.ser516.projecttwo.team04.listeners.ServerListener;
 import edu.asu.ser516.projecttwo.team04.util.Log;
@@ -57,7 +57,7 @@ public class AppView extends JFrame {
 
         this.setMinimumSize(new Dimension(800, 600));
         this.setLayout(new BorderLayout(8, 8));
-        this.setBackground(UIConstants.BACKGROUND_BLUE);
+        this.setBackground(ColorConstants.BACKGROUND_BLUE);
 
         // Add top
         viewToolbar = new AppToolbar();
@@ -71,7 +71,7 @@ public class AppView extends JFrame {
         this.add(viewConsole, BorderLayout.PAGE_END);
 
         // Package, set visible, move to center of screen
-        this.getContentPane().setBackground(UIConstants.BACKGROUND_BLUE);
+        this.getContentPane().setBackground(ColorConstants.BACKGROUND_BLUE);
         this.setVisible(true);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width/2-this.getSize().width/2+(this.getSize().width/2 * (isClient() ? 1 : -1)), dim.height/2-this.getSize().height/2);
@@ -154,22 +154,22 @@ public class AppView extends JFrame {
                 }
             });
 
-            this.setBackground(UIConstants.BACKGROUND_BLUE);
+            this.setBackground(ColorConstants.BACKGROUND_BLUE);
             this.setBorder(new EmptyBorder(8, 8, 8, 8));
             this.setFloatable(false);
 
             labelType = new JLabel(AppView.get().isClient() ? "Client" : "Server");
-            labelType.setFont(UIConstants.DEFAULT_FONT);
+            labelType.setFont(ColorConstants.DEFAULT_FONT);
             this.add(labelType);
             this.add(Box.createHorizontalGlue());
 
             buttonToggle = new JButton("Start");
-            buttonToggle.setFont(UIConstants.DEFAULT_FONT);
-            buttonToggle.setBackground(UIConstants.BACKGROUND_PINK);
+            buttonToggle.setFont(ColorConstants.DEFAULT_FONT);
+            buttonToggle.setBackground(ColorConstants.BACKGROUND_PINK);
             buttonToggle.setFocusPainted(false);
             buttonToggle.setBorder(BorderFactory.createCompoundBorder(
                     BorderFactory.createLineBorder(Color.BLACK, 1),
-                    BorderFactory.createLineBorder(UIConstants.BACKGROUND_PINK, 4)
+                    BorderFactory.createLineBorder(ColorConstants.BACKGROUND_PINK, 4)
                     )
             );
             buttonToggle.addActionListener(e -> {

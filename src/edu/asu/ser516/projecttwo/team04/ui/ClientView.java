@@ -1,18 +1,14 @@
 package edu.asu.ser516.projecttwo.team04.ui;
 
 import edu.asu.ser516.projecttwo.team04.ClientModel;
-import edu.asu.ser516.projecttwo.team04.ServerModel;
+import edu.asu.ser516.projecttwo.team04.constants.ColorConstants;
 import edu.asu.ser516.projecttwo.team04.constants.StringConstants;
-import edu.asu.ser516.projecttwo.team04.constants.UIConstants;
 import edu.asu.ser516.projecttwo.team04.listeners.ClientListener;
-import edu.asu.ser516.projecttwo.team04.util.Log;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import java.awt.*;
 
 /**
@@ -29,7 +25,7 @@ public class ClientView extends JPanel {
         this.setBorder(new EmptyBorder(8, 8, 8, 8));
 
         JPanel panelBuffer = new JPanel(new GridLayout(1, 2, 8, 8));
-        panelBuffer.setBackground(UIConstants.BACKGROUND_GRAY);
+        panelBuffer.setBackground(ColorConstants.BACKGROUND_GRAY);
         panelBuffer.setBorder(BorderFactory.createLineBorder(Color.black));
 
         graphView = new ClientGraphView();
@@ -48,7 +44,7 @@ public class ClientView extends JPanel {
             this.setBorder(new EmptyBorder(8, 8, 8, 8));
 
             JPanel panelBuffer = new JPanel(new BorderLayout());
-            panelBuffer.setBackground(UIConstants.BACKGROUND_PINK);
+            panelBuffer.setBackground(ColorConstants.BACKGROUND_PINK);
             panelBuffer.setBorder(BorderFactory.createLineBorder(Color.black));
 
             // TODO - panelBuffer.add(<GRAPH JPANEL>, BorderLayout.CENTER);
@@ -71,88 +67,88 @@ public class ClientView extends JPanel {
 
             // Maximum - Prompt
             JLabel labelPromptMaximum = new JLabel(StringConstants.HIGHEST_VALUE_STRING);
-            labelPromptMaximum.setFont(UIConstants.DEFAULT_FONT);
+            labelPromptMaximum.setFont(ColorConstants.DEFAULT_FONT);
             labelPromptMaximum.setHorizontalAlignment(JLabel.CENTER);
             labelPromptMaximum.setVerticalAlignment(JLabel.CENTER);
 
             JPanel panelPromptMaximum = new JPanel();
             panelPromptMaximum.setBorder(BorderFactory.createLineBorder(Color.black));
-            panelPromptMaximum.setBackground(UIConstants.BACKGROUND_BLUEGRAY);
+            panelPromptMaximum.setBackground(ColorConstants.BACKGROUND_BLUEGRAY);
             panelPromptMaximum.add(labelPromptMaximum);
             this.add(panelPromptMaximum);
 
             // Maximum - Value
             labelValueMaximum = new JLabel(String.valueOf(ClientModel.get().getMaximum() == null ? "" : ClientModel.get().getMinimum()));
-            labelValueMaximum.setFont(UIConstants.DEFAULT_FONT);
+            labelValueMaximum.setFont(ColorConstants.LARGE_FONT);
 
             JPanel panelValueMaximum = new JPanel();
             panelValueMaximum.setBorder(BorderFactory.createLineBorder(Color.black));
-            panelValueMaximum.setBackground(UIConstants.BACKGROUND_PINK);
+            panelValueMaximum.setBackground(ColorConstants.BACKGROUND_PINK);
             panelValueMaximum.add(labelValueMaximum);
             this.add(panelValueMaximum);
 
             // Minimum - Prompt
             JLabel labelPromptMinimum = new JLabel(StringConstants.LOWEST_VALUE_STRING);
-            labelPromptMinimum.setFont(UIConstants.DEFAULT_FONT);
+            labelPromptMinimum.setFont(ColorConstants.DEFAULT_FONT);
             labelPromptMinimum.setHorizontalAlignment(JLabel.CENTER);
             labelPromptMinimum.setVerticalAlignment(JLabel.CENTER);
 
             JPanel panelPromptMinimum = new JPanel();
             panelPromptMinimum.setBorder(BorderFactory.createLineBorder(Color.black));
-            panelPromptMinimum.setBackground(UIConstants.BACKGROUND_PINK);
+            panelPromptMinimum.setBackground(ColorConstants.BACKGROUND_PINK);
             panelPromptMinimum.add(labelPromptMinimum);
             this.add(panelPromptMinimum);
 
             // Minimum - Value
             labelValueMinimum = new JLabel(String.valueOf(ClientModel.get().getMinimum() == null ? "" : ClientModel.get().getMinimum()));
-            labelValueMinimum.setFont(UIConstants.DEFAULT_FONT);
+            labelValueMinimum.setFont(ColorConstants.LARGE_FONT);
 
             JPanel panelValueMinimum = new JPanel();
             panelValueMinimum.setBorder(BorderFactory.createLineBorder(Color.black));
-            panelValueMinimum.setBackground(UIConstants.BACKGROUND_BLUEGRAY);
+            panelValueMinimum.setBackground(ColorConstants.BACKGROUND_BLUEGRAY);
             panelValueMinimum.add(labelValueMinimum);
             this.add(panelValueMinimum);
 
             // Average - Prompt
             JLabel labelPromptAverage = new JLabel(StringConstants.AVERAGE_VALUE_STRING);
-            labelPromptAverage.setFont(UIConstants.DEFAULT_FONT);
+            labelPromptAverage.setFont(ColorConstants.DEFAULT_FONT);
             labelPromptAverage.setHorizontalAlignment(JLabel.CENTER);
             labelPromptAverage.setVerticalAlignment(JLabel.CENTER);
 
             JPanel panelPromptAverage = new JPanel();
             panelPromptAverage.setBorder(BorderFactory.createLineBorder(Color.black));
-            panelPromptAverage.setBackground(UIConstants.BACKGROUND_BLUEGRAY);
+            panelPromptAverage.setBackground(ColorConstants.BACKGROUND_BLUEGRAY);
             panelPromptAverage.add(labelPromptAverage);
             this.add(panelPromptAverage);
 
             // Average - Value
             labelValueAverage = new JLabel(String.valueOf(ClientModel.get().getAverage() == null ? "" : ClientModel.get().getAverage()));
-            labelValueAverage.setFont(UIConstants.DEFAULT_FONT);
+            labelValueAverage.setFont(ColorConstants.LARGE_FONT);
 
             JPanel panelValueAverage = new JPanel();
             panelValueAverage.setBorder(BorderFactory.createLineBorder(Color.black));
-            panelValueAverage.setBackground(UIConstants.BACKGROUND_PINK);
+            panelValueAverage.setBackground(ColorConstants.BACKGROUND_PINK);
             panelValueAverage.add(labelValueAverage);
             this.add(panelValueAverage);
 
             // Channels - Prompt
             JLabel labelPromptChannels = new JLabel(StringConstants.CHANNELS_VALUE_STRING);
-            labelPromptChannels.setFont(UIConstants.DEFAULT_FONT);
+            labelPromptChannels.setFont(ColorConstants.DEFAULT_FONT);
             labelPromptChannels.setHorizontalAlignment(JLabel.CENTER);
             labelPromptChannels.setVerticalAlignment(JLabel.CENTER);
 
             JPanel panelPromptChannels = new JPanel();
             panelPromptChannels.setBorder(BorderFactory.createLineBorder(Color.black));
-            panelPromptChannels.setBackground(UIConstants.BACKGROUND_PINK);
+            panelPromptChannels.setBackground(ColorConstants.BACKGROUND_PINK);
             panelPromptChannels.add(labelPromptChannels);
             this.add(panelPromptChannels);
 
             // Channels - Input
-            spinnerInputChannels = new JSpinner( new SpinnerNumberModel(ClientModel.get().getChannelCount(), 1, Integer.MAX_VALUE, 1) );
+            spinnerInputChannels = new JSpinner( new SpinnerNumberModel(ClientModel.get().getChannelCount(), 1, 65536, 1) );
             spinnerInputChannels.setVisible(true);
             spinnerInputChannels.setBorder(null);
-            spinnerInputChannels.getEditor().getComponent(0).setBackground(UIConstants.BACKGROUND_BLUEGRAY);
-            spinnerInputChannels.setFont(UIConstants.DEFAULT_FONT);
+            spinnerInputChannels.getEditor().getComponent(0).setBackground(ColorConstants.BACKGROUND_BLUEGRAY);
+            spinnerInputChannels.setFont(ColorConstants.LARGE_FONT);
             spinnerInputChannels.addChangeListener(new ChangeListener() {
                 @Override
                 public void stateChanged(ChangeEvent e) {
@@ -162,28 +158,28 @@ public class ClientView extends JPanel {
 
             JPanel panelInputChannels = new JPanel();
             panelInputChannels.setBorder(BorderFactory.createLineBorder(Color.black));
-            panelInputChannels.setBackground(UIConstants.BACKGROUND_BLUEGRAY);
+            panelInputChannels.setBackground(ColorConstants.BACKGROUND_BLUEGRAY);
             panelInputChannels.add(spinnerInputChannels);
             this.add(panelInputChannels);
 
             // Frequency - Prompt
             JLabel labelPromptFrequency = new JLabel(StringConstants.FREQUENCY_VALUE_STRING);
-            labelPromptFrequency.setFont(UIConstants.DEFAULT_FONT);
+            labelPromptFrequency.setFont(ColorConstants.DEFAULT_FONT);
             labelPromptFrequency.setHorizontalAlignment(JLabel.CENTER);
             labelPromptFrequency.setVerticalAlignment(JLabel.CENTER);
 
             JPanel panelPromptFrequency = new JPanel();
             panelPromptFrequency.setBorder(BorderFactory.createLineBorder(Color.black));
-            panelPromptFrequency.setBackground(UIConstants.BACKGROUND_BLUEGRAY);
+            panelPromptFrequency.setBackground(ColorConstants.BACKGROUND_BLUEGRAY);
             panelPromptFrequency.add(labelPromptFrequency);
             this.add(panelPromptFrequency);
 
             // Frequency - Input
-            spinnerInputFrequency = new JSpinner( new SpinnerNumberModel(ClientModel.get().getFrequency(), 1, Integer.MAX_VALUE, 1) );
+            spinnerInputFrequency = new JSpinner( new SpinnerNumberModel(ClientModel.get().getFrequency(), 1, 65536, 1) );
             spinnerInputFrequency.setVisible(true);
             spinnerInputFrequency.setBorder(null);
-            spinnerInputFrequency.getEditor().getComponent(0).setBackground(UIConstants.BACKGROUND_PINK);
-            spinnerInputFrequency.setFont(UIConstants.DEFAULT_FONT);
+            spinnerInputFrequency.getEditor().getComponent(0).setBackground(ColorConstants.BACKGROUND_PINK);
+            spinnerInputFrequency.setFont(ColorConstants.LARGE_FONT);
             spinnerInputFrequency.addChangeListener(new ChangeListener() {
                 @Override
                 public void stateChanged(ChangeEvent e) {
@@ -193,7 +189,7 @@ public class ClientView extends JPanel {
 
             JPanel panelInputFrequency = new JPanel();
             panelInputFrequency.setBorder(BorderFactory.createLineBorder(Color.black));
-            panelInputFrequency.setBackground(UIConstants.BACKGROUND_PINK);
+            panelInputFrequency.setBackground(ColorConstants.BACKGROUND_PINK);
             panelInputFrequency.add(spinnerInputFrequency);
             this.add(panelInputFrequency);
 

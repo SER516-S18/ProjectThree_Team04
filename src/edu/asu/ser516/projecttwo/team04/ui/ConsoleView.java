@@ -1,6 +1,6 @@
 package edu.asu.ser516.projecttwo.team04.ui;
 
-import edu.asu.ser516.projecttwo.team04.constants.UIConstants;
+import edu.asu.ser516.projecttwo.team04.constants.ColorConstants;
 import edu.asu.ser516.projecttwo.team04.util.Log;
 import edu.asu.ser516.projecttwo.team04.util.Terminal;
 
@@ -28,18 +28,18 @@ public class ConsoleView extends JPanel {
         this.setBorder(new EmptyBorder(8, 8, 8, 8));
 
         JPanel panelBuffer = new JPanel(new BorderLayout());
-        panelBuffer.setBackground(UIConstants.BACKGROUND_GRAY);
+        panelBuffer.setBackground(ColorConstants.BACKGROUND_GRAY);
         panelBuffer.setBorder(BorderFactory.createLineBorder(Color.black));
 
         labelHeader = new JLabel("Console:");
-        labelHeader.setFont(UIConstants.DEFAULT_FONT);
+        labelHeader.setFont(ColorConstants.DEFAULT_FONT);
         panelBuffer.add(labelHeader, BorderLayout.PAGE_START);
 
         textareaLog = new JTextArea();
         textareaLog.setEditable(false);
         textareaLog.setRows(6);
         textareaLog.setOpaque(false);
-        textareaLog.setFont(UIConstants.SMALL_FONT);
+        textareaLog.setFont(ColorConstants.SMALL_FONT);
         textareaLog.setLineWrap(true);
         textareaLog.setWrapStyleWord(true);
         panelBuffer.add(textareaLog, BorderLayout.CENTER);
@@ -48,7 +48,7 @@ public class ConsoleView extends JPanel {
         textfieldInput = new JTextField();
         textfieldInput.setOpaque(false);
         textfieldInput.setBorder(null);
-        textfieldInput.setFont(UIConstants.DEFAULT_FONT);
+        textfieldInput.setFont(ColorConstants.DEFAULT_FONT);
         textfieldInput.addActionListener(e -> {
             textareaLog.append("> " + textfieldInput.getText() + "\n");
             Terminal.handle(textfieldInput.getText());
