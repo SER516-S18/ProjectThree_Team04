@@ -1,8 +1,8 @@
 package edu.asu.ser516.projecttwo.team04.ui;
 
-import edu.asu.ser516.projecttwo.team04.ClientModel;
 import edu.asu.ser516.projecttwo.team04.constants.ColorConstants;
 import edu.asu.ser516.projecttwo.team04.listeners.ClientListener;
+import edu.asu.ser516.projecttwo.team04.model.client.ClientModel;
 import edu.asu.ser516.projecttwo.team04.util.Log;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;

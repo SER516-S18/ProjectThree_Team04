@@ -1,5 +1,6 @@
-package edu.asu.ser516.projecttwo.team04;
+package edu.asu.ser516.projecttwo.team04.model.client;
 
+import edu.asu.ser516.projecttwo.team04.Datagram;
 import edu.asu.ser516.projecttwo.team04.listeners.ClientListener;
 import edu.asu.ser516.projecttwo.team04.util.Log;
 

@@ -1,10 +1,10 @@
 package edu.asu.ser516.projecttwo.team04.ui;
 
-import edu.asu.ser516.projecttwo.team04.ClientModel;
-import edu.asu.ser516.projecttwo.team04.ServerModel;
 import edu.asu.ser516.projecttwo.team04.constants.ColorConstants;
 import edu.asu.ser516.projecttwo.team04.listeners.ClientListener;
 import edu.asu.ser516.projecttwo.team04.listeners.ServerListener;
+import edu.asu.ser516.projecttwo.team04.model.client.ClientModel;
+import edu.asu.ser516.projecttwo.team04.model.server.ServerModel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

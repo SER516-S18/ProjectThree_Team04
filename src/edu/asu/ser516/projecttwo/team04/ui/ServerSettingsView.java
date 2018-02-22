@@ -1,8 +1,8 @@
 package edu.asu.ser516.projecttwo.team04.ui;
 
-import edu.asu.ser516.projecttwo.team04.ServerModel;
 import edu.asu.ser516.projecttwo.team04.constants.ColorConstants;
 import edu.asu.ser516.projecttwo.team04.constants.StringConstants;
+import edu.asu.ser516.projecttwo.team04.model.server.ServerModel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
