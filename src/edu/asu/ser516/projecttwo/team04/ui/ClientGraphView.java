@@ -2,7 +2,9 @@ package edu.asu.ser516.projecttwo.team04.ui;
 
 import edu.asu.ser516.projecttwo.team04.constants.ColorConstants;
 import edu.asu.ser516.projecttwo.team04.listeners.ClientListener;
+import edu.asu.ser516.projecttwo.team04.model.client.ClientChannel;
 import edu.asu.ser516.projecttwo.team04.model.client.ClientModel;
+import edu.asu.ser516.projecttwo.team04.model.client.ClientValueTuple;
 import edu.asu.ser516.projecttwo.team04.util.Log;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -88,14 +90,14 @@ public class ClientGraphView extends JPanel {
 
     private void updateSeries() {
         // Each series is a line, displaying a channel
-        java.util.List<ClientModel.ClientChannel> channels = ClientModel.get().getChannels();
+        java.util.List<ClientChannel> channels = ClientModel.get().getChannels();
 
         if(channels.size() > dataset.getSeriesCount()) {
             // Was added
             for(int i = dataset.getSeriesCount(); i < channels.size(); i++) {
-                ClientModel.ClientChannel channel = channels.get(i);
+                ClientChannel channel = channels.get(i);
                 XYSeries series = new XYSeries("Channel " + channel.id);
-                for(ClientModel.ClientValueTuple tuple : channel.getValues()) {
+                for(ClientValueTuple tuple : channel.getValues()) {
                     series.add(tuple.tick, tuple.value);
                 }
                 dataset.addSeries(series);
@@ -111,11 +113,11 @@ public class ClientGraphView extends JPanel {
     }
 
     private void updateValues() {
-        List<ClientModel.ClientChannel> channels = ClientModel.get().getChannels();
+        List<ClientChannel> channels = ClientModel.get().getChannels();
         for(int i = 0; i < dataset.getSeriesCount(); i++) {
             if(channels.size() == dataset.getSeriesCount()) {
                 XYSeries series = dataset.getSeries(i);
-                ClientModel.ClientValueTuple tuple = channels.get(i).getLast();
+                ClientValueTuple tuple = channels.get(i).getLast();
                 if(tuple != null)
                     series.add(tuple.tick, tuple.value);
             } else {
