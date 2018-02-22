@@ -1,4 +1,4 @@
-package edu.asu.ser516.projecttwo.team04.util;
+package edu.asu.ser516.projecttwo.team04.constants;
 
 import java.awt.*;
 
@@ -14,6 +14,4 @@ public class UIStandards {
     public static Color BACKGROUND_BLUE = new Color(207, 220, 240);
     public static Color BACKGROUND_BLUEGRAY = new Color(228,233,239);
     public static Color BACKGROUND_GRAY = new Color(221,221,221);
-    public static String[] NUMBER_OF_CHANNELS = new String[] {"1", "2", "3", "4", "5"};
-
 }

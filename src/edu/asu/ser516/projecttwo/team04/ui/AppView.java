@@ -5,7 +5,7 @@ import edu.asu.ser516.projecttwo.team04.ServerModel;
 import edu.asu.ser516.projecttwo.team04.listeners.ClientListener;
 import edu.asu.ser516.projecttwo.team04.listeners.ServerListener;
 import edu.asu.ser516.projecttwo.team04.util.Log;
-import edu.asu.ser516.projecttwo.team04.util.UIStandards;
+import edu.asu.ser516.projecttwo.team04.constants.UIStandards;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

@@ -1,4 +1,4 @@
-package edu.asu.ser516.projecttwo.team04.Constants;
+package edu.asu.ser516.projecttwo.team04.constants;
 
 public class AppConstants {
     public static final String HIGHEST_VALUE_STRING = "<html>Highest<br>value:</html>";

@@ -1,10 +1,10 @@
 package edu.asu.ser516.projecttwo.team04.ui;
 
 import edu.asu.ser516.projecttwo.team04.ClientModel;
-import edu.asu.ser516.projecttwo.team04.Constants.AppConstants;
+import edu.asu.ser516.projecttwo.team04.constants.AppConstants;
 import edu.asu.ser516.projecttwo.team04.listeners.ClientListener;
 import edu.asu.ser516.projecttwo.team04.util.Log;
-import edu.asu.ser516.projecttwo.team04.util.UIStandards;
+import edu.asu.ser516.projecttwo.team04.constants.UIStandards;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -213,40 +213,37 @@ public class ClientView extends JPanel {
             public void shutdown() {}
         });
     }
-}
 
+    /**
+     * Class to plot the graph on client server depending on number of channels selected
+     * @author  Sai Saran Kandimalla.
+     */
+    class PlotGraph {
+        JFreeChart graph;
 
-/**
- * Class to plot the graph on client server depending on number of channels selected 
- * @author  Sai Saran Kandimalla. 
- */
+        public PlotGraph() {
+            this.graph= ChartFactory.createLineChart(
+                    "Display",
+                    "Number","Value",
+                    createDataset(),
+                    PlotOrientation.VERTICAL,
+                    true,true,false);
+        }
 
-class PlotGraph
-{
-	 JFreeChart graph;
-		
-	   public PlotGraph() {
-			 this.graph= ChartFactory.createLineChart(
-			         "Display",
-			         "Number","Value",
-			         createDataset(),
-			         PlotOrientation.VERTICAL,
-			         true,true,false);
-	}
+        /*
+         * Method that creates datasets to plot the graph receiving the random values from server.
+         * this method creates number of datasets equal to number of channels
+         */
+        private DefaultCategoryDataset createDataset( ) {
+            DefaultCategoryDataset dataset = new DefaultCategoryDataset( );
+            Random randomNumber = new Random();
 
-	/*
-	 * Method that creates datasets to plot the graph receiving the random values from server.
-	 * this method creates number of datasets equal to number of channels
-	 */
-	   private DefaultCategoryDataset createDataset( ) {
-		      DefaultCategoryDataset dataset = new DefaultCategoryDataset( );
-		      Random randomNumber = new Random();
-		      
-		      for(int i=1;i<=30;i++)
-		      {
-		    	  dataset.addValue((Number)randomNumber.nextInt(1024), "values", i);
-		      }
-		      
-		      return dataset;
-		   }	
+            for(int i=1;i<=30;i++)
+            {
+                dataset.addValue((Number)randomNumber.nextInt(1024), "values", i);
+            }
+
+            return dataset;
+        }
+    }
 }
