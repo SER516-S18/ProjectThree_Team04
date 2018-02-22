@@ -1,7 +1,7 @@
 package edu.asu.ser516.projecttwo.team04.ui;
 
 import edu.asu.ser516.projecttwo.team04.constants.ColorConstants;
-import edu.asu.ser516.projecttwo.team04.constants.StringConstants;
+import edu.asu.ser516.projecttwo.team04.constants.TextConstants;
 import edu.asu.ser516.projecttwo.team04.model.server.ServerModel;
 
 import javax.swing.*;
@@ -20,8 +20,8 @@ public class ServerSettingsView extends JPanel {
         this.setOpaque(false);
 
         // Maximum - Prompt
-        JLabel labelPromptMaximum = new JLabel(StringConstants.HIGHEST_VALUE_STRING);
-        labelPromptMaximum.setFont(ColorConstants.DEFAULT_FONT);
+        JLabel labelPromptMaximum = new JLabel(TextConstants.HIGHEST_VALUE_STRING);
+        labelPromptMaximum.setFont(TextConstants.DEFAULT_FONT);
         labelPromptMaximum.setHorizontalAlignment(JLabel.CENTER);
         labelPromptMaximum.setVerticalAlignment(JLabel.CENTER);
 
@@ -36,7 +36,7 @@ public class ServerSettingsView extends JPanel {
         spinnerInputMaximum.setVisible(true);
         spinnerInputMaximum.setBorder(null);
         spinnerInputMaximum.getEditor().getComponent(0).setBackground(ColorConstants.BACKGROUND_PINK);
-        spinnerInputMaximum.setFont(ColorConstants.LARGE_FONT);
+        spinnerInputMaximum.setFont(TextConstants.LARGE_FONT);
         spinnerInputMaximum.addChangeListener(e -> {
             ServerModel.get().setValueMax((Integer) spinnerInputMaximum.getValue());
         });
@@ -48,8 +48,8 @@ public class ServerSettingsView extends JPanel {
         this.add(panelInputMaximum);
 
         // Minimum - Prompt
-        JLabel labelPromptMinimum = new JLabel(StringConstants.LOWEST_VALUE_STRING);
-        labelPromptMinimum.setFont(ColorConstants.DEFAULT_FONT);
+        JLabel labelPromptMinimum = new JLabel(TextConstants.LOWEST_VALUE_STRING);
+        labelPromptMinimum.setFont(TextConstants.DEFAULT_FONT);
         labelPromptMinimum.setHorizontalAlignment(JLabel.CENTER);
         labelPromptMinimum.setVerticalAlignment(JLabel.CENTER);
 
@@ -64,7 +64,7 @@ public class ServerSettingsView extends JPanel {
         spinnerInputMinimum.setVisible(true);
         spinnerInputMinimum.setBorder(null);
         spinnerInputMinimum.getEditor().getComponent(0).setBackground(ColorConstants.BACKGROUND_BLUEGRAY);
-        spinnerInputMinimum.setFont(ColorConstants.LARGE_FONT);
+        spinnerInputMinimum.setFont(TextConstants.LARGE_FONT);
         spinnerInputMinimum.addChangeListener(e -> {
             ServerModel.get().setValueMin((Integer) spinnerInputMinimum.getValue());
         });
@@ -76,8 +76,8 @@ public class ServerSettingsView extends JPanel {
         this.add(panelInputMinimum);
 
         // Frequency - Prompt
-        JLabel labelPromptFrequency = new JLabel(StringConstants.FREQUENCY_VALUE_STRING);
-        labelPromptFrequency.setFont(ColorConstants.DEFAULT_FONT);
+        JLabel labelPromptFrequency = new JLabel(TextConstants.FREQUENCY_VALUE_STRING);
+        labelPromptFrequency.setFont(TextConstants.DEFAULT_FONT);
         labelPromptFrequency.setHorizontalAlignment(JLabel.CENTER);
         labelPromptFrequency.setVerticalAlignment(JLabel.CENTER);
 
@@ -92,7 +92,7 @@ public class ServerSettingsView extends JPanel {
         spinnerInputFrequency.setVisible(true);
         spinnerInputFrequency.setBorder(null);
         spinnerInputFrequency.getEditor().getComponent(0).setBackground(ColorConstants.BACKGROUND_PINK);
-        spinnerInputFrequency.setFont(ColorConstants.LARGE_FONT);
+        spinnerInputFrequency.setFont(TextConstants.LARGE_FONT);
         spinnerInputFrequency.addChangeListener(e -> {
             ServerModel.get().setFrequency((Integer) spinnerInputFrequency.getValue());
         });

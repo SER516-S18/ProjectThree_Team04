@@ -1,6 +1,7 @@
 package edu.asu.ser516.projecttwo.team04.ui;
 
 import edu.asu.ser516.projecttwo.team04.constants.ColorConstants;
+import edu.asu.ser516.projecttwo.team04.constants.TextConstants;
 import edu.asu.ser516.projecttwo.team04.listeners.ServerListener;
 import edu.asu.ser516.projecttwo.team04.model.server.ServerModel;
 
@@ -63,7 +64,7 @@ public class ServerStatusView extends  JPanel {
 
         // Create the indicator
         labelIndicator = new JLabel("•", SwingConstants.CENTER);
-        labelIndicator.setFont(new Font("Monospaced", Font.PLAIN, ColorConstants.DEFAULT_FONT.getSize() * 16));
+        labelIndicator.setFont(new Font("Monospaced", Font.PLAIN, TextConstants.DEFAULT_FONT.getSize() * 16));
         labelIndicator.setForeground(running ? COLOR_ON_BRIGHT : COLOR_OFF);
         panelBuffer.add(labelIndicator, BorderLayout.CENTER);
 

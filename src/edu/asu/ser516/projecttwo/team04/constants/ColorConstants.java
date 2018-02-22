@@ -8,9 +8,6 @@ import java.awt.*;
  */
 
 public class ColorConstants {
-    public static final Font LARGE_FONT = new Font("Monospaced", Font.PLAIN, 20);
-    public static final Font DEFAULT_FONT = new Font("Monospaced", Font.PLAIN, 16);
-    public static final Font SMALL_FONT = new Font("Monospaced", Font.PLAIN, 13);
     public static final Color BACKGROUND_PINK = new Color(236, 219, 219);
     public static final Color BACKGROUND_BLUE = new Color(207, 220, 240);
     public static final Color BACKGROUND_BLUEGRAY = new Color(228,233,239);

@@ -1,7 +1,7 @@
 package edu.asu.ser516.projecttwo.team04.ui;
 
 import edu.asu.ser516.projecttwo.team04.constants.ColorConstants;
-import edu.asu.ser516.projecttwo.team04.constants.StringConstants;
+import edu.asu.ser516.projecttwo.team04.constants.TextConstants;
 import edu.asu.ser516.projecttwo.team04.listeners.ClientListener;
 import edu.asu.ser516.projecttwo.team04.model.client.ClientModel;
 
@@ -22,8 +22,8 @@ public class ClientSettingsView extends JPanel {
         this.setOpaque(false);
 
         // Maximum - Prompt
-        JLabel labelPromptMaximum = new JLabel(StringConstants.HIGHEST_VALUE_STRING);
-        labelPromptMaximum.setFont(ColorConstants.DEFAULT_FONT);
+        JLabel labelPromptMaximum = new JLabel(TextConstants.HIGHEST_VALUE_STRING);
+        labelPromptMaximum.setFont(TextConstants.DEFAULT_FONT);
         labelPromptMaximum.setHorizontalAlignment(JLabel.CENTER);
         labelPromptMaximum.setVerticalAlignment(JLabel.CENTER);
 
@@ -35,7 +35,7 @@ public class ClientSettingsView extends JPanel {
 
         // Maximum - Value
         labelValueMaximum = new JLabel(String.valueOf(ClientModel.get().getMaximum() == null ? "" : ClientModel.get().getMinimum()));
-        labelValueMaximum.setFont(ColorConstants.LARGE_FONT);
+        labelValueMaximum.setFont(TextConstants.LARGE_FONT);
 
         JPanel panelValueMaximum = new JPanel();
         panelValueMaximum.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -44,8 +44,8 @@ public class ClientSettingsView extends JPanel {
         this.add(panelValueMaximum);
 
         // Minimum - Prompt
-        JLabel labelPromptMinimum = new JLabel(StringConstants.LOWEST_VALUE_STRING);
-        labelPromptMinimum.setFont(ColorConstants.DEFAULT_FONT);
+        JLabel labelPromptMinimum = new JLabel(TextConstants.LOWEST_VALUE_STRING);
+        labelPromptMinimum.setFont(TextConstants.DEFAULT_FONT);
         labelPromptMinimum.setHorizontalAlignment(JLabel.CENTER);
         labelPromptMinimum.setVerticalAlignment(JLabel.CENTER);
 
@@ -57,7 +57,7 @@ public class ClientSettingsView extends JPanel {
 
         // Minimum - Value
         labelValueMinimum = new JLabel(String.valueOf(ClientModel.get().getMinimum() == null ? "" : ClientModel.get().getMinimum()));
-        labelValueMinimum.setFont(ColorConstants.LARGE_FONT);
+        labelValueMinimum.setFont(TextConstants.LARGE_FONT);
 
         JPanel panelValueMinimum = new JPanel();
         panelValueMinimum.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -66,8 +66,8 @@ public class ClientSettingsView extends JPanel {
         this.add(panelValueMinimum);
 
         // Average - Prompt
-        JLabel labelPromptAverage = new JLabel(StringConstants.AVERAGE_VALUE_STRING);
-        labelPromptAverage.setFont(ColorConstants.DEFAULT_FONT);
+        JLabel labelPromptAverage = new JLabel(TextConstants.AVERAGE_VALUE_STRING);
+        labelPromptAverage.setFont(TextConstants.DEFAULT_FONT);
         labelPromptAverage.setHorizontalAlignment(JLabel.CENTER);
         labelPromptAverage.setVerticalAlignment(JLabel.CENTER);
 
@@ -79,7 +79,7 @@ public class ClientSettingsView extends JPanel {
 
         // Average - Value
         labelValueAverage = new JLabel(String.valueOf(ClientModel.get().getAverage() == null ? "" : ClientModel.get().getAverage()));
-        labelValueAverage.setFont(ColorConstants.LARGE_FONT);
+        labelValueAverage.setFont(TextConstants.LARGE_FONT);
 
         JPanel panelValueAverage = new JPanel();
         panelValueAverage.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -88,8 +88,8 @@ public class ClientSettingsView extends JPanel {
         this.add(panelValueAverage);
 
         // Channels - Prompt
-        JLabel labelPromptChannels = new JLabel(StringConstants.CHANNELS_VALUE_STRING);
-        labelPromptChannels.setFont(ColorConstants.DEFAULT_FONT);
+        JLabel labelPromptChannels = new JLabel(TextConstants.CHANNELS_VALUE_STRING);
+        labelPromptChannels.setFont(TextConstants.DEFAULT_FONT);
         labelPromptChannels.setHorizontalAlignment(JLabel.CENTER);
         labelPromptChannels.setVerticalAlignment(JLabel.CENTER);
 
@@ -104,7 +104,7 @@ public class ClientSettingsView extends JPanel {
         spinnerInputChannels.setVisible(true);
         spinnerInputChannels.setBorder(null);
         spinnerInputChannels.getEditor().getComponent(0).setBackground(ColorConstants.BACKGROUND_BLUEGRAY);
-        spinnerInputChannels.setFont(ColorConstants.LARGE_FONT);
+        spinnerInputChannels.setFont(TextConstants.LARGE_FONT);
         spinnerInputChannels.addChangeListener(e -> {
             ClientModel.get().setChannelCount((Integer) spinnerInputChannels.getValue());
         });
@@ -116,8 +116,8 @@ public class ClientSettingsView extends JPanel {
         this.add(panelInputChannels);
 
         // Frequency - Prompt
-        JLabel labelPromptFrequency = new JLabel(StringConstants.FREQUENCY_VALUE_STRING);
-        labelPromptFrequency.setFont(ColorConstants.DEFAULT_FONT);
+        JLabel labelPromptFrequency = new JLabel(TextConstants.FREQUENCY_VALUE_STRING);
+        labelPromptFrequency.setFont(TextConstants.DEFAULT_FONT);
         labelPromptFrequency.setHorizontalAlignment(JLabel.CENTER);
         labelPromptFrequency.setVerticalAlignment(JLabel.CENTER);
 
@@ -132,7 +132,7 @@ public class ClientSettingsView extends JPanel {
         spinnerInputFrequency.setVisible(true);
         spinnerInputFrequency.setBorder(null);
         spinnerInputFrequency.getEditor().getComponent(0).setBackground(ColorConstants.BACKGROUND_PINK);
-        spinnerInputFrequency.setFont(ColorConstants.LARGE_FONT);
+        spinnerInputFrequency.setFont(TextConstants.LARGE_FONT);
         spinnerInputFrequency.addChangeListener(e -> {
             ClientModel.get().setFrequency((Integer) spinnerInputFrequency.getValue());
         });

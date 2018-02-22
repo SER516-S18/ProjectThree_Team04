@@ -1,6 +1,7 @@
 package edu.asu.ser516.projecttwo.team04.ui;
 
 import edu.asu.ser516.projecttwo.team04.constants.ColorConstants;
+import edu.asu.ser516.projecttwo.team04.constants.TextConstants;
 import edu.asu.ser516.projecttwo.team04.listeners.ClientListener;
 import edu.asu.ser516.projecttwo.team04.listeners.ServerListener;
 import edu.asu.ser516.projecttwo.team04.model.client.ClientModel;
@@ -59,12 +60,12 @@ public class AppToolbarView extends JToolBar {
         this.setFloatable(false);
 
         labelType = new JLabel(AppView.get().isClient() ? "Client" : "Server");
-        labelType.setFont(ColorConstants.DEFAULT_FONT);
+        labelType.setFont(TextConstants.DEFAULT_FONT);
         this.add(labelType);
         this.add(Box.createHorizontalGlue());
 
         buttonToggle = new JButton("Start");
-        buttonToggle.setFont(ColorConstants.DEFAULT_FONT);
+        buttonToggle.setFont(TextConstants.DEFAULT_FONT);
         buttonToggle.setBackground(ColorConstants.BACKGROUND_PINK);
         buttonToggle.setFocusPainted(false);
         buttonToggle.setBorder(BorderFactory.createCompoundBorder(
