@@ -253,7 +253,7 @@ public class ClientModel {
     public void setChannelCount(int count) {
         if(count < 1)
             throw new IllegalArgumentException("Channel count must be greater than zero");
-        else {
+        else if(count != CHANNEL_COUNT) {
             // Create new channels on clientside
             if(count > CHANNEL_COUNT) {
                 // Adding channels
@@ -553,8 +553,12 @@ public class ClientModel {
         }
 
         public ClientValueTuple getLast() {
-            return values.get(values.size());
+            if(values.size() > 0)
+                return values.get(values.size() - 1);
+            else
+                return null;
         }
+
         public List<ClientValueTuple> getValues() {
             return Collections.unmodifiableList(values);
         }
