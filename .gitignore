@@ -6,3 +6,4 @@ out/*
 *.iml
 *.jar
 *.zip
+*MANIFEST.MF
