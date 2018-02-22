@@ -4,12 +4,22 @@ import edu.asu.ser516.projecttwo.team04.ClientModel;
 import edu.asu.ser516.projecttwo.team04.constants.ColorConstants;
 import edu.asu.ser516.projecttwo.team04.constants.StringConstants;
 import edu.asu.ser516.projecttwo.team04.listeners.ClientListener;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.util.*;
+import java.util.List;
 
 /**
  * ClientView, the main UI for the client application
@@ -38,19 +48,80 @@ public class ClientView extends JPanel {
     }
 
     private class ClientGraphView extends JPanel {
+        private ArrayList<XYSeries> series;
+        private XYDataset dataset;
+        private JFreeChart chart;
+        private ChartPanel panelChart;
+        private JPanel panelBuffer;
+
         private ClientGraphView() {
+            ClientModel.get().addListener(new ClientListener() {
+                @Override
+                public void changedValues() {
+                    ClientGraphView.this.initGraph();
+                }
+
+                @Override
+                public void changedChannelCount(int count) {
+                    // ClientGraphView.this.updateSeries();
+                }
+
+                @Override
+                public void started() {}
+
+                @Override
+                public void shutdown() {}
+            });
+
             this.setLayout(new BorderLayout());
             this.setOpaque(false);
             this.setBorder(new EmptyBorder(8, 8, 8, 8));
 
-            JPanel panelBuffer = new JPanel(new BorderLayout());
+            initGraph();
+        }
+
+        private void initGraph() {
+            panelBuffer = new JPanel(new BorderLayout());
             panelBuffer.setBackground(ColorConstants.BACKGROUND_PINK);
             panelBuffer.setBorder(BorderFactory.createLineBorder(Color.black));
 
-            // TODO - panelBuffer.add(<GRAPH JPANEL>, BorderLayout.CENTER);
+            // Create the chart
+            dataset = this.getDataset();
+            chart = ChartFactory.createXYLineChart("", "", "", dataset, PlotOrientation.VERTICAL, false, false, false);
+            chart.setBackgroundPaint(ColorConstants.BACKGROUND_PINK);
+            chart.getPlot().setOutlineVisible(false);
+            chart.getPlot().setBackgroundAlpha(0);
+            ((XYPlot) chart.getPlot()).getDomainAxis().setVisible(false);
+            ((XYPlot) chart.getPlot()).setDomainGridlinesVisible(false);
+            ((XYPlot) chart.getPlot()).setDomainMinorGridlinesVisible(false);
+            ((XYPlot) chart.getPlot()).getRangeAxis().setVisible(false);
+            ((XYPlot) chart.getPlot()).setRangeGridlinesVisible(false);
+            ((XYPlot) chart.getPlot()).setRangeMinorGridlinesVisible(false);
 
+            // Put chart in panel
+            panelChart = new ChartPanel(chart, false);
+            panelChart.setDomainZoomable(false);
+            panelChart.setRangeZoomable(false);
+
+            // Put in buffer (for border), then in the ClientView
+            panelBuffer.add(panelChart, BorderLayout.CENTER);
             this.add(panelBuffer, BorderLayout.CENTER);
         }
+
+        private XYSeriesCollection getDataset() {
+            XYSeriesCollection collection = new XYSeriesCollection();
+
+            for(ClientModel.ClientChannel channel : ClientModel.get().getChannels()) {
+                XYSeries series = new XYSeries("Channel " + channel.id);
+                for(ClientModel.ClientValueTuple tuple : channel.getValues()) {
+                    series.add(tuple.tick, tuple.value);
+                }
+                collection.addSeries(series);
+            }
+
+            return collection;
+        }
+
     }
 
     private class ClientSettingsView extends JPanel {
