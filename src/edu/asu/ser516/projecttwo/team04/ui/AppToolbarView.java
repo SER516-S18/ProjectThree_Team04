@@ -12,8 +12,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 /**
- * AppToolbarView, the toolbar with the start/stop button and Label which denotes
- * whether the application is of type client or server7
+ * AppToolbarView, the toolbar with the start/stop button and label which denotes
+ * whether the application is of type Client or Server
  */
 public class AppToolbarView extends JToolBar {
 
