@@ -516,7 +516,7 @@ public class ClientModel {
 
             while(ClientModel.this.run) {
                 // Get the most recent input at our own client's frequency
-                ArrayList<Integer> values = worker.inputListener.getValue(true);
+                ArrayList<Integer> values = worker.inputListener.getValue(false);
 
                 if(values != null) {
                     if(values.size() != CHANNEL_COUNT) {
