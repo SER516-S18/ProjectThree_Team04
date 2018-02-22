@@ -44,12 +44,12 @@ public class ConsoleView extends JPanel {
         textareaLog.setWrapStyleWord(true);
         panelBuffer.add(textareaLog, BorderLayout.CENTER);
 
-
         textfieldInput = new JTextField();
         textfieldInput.setOpaque(false);
         textfieldInput.setBorder(null);
         textfieldInput.setFont(ColorConstants.DEFAULT_FONT);
         textfieldInput.addActionListener(e -> {
+            // Upon taking input, append the input to the console and send it to the terminal to handle
             textareaLog.append("> " + textfieldInput.getText() + "\n");
             Terminal.handle(textfieldInput.getText());
             textareaLog.setCaretPosition(textareaLog.getText().length());

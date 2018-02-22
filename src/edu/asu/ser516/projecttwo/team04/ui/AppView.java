@@ -37,7 +37,7 @@ public class AppView extends JFrame {
 
     /**
      * Set whether the app is a client or server
-     * @param type
+     * @param type Either TYPE_CLIENT or TYPE_SERVER
      */
     public void setType(int type) {
         if(type != TYPE_CLIENT && type != TYPE_SERVER)
@@ -82,6 +82,8 @@ public class AppView extends JFrame {
      */
     private void updateType() {
         if(viewMenu != null) {
+            viewMenu.removeAll();
+            viewMenu.setVisible(false);
             this.remove(viewMenu);
             viewMenu = null;
         }
@@ -105,6 +107,8 @@ public class AppView extends JFrame {
                 this.viewToolbar.labelType.setText("Server");
                 this.viewToolbar.buttonToggle.setText(ServerModel.get().isRunning() ? "Stop" : "Start");
             }
+        } else {
+            throw new IllegalStateException("Type is not client or server");
         }
 
         this.add(viewMenu, BorderLayout.CENTER);

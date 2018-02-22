@@ -15,8 +15,6 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.util.List;
 
@@ -242,11 +240,8 @@ public class ClientView extends JPanel {
             spinnerInputChannels.setBorder(null);
             spinnerInputChannels.getEditor().getComponent(0).setBackground(ColorConstants.BACKGROUND_BLUEGRAY);
             spinnerInputChannels.setFont(ColorConstants.LARGE_FONT);
-            spinnerInputChannels.addChangeListener(new ChangeListener() {
-                @Override
-                public void stateChanged(ChangeEvent e) {
-                    ClientModel.get().setChannelCount((Integer) spinnerInputChannels.getValue());
-                }
+            spinnerInputChannels.addChangeListener(e -> {
+                ClientModel.get().setChannelCount((Integer) spinnerInputChannels.getValue());
             });
 
             JPanel panelInputChannels = new JPanel();
@@ -273,11 +268,8 @@ public class ClientView extends JPanel {
             spinnerInputFrequency.setBorder(null);
             spinnerInputFrequency.getEditor().getComponent(0).setBackground(ColorConstants.BACKGROUND_PINK);
             spinnerInputFrequency.setFont(ColorConstants.LARGE_FONT);
-            spinnerInputFrequency.addChangeListener(new ChangeListener() {
-                @Override
-                public void stateChanged(ChangeEvent e) {
-                    ClientModel.get().setFrequency((Integer) spinnerInputFrequency.getValue());
-                }
+            spinnerInputFrequency.addChangeListener(e -> {
+                ClientModel.get().setFrequency((Integer) spinnerInputFrequency.getValue());
             });
 
             JPanel panelInputFrequency = new JPanel();

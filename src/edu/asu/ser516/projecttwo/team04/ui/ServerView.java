@@ -7,8 +7,6 @@ import edu.asu.ser516.projecttwo.team04.listeners.ServerListener;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 
 /**
@@ -24,19 +22,25 @@ public class ServerView extends JPanel {
         this.setOpaque(false);
         this.setBorder(new EmptyBorder(8, 8, 8, 8));
 
+        // Buffer for an opaque border surrounding ServerView, the buffer is the actual visible panel
         JPanel panelBuffer = new JPanel(new GridLayout(1, 2, 8, 8));
         panelBuffer.setBackground(ColorConstants.BACKGROUND_GRAY);
         panelBuffer.setBorder(BorderFactory.createLineBorder(Color.black));
 
+        // Add the status view (left)
         statusView = new ServerStatusView();
         panelBuffer.add(statusView, BorderLayout.LINE_START);
 
+        // Add the settings view (right)
         settingsView = new ServerSettingsView();
         panelBuffer.add(settingsView, BorderLayout.LINE_END);
 
         this.add(panelBuffer, BorderLayout.CENTER);
     }
 
+    /**
+     * ServerStatusView - The view that contains an indicator showing if the server is running
+     */
     private class ServerStatusView extends JPanel {
         private Color COLOR_OFF = Color.DARK_GRAY;
         private Color COLOR_ON_DIM = new Color(197, 224, 179);
@@ -50,17 +54,20 @@ public class ServerView extends JPanel {
             ServerModel.get().addListener(new ServerListener() {
                 @Override
                 public void started() {
+                    // When the server is started, set the label to on
                     running = true;
                     labelIndicator.setForeground(COLOR_ON_BRIGHT);
                 }
 
                 @Override
                 public void shutdown() {
+                    // When the server is stopped, set the label to off
                     running = false;
                     labelIndicator.setForeground(COLOR_OFF);
                 }
             });
 
+            // Create a timer to blink if on or off
             Timer timer = new Timer(1000, e2 -> {
                 if(running) {
                     if(labelIndicator.getForeground() == COLOR_ON_DIM) {
@@ -78,10 +85,12 @@ public class ServerView extends JPanel {
             this.setOpaque(false);
             this.setBorder(new EmptyBorder(8, 8, 8, 8));
 
+            // Put the main view in a "buffer", this creates a transparent border around the buffer's content
             JPanel panelBuffer = new JPanel(new BorderLayout());
             panelBuffer.setBackground(ColorConstants.BACKGROUND_PINK);
             panelBuffer.setBorder(BorderFactory.createLineBorder(Color.black));
 
+            // Create the indicator
             labelIndicator = new JLabel("•", SwingConstants.CENTER);
             labelIndicator.setFont(new Font("Monospaced", Font.PLAIN, ColorConstants.DEFAULT_FONT.getSize() * 16));
             labelIndicator.setForeground(running ? COLOR_ON_BRIGHT : COLOR_OFF);
@@ -91,6 +100,9 @@ public class ServerView extends JPanel {
         }
     }
 
+    /**
+     * ServerSettingsView - The right hand side to change the output min/max/frequency
+     */
     private class ServerSettingsView extends JPanel {
         private ServerSettingsView() {
             this.setLayout(new GridLayout(5, 2, 8, 8));
@@ -115,11 +127,8 @@ public class ServerView extends JPanel {
             spinnerInputMaximum.setBorder(null);
             spinnerInputMaximum.getEditor().getComponent(0).setBackground(ColorConstants.BACKGROUND_PINK);
             spinnerInputMaximum.setFont(ColorConstants.LARGE_FONT);
-            spinnerInputMaximum.addChangeListener(new ChangeListener() {
-                @Override
-                public void stateChanged(ChangeEvent e) {
-                    ServerModel.get().setValueMax((Integer) spinnerInputMaximum.getValue());
-                }
+            spinnerInputMaximum.addChangeListener(e -> {
+                ServerModel.get().setValueMax((Integer) spinnerInputMaximum.getValue());
             });
 
             JPanel panelInputMaximum = new JPanel();
@@ -146,11 +155,8 @@ public class ServerView extends JPanel {
             spinnerInputMinimum.setBorder(null);
             spinnerInputMinimum.getEditor().getComponent(0).setBackground(ColorConstants.BACKGROUND_BLUEGRAY);
             spinnerInputMinimum.setFont(ColorConstants.LARGE_FONT);
-            spinnerInputMinimum.addChangeListener(new ChangeListener() {
-                @Override
-                public void stateChanged(ChangeEvent e) {
-                    ServerModel.get().setValueMin((Integer) spinnerInputMinimum.getValue());
-                }
+            spinnerInputMinimum.addChangeListener(e -> {
+                ServerModel.get().setValueMin((Integer) spinnerInputMinimum.getValue());
             });
 
             JPanel panelInputMinimum = new JPanel();
@@ -177,11 +183,8 @@ public class ServerView extends JPanel {
             spinnerInputFrequency.setBorder(null);
             spinnerInputFrequency.getEditor().getComponent(0).setBackground(ColorConstants.BACKGROUND_PINK);
             spinnerInputFrequency.setFont(ColorConstants.LARGE_FONT);
-            spinnerInputFrequency.addChangeListener(new ChangeListener() {
-                @Override
-                public void stateChanged(ChangeEvent e) {
-                    ServerModel.get().setFrequency((Integer) spinnerInputFrequency.getValue());
-                }
+            spinnerInputFrequency.addChangeListener(e -> {
+                ServerModel.get().setFrequency((Integer) spinnerInputFrequency.getValue());
             });
 
             JPanel panelInputFrequency = new JPanel();
@@ -190,6 +193,7 @@ public class ServerView extends JPanel {
             panelInputFrequency.add(spinnerInputFrequency);
             this.add(panelInputFrequency);
 
+            // Add four empty panels (to scale like the specification and the client's 5 rows)
             this.add(new JLabel());
             this.add(new JLabel());
             this.add(new JLabel());

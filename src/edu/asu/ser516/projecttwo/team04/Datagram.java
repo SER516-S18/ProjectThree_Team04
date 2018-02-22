@@ -12,7 +12,6 @@ import java.io.Serializable;
 
 public class Datagram implements Serializable {
     public enum TYPE {
-        PING,
         SETTING,
         SHUTDOWN,
         PAYLOAD

@@ -194,7 +194,7 @@ public class ServerModel {
 
     /**
      * Setter for server's port
-     * @param port
+     * @param port Port to connect to
      */
     public void setPort(int port) {
         if(port < 0)
