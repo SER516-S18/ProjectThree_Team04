@@ -89,24 +89,20 @@ public class AppView extends JFrame {
             Log.i("Application initializing as a Client", AppView.class);
             viewMenu = new ClientView(this);
             this.setTitle("Client - SER516 Project Two: Team 4");
-            this.viewToolbar.label.setText("Client");
 
-            if (ClientModel.get().isRunning()) {
-                this.viewToolbar.buttonToggle.setText("Stop");
-            } else {
-                this.viewToolbar.buttonToggle.setText("Start");
+            if(this.viewToolbar != null) {
+                this.viewToolbar.labelType.setText("Client");
+                this.viewToolbar.buttonToggle.setText(ClientModel.get().isRunning() ? "Stop" : "Start");
             }
-
-        } else if(_type == AppView.TYPE_SERVER) {
+        }
+        else if(_type == AppView.TYPE_SERVER) {
             Log.i("Application initializing as a Server", AppView.class);
             viewMenu = new ServerView(this);
             this.setTitle("Server - SER516 Project Two: Team 4");
-            this.viewToolbar.label.setText("Server");
 
-            if (ServerModel.get().isRunning()) {
-                this.viewToolbar.buttonToggle.setText("Stop");
-            } else {
-                this.viewToolbar.buttonToggle.setText("Start");
+            if(this.viewToolbar != null) {
+                this.viewToolbar.labelType.setText("Server");
+                this.viewToolbar.buttonToggle.setText(ServerModel.get().isRunning() ? "Stop" : "Start");
             }
         }
 
@@ -120,23 +116,9 @@ public class AppView extends JFrame {
      */
     private class AppToolbar extends JToolBar {
         private JButton buttonToggle;
-        private Label label;
+        private JLabel labelType;
 
         public AppToolbar() {
-            this.setBackground(UIStandards.BACKGROUND_BLUE);
-            this.setBorder(new EmptyBorder(8, 8, 8, 8));
-            this.setFloatable(false);
-            this.add(Box.createHorizontalGlue());
-
-            if(AppView.this.isClient()) {
-                label = new Label("Client");
-                this.add(label);
-            }
-            else {
-                label = new Label("Server");
-                this.add(label);
-            }
-
             ServerModel.get().addListener(new ServerListener() {
                 @Override
                 public void started() {
@@ -170,6 +152,15 @@ public class AppView extends JFrame {
                         buttonToggle.setText("Start");
                 }
             });
+
+            this.setBackground(UIStandards.BACKGROUND_BLUE);
+            this.setBorder(new EmptyBorder(8, 8, 8, 8));
+            this.setFloatable(false);
+
+            labelType = new JLabel(AppView.get().isClient() ? "Client" : "Server");
+            labelType.setFont(UIStandards.DEFAULT_FONT);
+            this.add(labelType);
+            this.add(Box.createHorizontalGlue());
 
             buttonToggle = new JButton("Start");
             buttonToggle.setFont(UIStandards.DEFAULT_FONT);
