@@ -19,12 +19,18 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * ClientGraphView - The left hand JPanel containing the graph in the client view
+ */
 public class ClientGraphView extends JPanel {
     private XYSeriesCollection dataset;
     private JFreeChart chart;
     private ChartPanel panelChart;
     private JPanel panelBuffer;
 
+    /**
+     * ClientGraphView - The left hand side of the client view, containing the graph
+     */
     public ClientGraphView() {
         ClientModel.get().addListener(new ClientListener() {
             @Override
@@ -59,6 +65,9 @@ public class ClientGraphView extends JPanel {
         initGraph();
     }
 
+    /**
+     * initGraph - Creates and adds the graph to the panel
+     */
     private void initGraph() {
         panelBuffer = new JPanel(new BorderLayout());
         panelBuffer.setBackground(ColorConstants.BACKGROUND_PINK);
@@ -88,6 +97,9 @@ public class ClientGraphView extends JPanel {
         this.add(panelBuffer, BorderLayout.CENTER);
     }
 
+    /**
+     * updateSeries - Called when the number of channels changes, to update the series (graph's lines)
+     */
     private void updateSeries() {
         // Each series is a line, displaying a channel
         java.util.List<ClientChannel> channels = ClientModel.get().getChannels();
@@ -112,6 +124,9 @@ public class ClientGraphView extends JPanel {
         }
     }
 
+    /**
+     * updateValues - Called when new values need to be added to the graph
+     */
     private void updateValues() {
         List<ClientChannel> channels = ClientModel.get().getChannels();
         for(int i = 0; i < dataset.getSeriesCount(); i++) {

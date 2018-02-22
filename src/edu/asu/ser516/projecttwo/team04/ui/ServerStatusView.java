@@ -21,6 +21,9 @@ public class ServerStatusView extends  JPanel {
     private boolean running;
     private JLabel labelIndicator;
 
+    /**
+     * The view that contains an indicator showing if the server is running
+     */
     public ServerStatusView() {
         running = ServerModel.get().isRunning();
         ServerModel.get().addListener(new ServerListener() {

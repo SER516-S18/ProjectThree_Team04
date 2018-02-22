@@ -11,5 +11,9 @@ import edu.asu.ser516.projecttwo.team04.util.LogRecord;
  */
 
 public interface ConsoleRecordListener {
+    /**
+     * added - Called when a new log record is added
+     * @param record The added record
+     */
     public void added(LogRecord record);
 }

@@ -13,6 +13,9 @@ import java.awt.*;
  * @author  David Henderson (dchende2@asu.edu)
  */
 public class ServerSettingsView extends JPanel {
+    /**
+     * ServerSettingsView - The right hand side to change the output min/max/frequency
+     */
     public ServerSettingsView() {
         // Create the settings view with a transparent border encompassing
         this.setLayout(new GridLayout(5, 2, 8, 8));

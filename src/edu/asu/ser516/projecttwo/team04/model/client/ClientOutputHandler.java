@@ -35,6 +35,9 @@ public class ClientOutputHandler implements Runnable {
         datagrams.add(data);
     }
 
+    /**
+     * Execution to run on the thread, to handle output to Server
+     */
     @Override
     public void run() {
         running = true;

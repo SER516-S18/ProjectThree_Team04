@@ -22,23 +22,46 @@ public class Log {
         private final int _level;
         private final String _name;
 
+        /**
+         *
+         * @param level
+         * @param name
+         */
         private POLICY(int level, String name) {
             this._level = level;
             this._name = name;
         }
 
+        /**
+         * getLevel - Returns the record's urgency level
+         * @return Policy's level
+         */
         public int getLevel() {
             return this._level;
         }
 
+        /**
+         * getName - Returns the policy name
+         * @return Policy's name
+         */
         public String getName() {
             return this._name;
         }
 
+        /**
+         * isEqualOrWorse - Compares two policies to check which is worse
+         * @param POLICY Second policy to compare
+         * @return Whether this policy is equal or worse than input POLICY
+         */
         public boolean isEqualOrWorse(POLICY POLICY) {
             return this._level >= POLICY._level;
         }
 
+        /**
+         * isWorse - Compares two policies to check which is worse
+         * @param POLICY Second policy to compare
+         * @return Whether this policy is worse than input POLICY
+         */
         public boolean isWorse(POLICY POLICY) {
             return this._level > POLICY._level;
         }
@@ -106,28 +129,82 @@ public class Log {
         }
     }
 
-    // A bunch of helper or shorthand messages for logging
+    /**
+     * error - Log an error message
+     * @param msg Message to log
+     * @param javaClass Class log message is from
+     */
     public static void error(String msg, Class javaClass) { Log.e(msg, javaClass); }
+
+    /**
+     * e - Log an error message
+     * @param msg Message to log
+     * @param javaClass Class log message is from
+     */
     public static void e(String msg, Class javaClass) {
         Log.log(msg, javaClass, POLICY.ERROR);
     }
 
+    /**
+     * warn - Log an warn message
+     * @param msg Message to log
+     * @param javaClass Class log message is from
+     */
     public static void warn(String msg, Class javaClass) { Log.w(msg, javaClass); }
+
+    /**
+     * w - Log an warn message
+     * @param msg Message to log
+     * @param javaClass Class log message is from
+     */
     public static void w(String msg, Class javaClass) {
         Log.log(msg, javaClass, POLICY.WARNING);
     }
 
+    /**
+     * info - Log an info message
+     * @param msg Message to log
+     * @param javaClass Class log message is from
+     */
     public static void info(String msg, Class javaClass) { Log.i(msg, javaClass); }
+
+    /**
+     * i - Log an info message
+     * @param msg Message to log
+     * @param javaClass Class log message is from
+     */
     public static void i(String msg, Class javaClass) {
         Log.log(msg, javaClass, POLICY.INFO);
     }
 
+    /**
+     * debug - Log an debug message
+     * @param msg Message to log
+     * @param javaClass Class log message is from
+     */
     public static void debug(String msg, Class javaClass) { Log.d(msg, javaClass); }
+
+    /**
+     * d - Log an debug message
+     * @param msg Message to log
+     * @param javaClass Class log message is from
+     */
     public static void d(String msg, Class javaClass) {
         Log.log(msg, javaClass, POLICY.DEBUG);
     }
 
+    /**
+     * verbose - Log an verbose message
+     * @param msg Message to log
+     * @param javaClass Class log message is from
+     */
     public static void verbose(String msg, Class javaClass) { Log.v(msg, javaClass); }
+
+    /**
+     * v - Log an verbose message
+     * @param msg Message to log
+     * @param javaClass Class log message is from
+     */
     public static void v(String msg, Class javaClass) {
         Log.log(msg, javaClass, POLICY.VERBOSE);
     }
@@ -148,6 +225,10 @@ public class Log {
         return CONSOLE_POLICY;
     }
 
+    /**
+     * setPolicies - Set the console's minimum policy
+     * @param policy Policy to set
+     */
     public static void setPolicies(POLICY policy) {
         CONSOLE_POLICY = policy;
     }

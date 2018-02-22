@@ -14,6 +14,9 @@ public class ClientView extends JPanel {
     private ClientGraphView graphView;
     private ClientSettingsView settingsView;
 
+    /**
+     * ClientView, representing the UI for the client application
+     */
     public ClientView() {
         // Create a transparent border around this view
         this.setLayout(new BorderLayout());

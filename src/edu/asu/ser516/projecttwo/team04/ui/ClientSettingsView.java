@@ -9,6 +9,9 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
+/**
+ * ClientSettingsView - The right hand side of the Client app, containing settings and the min/max/avg
+ */
 public class ClientSettingsView extends JPanel {
     private JLabel labelValueMaximum;
     private JLabel labelValueMinimum;
@@ -16,6 +19,9 @@ public class ClientSettingsView extends JPanel {
     private JSpinner spinnerInputChannels;
     private JSpinner spinnerInputFrequency;
 
+    /**
+     * ClientSettingsView - The right hand side of the Client app, containing settings and the min/max/avg
+     */
     public ClientSettingsView() {
         this.setLayout(new GridLayout(5, 2, 8, 8));
         this.setBorder(new EmptyBorder(8, 8, 8, 8));

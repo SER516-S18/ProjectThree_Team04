@@ -56,11 +56,18 @@ public class ClientModel {
     private Integer valueMax = null;
     private Integer valueAvg = null;
 
+    /**
+     * ClientModel - Default constructor, defaulting to port 1516 and LOCALHOST
+     */
     private ClientModel() {
-        // Simple default constructor, port 1516 and LOCALHOST
         this(1516, LOCALHOST);
     }
 
+    /**
+     * ClientModel - Full constructor
+     * @param port Port to connect to
+     * @param host Host to connect to
+     */
     private ClientModel(int port, InetAddress host) {
         this.setHost(host);
         this.setPort(port);
@@ -124,6 +131,11 @@ public class ClientModel {
         this.notifyClientShutdown();
     }
 
+    /**
+     * handleNewInputValues - Called to add new input values from the Server into the Client
+     * @param values List of the values for the respective channels
+     * @param tick The tick (time) the values were retrieved on
+     */
     public void handleNewInputValues(ArrayList<Integer> values, int tick) {
         // For each value, add to the correct channel (and calculate min/max/avg)
         for(int i = 0; i < values.size(); i++) {
@@ -270,6 +282,10 @@ public class ClientModel {
         return PORT;
     }
 
+    /**
+     * setHost - Set the host to connect to
+     * @param host The host to connect to
+     */
     public void setHost(InetAddress host) {
         if(host == null)
             throw new IllegalArgumentException("Host must be non-null");

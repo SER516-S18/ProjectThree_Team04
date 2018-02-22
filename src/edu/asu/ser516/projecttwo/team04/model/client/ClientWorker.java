@@ -22,6 +22,10 @@ public class ClientWorker {
     private ClientInputListener inputListener;
     private ClientInputHandler inputHandler;
 
+    /**
+     * ClientWorker
+     * @param socket A worker to handle a connection to the server
+     */
     public ClientWorker(Socket socket) {
         try {
             // Open streams, start handlers and listeners
@@ -54,10 +58,18 @@ public class ClientWorker {
                 inputHandler != null && inputHandler.isRunning());
     }
 
+    /**
+     * getInputListener Gets the client's input listener
+     * @return Client's input listener
+     */
     public ClientInputListener getInputListener() {
         return inputListener;
     }
 
+    /**
+     * getOutputHandler Gets the client's output handler
+     * @return Client's output handler
+     */
     public ClientOutputHandler getOutputHandler() {
         return outputHandler;
     }

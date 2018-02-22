@@ -18,6 +18,9 @@ public class AppToolbarView extends JToolBar {
     private JButton buttonToggle;
     private JLabel labelType;
 
+    /**
+     * AppToolbarView - A toolbar with the type of app and the start/stop button
+     */
     public AppToolbarView() {
         // When server is starting or stopping, update button
         ServerModel.get().addListener(new ServerListener() {
@@ -91,6 +94,9 @@ public class AppToolbarView extends JToolBar {
         this.add(buttonToggle);
     }
 
+    /**
+     * updateType - Called to update the Client/Server header text
+     */
     public void updateType() {
         if(AppView.get().isClient()) {
             this.labelType.setText("Client");

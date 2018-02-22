@@ -13,7 +13,6 @@ import java.util.ArrayList;
  * @author  David Henderson (dchende2@asu.edu)
  */
 
-@SuppressWarnings("unused")
 public class ServerModel {
     private static ServerModel _instance = null;
 

@@ -41,6 +41,9 @@ public class ClientInputListener implements Runnable {
         }
     }
 
+    /**
+     * run - Execution to run on the thread, listening for input at Server's frequency
+     */
     @Override
     public void run() {
         running = true;

@@ -22,6 +22,9 @@ public class ClientInputHandler implements Runnable {
         this.running = false;
     }
 
+    /**
+     * run - Execution to run on the thread, handling input at Client's frequency
+     */
     @Override
     public void run() {
         tick = 0;

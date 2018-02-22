@@ -2,6 +2,10 @@ package edu.asu.ser516.projecttwo.team04.constants;
 
 import java.awt.*;
 
+/**
+ * TextConstants - Class containing program-wide constant Fonts and Strings
+ */
+
 public class TextConstants {
     public static final Font LARGE_FONT = new Font("Monospaced", Font.PLAIN, 20);
     public static final Font DEFAULT_FONT = new Font("Monospaced", Font.PLAIN, 16);

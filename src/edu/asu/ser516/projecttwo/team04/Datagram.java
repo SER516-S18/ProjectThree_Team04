@@ -11,6 +11,12 @@ import java.io.Serializable;
  */
 
 public class Datagram implements Serializable {
+    /**
+     * Types of datagrams
+     * - Setting (For sending settings such as channel)
+     * - Shutdown (For notifying the other side of the connection itself is shutting down)
+     * - Payload (For the actual payload data)
+     */
     public enum TYPE {
         SETTING,
         SHUTDOWN,

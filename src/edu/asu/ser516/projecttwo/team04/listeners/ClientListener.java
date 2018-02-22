@@ -9,8 +9,23 @@ package edu.asu.ser516.projecttwo.team04.listeners;
  */
 
 public interface ClientListener {
+    /**
+     * changedValues - Called when values have been added or updated
+     */
     public void changedValues();
+
+    /**
+     * changedChannelCount - Called when the Client's number of channels changes (added/removed)
+     */
     public void changedChannelCount();
+
+    /**
+     * started - Called when the Client is started (and connecting)
+     */
     public void started();
+
+    /**
+     * shutdown - Called when the Client it shut down (and disconnected)
+     */
     public void shutdown();
 }

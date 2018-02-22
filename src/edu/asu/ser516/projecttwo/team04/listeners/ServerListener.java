@@ -9,6 +9,13 @@ package edu.asu.ser516.projecttwo.team04.listeners;
  */
 
 public interface ServerListener {
+    /**
+     * started - Called when the server is started (and open for connections)
+     */
     public void started();
+
+    /**
+     * shutdown - Called when the server is stopped (and connections are closed)
+     */
     public void shutdown();
 }

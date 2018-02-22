@@ -16,6 +16,10 @@ public class AppView extends JFrame {
 
     private static AppView _instance = null;
 
+    /**
+     * Singleton instance getter for AppView
+     * @return The AppView instance
+     */
     public static AppView get() {
         if(_instance == null)
             _instance = new AppView();
@@ -28,6 +32,9 @@ public class AppView extends JFrame {
     private JPanel viewMenu;
     private ConsoleView viewConsole;
 
+    /**
+     * AppView - Private constructor for Singleton pattern
+     */
     private AppView() {}
 
     /**
