@@ -19,14 +19,17 @@ public class ConsoleView extends JPanel {
     private JTextField textfieldInput;
 
     public ConsoleView() {
+        // It is customary to have an initialize method for Swing UIs to allow reinitialization
         this.init();
     }
 
     public void init() {
+        // Create transparent border around class
         this.setLayout(new BorderLayout());
         this.setOpaque(false);
         this.setBorder(new EmptyBorder(8, 8, 8, 8));
 
+        // Actual content pane (which the transparent border encompasses)
         JPanel panelBuffer = new JPanel(new BorderLayout());
         panelBuffer.setBackground(ColorConstants.BACKGROUND_GRAY);
         panelBuffer.setBorder(BorderFactory.createLineBorder(Color.black));

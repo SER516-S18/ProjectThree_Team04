@@ -17,7 +17,11 @@ public class ServerView extends JPanel {
     private ServerStatusView statusView;
     private ServerSettingsView settingsView;
 
+    /**
+     * ServerView - The container for the left (indicator) and right (input) views
+     */
     public ServerView() {
+        // Create transparent border around view
         this.setLayout(new BorderLayout());
         this.setOpaque(false);
         this.setBorder(new EmptyBorder(8, 8, 8, 8));
@@ -42,9 +46,9 @@ public class ServerView extends JPanel {
      * ServerStatusView - The view that contains an indicator showing if the server is running
      */
     private class ServerStatusView extends JPanel {
-        private Color COLOR_OFF = Color.DARK_GRAY;
-        private Color COLOR_ON_DIM = new Color(197, 224, 179);
-        private Color COLOR_ON_BRIGHT = new Color(168,208,141);
+        private final Color COLOR_OFF = Color.DARK_GRAY;
+        private final Color COLOR_ON_DIM = new Color(197, 224, 179);
+        private final Color COLOR_ON_BRIGHT = new Color(168,208,141);
 
         private boolean running;
         private JLabel labelIndicator;
@@ -105,6 +109,7 @@ public class ServerView extends JPanel {
      */
     private class ServerSettingsView extends JPanel {
         private ServerSettingsView() {
+            // Create the settings view with a transparent border encompassing
             this.setLayout(new GridLayout(5, 2, 8, 8));
             this.setBorder(new EmptyBorder(8, 8, 8, 8));
             this.setOpaque(false);
@@ -194,6 +199,7 @@ public class ServerView extends JPanel {
             this.add(panelInputFrequency);
 
             // Add four empty panels (to scale like the specification and the client's 5 rows)
+            // (we have 3 rows, so add two rows, each with two empty columns)
             this.add(new JLabel());
             this.add(new JLabel());
             this.add(new JLabel());

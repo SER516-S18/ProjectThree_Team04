@@ -27,17 +27,21 @@ public class ClientView extends JPanel {
     private ClientSettingsView settingsView;
 
     public ClientView() {
+        // Create a transparent border around this view
         this.setLayout(new BorderLayout());
         this.setOpaque(false);
         this.setBorder(new EmptyBorder(8, 8, 8, 8));
 
+        // Content goes in here (inside the invisible border)
         JPanel panelBuffer = new JPanel(new GridLayout(1, 2, 8, 8));
         panelBuffer.setBackground(ColorConstants.BACKGROUND_GRAY);
         panelBuffer.setBorder(BorderFactory.createLineBorder(Color.black));
 
+        // Add left (graphical) view
         graphView = new ClientGraphView();
         panelBuffer.add(graphView, BorderLayout.LINE_START);
 
+        // Add right (input/output) view
         settingsView = new ClientSettingsView();
         panelBuffer.add(settingsView, BorderLayout.LINE_END);
 
@@ -54,11 +58,13 @@ public class ClientView extends JPanel {
             ClientModel.get().addListener(new ClientListener() {
                 @Override
                 public void changedValues() {
+                    // When the channel(s) get new values, add them to the graph
                     ClientGraphView.this.updateValues();
                 }
 
                 @Override
                 public void changedChannelCount() {
+                    // When the number of channels changes, update the series (dataset lines in graph)
                     ClientGraphView.this.updateSeries();
                 }
 
@@ -74,6 +80,7 @@ public class ClientView extends JPanel {
                 public void shutdown() {}
             });
 
+            // Create transparent border around graph
             this.setLayout(new BorderLayout());
             this.setOpaque(false);
             this.setBorder(new EmptyBorder(8, 8, 8, 8));
@@ -286,6 +293,7 @@ public class ClientView extends JPanel {
             ClientModel.get().addListener(new ClientListener() {
                 @Override
                 public void changedValues() {
+                    // When the min/max/freq values change, update the text
                     ClientSettingsView.this.labelValueMaximum.setText( ClientModel.get().getMaximum() == null ? "" : Integer.toString(ClientModel.get().getMaximum()) );
                     ClientSettingsView.this.labelValueMinimum.setText( ClientModel.get().getMinimum() == null ? "" : Integer.toString(ClientModel.get().getMinimum()) );
                     ClientSettingsView.this.labelValueAverage.setText( ClientModel.get().getAverage() == null ? "" : Integer.toString(ClientModel.get().getAverage()) );

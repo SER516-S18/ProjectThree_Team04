@@ -22,6 +22,10 @@ import java.util.concurrent.ThreadLocalRandom;
 public class ServerModel {
     private static ServerModel _instance = null;
 
+    /**
+     * get - ServerModal singleton instance getter
+     * @return ServerModel instance
+     */
     public static ServerModel get() {
         if(_instance == null)
             _instance = new ServerModel();
@@ -40,10 +44,20 @@ public class ServerModel {
     private int clientID = 0;
     private boolean run = false;
 
+    /**
+     * Default constructor (with min 0, max 1024, frequency 5, and port 1516)
+     */
     private ServerModel() {
         this(0, 1024, 5, 1516);
     }
 
+    /**
+     * ServerModel full constructor
+     * @param min The minimum value to send
+     * @param max The maximum value to send
+     * @param frequency The frequency the server sends at
+     * @param port The port the server sends to
+     */
     private ServerModel(int min, int max, int frequency, int port) {
         this.setValueMin(min);
         this.setValueMax(max);
@@ -115,6 +129,10 @@ public class ServerModel {
         return run;
     }
 
+    /**
+     * Adds a ServerListener to notify
+     * @param listener The listener to notify
+     */
     public void addListener(ServerListener listener) {
         if(listener == null)
             throw new IllegalArgumentException("Listener must not be null");
@@ -122,6 +140,9 @@ public class ServerModel {
             listeners.add(listener);
     }
 
+    /**
+     * notifyServerShutdown - Notifies that the server is shutting down
+     */
     private void notifyServerShutdown() {
         Log.i("Server shutdown successfully", ServerModel.class);
         for(ServerListener listener : listeners) {
@@ -129,6 +150,9 @@ public class ServerModel {
         }
     }
 
+    /**
+     * notifyServerStarted - Notifies the server is starting
+     */
     private void notifyServerStarted() {
         Log.i("Server started on port " + PORT, ServerModel.class);
         for(ServerListener listener : listeners) {
@@ -229,6 +253,11 @@ public class ServerModel {
         private ObjectInputStream streamIn;
         private boolean clientNotifyDisconnect = false;
 
+        /**
+         * ServerWorker The worker that handles input and output
+         * @param socket The socket the client is connecting from
+         * @param clientID The id of the client
+         */
         public ServerWorker(Socket socket, int clientID) {
             id = clientID;
             run = true;
@@ -324,6 +353,9 @@ public class ServerModel {
             }
         }
 
+        /**
+         * disconnect - Disconnects this individual connection from the client
+         */
         public void disconnect() {
             ServerWorker.this.run = false;
 

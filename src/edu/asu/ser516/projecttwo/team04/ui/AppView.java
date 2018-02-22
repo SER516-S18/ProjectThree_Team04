@@ -81,6 +81,7 @@ public class AppView extends JFrame {
      * Update the AppView with the correct UI (either client or server)
      */
     private void updateType() {
+        // If it's already created, remove the old one
         if(viewMenu != null) {
             viewMenu.removeAll();
             viewMenu.setVisible(false);
@@ -124,6 +125,7 @@ public class AppView extends JFrame {
         private JLabel labelType;
 
         public AppToolbar() {
+            // When server is starting or stopping, update button
             ServerModel.get().addListener(new ServerListener() {
                 @Override
                 public void started() {
@@ -138,6 +140,7 @@ public class AppView extends JFrame {
                 }
             });
 
+            // When client is starting or stopping, update button
             ClientModel.get().addListener(new ClientListener() {
                 @Override
                 public void changedValues() {}
@@ -177,6 +180,7 @@ public class AppView extends JFrame {
                     )
             );
             buttonToggle.addActionListener(e -> {
+                // Check if it is client or server, then stop or start respectively
                 if(AppView.this.isServer()) {
                     if (ServerModel.get().isRunning())
                         ServerModel.get().shutdown();
@@ -193,10 +197,18 @@ public class AppView extends JFrame {
         }
     }
 
+    /**
+     * isClient
+     * @return boolean whether App is a client
+     */
     public boolean isClient() {
         return _type == TYPE_CLIENT;
     }
 
+    /**
+     * isServer
+     * @return boolean whether App is a server
+     */
     public boolean isServer() {
         return  _type == TYPE_SERVER;
     }

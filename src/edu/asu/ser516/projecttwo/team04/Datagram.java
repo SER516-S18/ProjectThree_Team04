@@ -20,6 +20,11 @@ public class Datagram implements Serializable {
     public final TYPE type;
     public final Object data;
 
+    /**
+     * Datagram - A payload tuple with the type of payload and data
+     * @param type The type of payload
+     * @param data The data of payload
+     */
     public Datagram(TYPE type, Object data) {
         this.type = type;
         this.data = data;

@@ -6,11 +6,6 @@ package edu.asu.ser516.projecttwo.team04.util;
  */
 
 public class Util {
-    // For Log without a class (namely uncaught exceptions)
-    public static class ERROR {
-        private ERROR() {}
-    }
-
     /**
      * isInteger, returns if a String s is a valid integer
      * @param s String to check if is integer

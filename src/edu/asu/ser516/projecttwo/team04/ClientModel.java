@@ -25,6 +25,7 @@ public class ClientModel {
     private static ClientModel _instance;
 
     static {
+        // Helper function to save the localhost as a default
         try {
             LOCALHOST = InetAddress.getLocalHost();
         } catch (UnknownHostException e) {
@@ -33,6 +34,10 @@ public class ClientModel {
         }
     }
 
+    /**
+     * Singleton ClientModel getter
+     * @return ClientModel instance
+     */
     public static ClientModel get() {
         if(_instance == null)
             _instance = new ClientModel();
@@ -45,8 +50,8 @@ public class ClientModel {
     private int FREQUENCY;
     private int CHANNEL_COUNT;
 
-    private ExecutorService executors = Executors.newCachedThreadPool();
-    private ArrayList<ClientListener> listeners = new ArrayList<>();
+    private final ExecutorService executors = Executors.newCachedThreadPool();
+    private final ArrayList<ClientListener> listeners = new ArrayList<>();
     private boolean run = false;
     private ClientWorker worker;
 
@@ -57,6 +62,7 @@ public class ClientModel {
     private Integer valueAvg = null;
 
     private ClientModel() {
+        // Simple default constructor, port 1516 and LOCALHOST
         this(1516, LOCALHOST);
     }
 
@@ -111,6 +117,7 @@ public class ClientModel {
             }
         }
 
+        // Clear past values
         worker = null;
         valueList.clear();
         valueMin = null;
@@ -154,6 +161,10 @@ public class ClientModel {
         return valueAvg;
     }
 
+    /**
+     * addListener - Add ClientListeners to ClientModel
+     * @param listener ClientListener to inform
+     */
     public void addListener(ClientListener listener) {
         if(listener == null)
             throw new IllegalArgumentException("Listener must not be null");
@@ -161,6 +172,9 @@ public class ClientModel {
             listeners.add(listener);
     }
 
+    /**
+     * notifyClientShutdown - Method called when ClientModel is shut down
+     */
     private void notifyClientShutdown() {
         Log.i("Client shutdown successfully", ClientModel.class);
         for(ClientListener listener : listeners) {
@@ -168,6 +182,9 @@ public class ClientModel {
         }
     }
 
+    /**
+     * notifyClientShutdown - Method called when ClientModel is started up
+     */
     private void notifyClientStarted() {
         Log.i("Client started and connected to server at " + HOST.getCanonicalHostName() + " port " + PORT, ClientModel.class);
         for(ClientListener listener : listeners) {
@@ -175,12 +192,18 @@ public class ClientModel {
         }
     }
 
+    /**
+     * notifyClientShutdown - Method called when the input values from servers change
+     */
     private void notifyValuesChanged() {
         for(ClientListener listener : listeners) {
             listener.changedValues();
         }
     }
 
+    /**
+     * notifyClientShutdown - Method called when the number of channels changes (added/removed)
+     */
     private void notifyChannelCountChanged() {
         for(ClientListener listener : listeners) {
             listener.changedChannelCount();
@@ -202,7 +225,8 @@ public class ClientModel {
     public void setPort(int port) {
         if(port < 0)
             throw new IllegalArgumentException("Port must be greater than zero");
-        PORT = port;
+        else
+            PORT = port;
     }
 
     /**
@@ -234,8 +258,8 @@ public class ClientModel {
     public void setFrequency(int freq) {
         if(freq < 1)
             throw new IllegalArgumentException("Frequency must be greater than zero");
-
-        FREQUENCY = freq;
+        else
+            FREQUENCY = freq;
     }
 
     /**
@@ -297,12 +321,15 @@ public class ClientModel {
                 streamOut = new ObjectOutputStream(socket.getOutputStream());
                 streamIn = new ObjectInputStream(socket.getInputStream());
 
+                // Create output handler (output to server)
                 outputHandler = new ClientOutputHandler(this);
                 executors.submit(outputHandler);
 
+                // Create input listener (input from server, at server's frequency)
                 inputListener = new ClientInputListener(this);
                 executors.submit(inputListener);
 
+                // Create input handler (handles input from listener, at client's frequency)
                 inputHandler = new ClientInputHandler(this);
                 executors.submit(inputHandler);
             } catch (IOException e) {
@@ -329,6 +356,10 @@ public class ClientModel {
         private ClientWorker worker;
         private ArrayList<Integer> value;
 
+        /**
+         * ClientInputListener - Accepts values from server at server's frequency
+         * @param worker Parent worker (to link between input listener/input handler/output handler)
+         */
         private ClientInputListener(ClientWorker worker) {
             this.worker = worker;
             this.running = false;
@@ -356,7 +387,7 @@ public class ClientModel {
             while (ClientModel.this.run) {
                 Datagram data;
                 try {
-                    // Get data
+                    // Wait until data is available, then get it
                     data = (Datagram) worker.streamIn.readObject();
                     if(data == null)
                         continue;
@@ -376,6 +407,7 @@ public class ClientModel {
                     continue;
                 } catch(IOException e) {
                     if(ClientModel.this.run) {
+                        // Only error if we should be running right now
                         Log.e("Failed to read in object from stream, shutting down (IOException: " + e.getMessage() + ")", ClientModel.class);
                         ClientModel.this.shutdown();
                     }
@@ -403,6 +435,10 @@ public class ClientModel {
         private ClientWorker worker;
         private ArrayList<Datagram> datagrams = new ArrayList<>();
 
+        /**
+         * ClientOutputHandler - Sends output to server
+         * @param worker Parent worker (to link between input listener/input handler/output handler)
+         */
         private ClientOutputHandler(ClientWorker worker) {
             this.worker = worker;
             this.running = false;
@@ -464,6 +500,10 @@ public class ClientModel {
         private boolean running;
         private ClientWorker worker;
 
+        /**
+         * ClientInputHandler - Handles input from input listener, at the client's frequency
+         * @param worker Parent worker (to link between input listener/input handler/output handler)
+         */
         private ClientInputHandler(ClientWorker worker) {
             this.worker = worker;
             this.running = false;
@@ -489,8 +529,10 @@ public class ClientModel {
                             if(value == null)
                                 continue;
 
+                            // Add value to the channel
                             channels.get(i).add(value, tick);
 
+                            // Now to calculate the min/max/avg across all channels
                             // First value edge case
                             if (valueList.size() == 0) {
                                 valueMin = value;
@@ -540,18 +582,35 @@ public class ClientModel {
         private final ArrayList<ClientValueTuple> values;
         public final int id;
 
+        /**
+         * ClientChannel - A wrapper for a list of values, with an ID for the channel
+         * @param id The channel identifier
+         */
         private ClientChannel(int id) {
             this.id = id;
             values = new ArrayList<>();
         }
 
+        /**
+         * add - Add a value input to the channel
+         * @param value The input value
+         * @param tick The tick (time) it happened
+         */
         private void add(Integer value, Integer tick) {
             values.add(new ClientValueTuple(value, tick));
         }
+
+        /**
+         * clear - Remove all values from the channel
+         */
         private void clear() {
             values.clear();
         }
 
+        /**
+         * getLast - Returns the last value in the list
+         * @return Last value (or null if empty) in the channel
+         */
         public ClientValueTuple getLast() {
             if(values.size() > 0)
                 return values.get(values.size() - 1);
@@ -559,6 +618,10 @@ public class ClientModel {
                 return null;
         }
 
+        /**
+         * gettValues - Returns all values in the channel
+         * @return Unmodifiable list of values (which can be null)
+         */
         public List<ClientValueTuple> getValues() {
             return Collections.unmodifiableList(values);
         }
@@ -571,6 +634,11 @@ public class ClientModel {
         public final Integer value;
         public final Integer tick;
 
+        /**
+         * ClientValueTuple, pairs a value with a tick (time)
+         * @param value Value from input
+         * @param tick Tick that the value occurred from
+         */
         private ClientValueTuple(Integer value, Integer tick) {
             this.value = value;
             this.tick = tick;
