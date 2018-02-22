@@ -42,7 +42,7 @@ public class AppView extends JFrame {
     public void setType(int type) {
         if(type != TYPE_CLIENT && type != TYPE_SERVER)
             throw new IllegalArgumentException("Type must be TYPE_CLIENT or TYPE_SERVER");
-        else {
+        else if(type != _type) {
             _type = type;
             this.updateType();
         }
