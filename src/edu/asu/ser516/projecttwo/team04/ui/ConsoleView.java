@@ -5,6 +5,7 @@ import edu.asu.ser516.projecttwo.team04.util.Log;
 import edu.asu.ser516.projecttwo.team04.util.Terminal;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 /**
@@ -23,11 +24,16 @@ public class ConsoleView extends JPanel {
 
     public void init() {
         this.setLayout(new BorderLayout());
-        this.setBorder(BorderFactory.createLineBorder(Color.black));
+        this.setOpaque(false);
+        this.setBorder(new EmptyBorder(8, 8, 8, 8));
+
+        JPanel panelBuffer = new JPanel(new BorderLayout());
+        panelBuffer.setBackground(UIConstants.BACKGROUND_GRAY);
+        panelBuffer.setBorder(BorderFactory.createLineBorder(Color.black));
 
         labelHeader = new JLabel("Console:");
         labelHeader.setFont(UIConstants.DEFAULT_FONT);
-        this.add(labelHeader, BorderLayout.PAGE_START);
+        panelBuffer.add(labelHeader, BorderLayout.PAGE_START);
 
         textareaLog = new JTextArea();
         textareaLog.setEditable(false);
@@ -36,7 +42,7 @@ public class ConsoleView extends JPanel {
         textareaLog.setFont(UIConstants.SMALL_FONT);
         textareaLog.setLineWrap(true);
         textareaLog.setWrapStyleWord(true);
-        this.add(textareaLog, BorderLayout.CENTER);
+        panelBuffer.add(textareaLog, BorderLayout.CENTER);
 
 
         textfieldInput = new JTextField();
@@ -49,12 +55,15 @@ public class ConsoleView extends JPanel {
             textareaLog.setCaretPosition(textareaLog.getText().length());
             textfieldInput.setText("");
         });
-        this.add(textfieldInput, BorderLayout.PAGE_END);
+        panelBuffer.add(textfieldInput, BorderLayout.PAGE_END);
 
         scrollpaneLog = new JScrollPane(textareaLog);
         scrollpaneLog.setOpaque(false);
+        scrollpaneLog.getViewport().setOpaque(false);
         scrollpaneLog.setBorder(null);
-        this.add(scrollpaneLog, BorderLayout.CENTER);
+        panelBuffer.add(scrollpaneLog, BorderLayout.CENTER);
+
+        this.add(panelBuffer, BorderLayout.CENTER);
 
         // Subscribe and listen to new records
         Log.addRecordListener(record -> {

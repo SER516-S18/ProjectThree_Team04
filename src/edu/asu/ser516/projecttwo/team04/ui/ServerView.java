@@ -6,6 +6,7 @@ import edu.asu.ser516.projecttwo.team04.constants.UIConstants;
 import edu.asu.ser516.projecttwo.team04.listeners.ServerListener;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
@@ -15,26 +16,29 @@ import java.awt.*;
  * @author  David Henderson (dchende2@asu.edu)
  */
 public class ServerView extends JPanel {
-    private static final SpinnerNumberModel SPINNER_MODEL = new SpinnerNumberModel(0, Integer.MIN_VALUE, Integer.MAX_VALUE, 1);
-    private AppView parent;
     private ServerStatusView statusView;
     private ServerSettingsView settingsView;
 
-    public ServerView(AppView appView) {
-        parent = appView;
-
+    public ServerView() {
         this.setLayout(new BorderLayout());
-        this.setBackground(UIConstants.BACKGROUND_GRAY);
+        this.setOpaque(false);
+        this.setBorder(new EmptyBorder(8, 8, 8, 8));
+
+        JPanel panelBuffer = new JPanel(new GridLayout(1, 2, 8, 8));
+        panelBuffer.setBackground(UIConstants.BACKGROUND_GRAY);
+        panelBuffer.setBorder(BorderFactory.createLineBorder(Color.black));
 
         statusView = new ServerStatusView();
-        this.add(statusView, BorderLayout.LINE_START);
+        panelBuffer.add(statusView, BorderLayout.LINE_START);
 
         settingsView = new ServerSettingsView();
-        this.add(settingsView, BorderLayout.LINE_END);
+        panelBuffer.add(settingsView, BorderLayout.LINE_END);
+
+        this.add(panelBuffer, BorderLayout.CENTER);
     }
 
     private class ServerStatusView extends JPanel {
-        private Color COLOR_OFF = Color.RED;
+        private Color COLOR_OFF = Color.DARK_GRAY;
         private Color COLOR_ON_DIM = new Color(197, 224, 179);
         private Color COLOR_ON_BRIGHT = new Color(168,208,141);
 
@@ -71,18 +75,26 @@ public class ServerView extends JPanel {
             timer.start();
 
             this.setLayout(new BorderLayout());
-            this.setBackground(UIConstants.BACKGROUND_PINK);
+            this.setOpaque(false);
+            this.setBorder(new EmptyBorder(8, 8, 8, 8));
 
-            labelIndicator = new JLabel("•");
+            JPanel panelBuffer = new JPanel(new BorderLayout());
+            panelBuffer.setBackground(UIConstants.BACKGROUND_PINK);
+            panelBuffer.setBorder(BorderFactory.createLineBorder(Color.black));
+
+            labelIndicator = new JLabel("•", SwingConstants.CENTER);
             labelIndicator.setFont(new Font("Monospaced", Font.PLAIN, UIConstants.DEFAULT_FONT.getSize() * 16));
             labelIndicator.setForeground(running ? COLOR_ON_BRIGHT : COLOR_OFF);
-            this.add(labelIndicator, BorderLayout.CENTER);
+            panelBuffer.add(labelIndicator, BorderLayout.CENTER);
+
+            this.add(panelBuffer, BorderLayout.CENTER);
         }
     }
 
     private class ServerSettingsView extends JPanel {
         private ServerSettingsView() {
             this.setLayout(new GridLayout(5, 2, 8, 8));
+            this.setBorder(new EmptyBorder(8, 8, 8, 8));
             this.setOpaque(false);
 
             // Maximum - Prompt

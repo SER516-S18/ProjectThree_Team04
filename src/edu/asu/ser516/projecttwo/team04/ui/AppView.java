@@ -52,12 +52,12 @@ public class AppView extends JFrame {
      * Initialize the AppView frame UI
      */
     public void init() {
-        this.setMinimumSize(new Dimension(800, 600));
-        this.setBackground(UIConstants.BACKGROUND_BLUE);
-
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setTitle("SER516 Project Two: Team 4");
-        this.setLayout(new BorderLayout());
+
+        this.setMinimumSize(new Dimension(800, 600));
+        this.setLayout(new BorderLayout(8, 8));
+        this.setBackground(UIConstants.BACKGROUND_BLUE);
 
         // Add top
         viewToolbar = new AppToolbar();
@@ -71,6 +71,7 @@ public class AppView extends JFrame {
         this.add(viewConsole, BorderLayout.PAGE_END);
 
         // Package, set visible, move to center of screen
+        this.getContentPane().setBackground(UIConstants.BACKGROUND_BLUE);
         this.setVisible(true);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width/2-this.getSize().width/2+(this.getSize().width/2 * (isClient() ? 1 : -1)), dim.height/2-this.getSize().height/2);
@@ -97,7 +98,7 @@ public class AppView extends JFrame {
         }
         else if(_type == AppView.TYPE_SERVER) {
             Log.i("Application initializing as a Server", AppView.class);
-            viewMenu = new ServerView(this);
+            viewMenu = new ServerView();
             this.setTitle("Server - SER516 Project Two: Team 4");
 
             if(this.viewToolbar != null) {
@@ -166,6 +167,11 @@ public class AppView extends JFrame {
             buttonToggle.setFont(UIConstants.DEFAULT_FONT);
             buttonToggle.setBackground(UIConstants.BACKGROUND_PINK);
             buttonToggle.setFocusPainted(false);
+            buttonToggle.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(Color.BLACK, 1),
+                    BorderFactory.createLineBorder(UIConstants.BACKGROUND_PINK, 4)
+                    )
+            );
             buttonToggle.addActionListener(e -> {
                 if(AppView.this.isServer()) {
                     if (ServerModel.get().isRunning())
