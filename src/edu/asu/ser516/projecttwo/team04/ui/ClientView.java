@@ -63,7 +63,12 @@ public class ClientView extends JPanel {
                 }
 
                 @Override
-                public void started() {}
+                public void started() {
+                    // If we're restarting, clear the previous values stored in the dataset
+                    for(int i = 0; i < dataset.getSeriesCount(); i++) {
+                        dataset.getSeries(i).clear();
+                    }
+                }
 
                 @Override
                 public void shutdown() {}
