@@ -88,7 +88,7 @@ public class AppView extends JFrame {
 
         if(_type == AppView.TYPE_CLIENT) {
             Log.i("Application initializing as a Client", AppView.class);
-            viewMenu = new ClientView(this);
+            viewMenu = new ClientView();
             this.setTitle("Client - SER516 Project Two: Team 4");
 
             if(this.viewToolbar != null) {
