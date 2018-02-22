@@ -2,10 +2,10 @@ package edu.asu.ser516.projecttwo.team04.ui;
 
 import edu.asu.ser516.projecttwo.team04.ClientModel;
 import edu.asu.ser516.projecttwo.team04.ServerModel;
+import edu.asu.ser516.projecttwo.team04.constants.UIConstants;
 import edu.asu.ser516.projecttwo.team04.listeners.ClientListener;
 import edu.asu.ser516.projecttwo.team04.listeners.ServerListener;
 import edu.asu.ser516.projecttwo.team04.util.Log;
-import edu.asu.ser516.projecttwo.team04.constants.UIStandards;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -53,7 +53,7 @@ public class AppView extends JFrame {
      */
     public void init() {
         this.setMinimumSize(new Dimension(800, 600));
-        this.setBackground(UIStandards.BACKGROUND_BLUE);
+        this.setBackground(UIConstants.BACKGROUND_BLUE);
 
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setTitle("SER516 Project Two: Team 4");
@@ -153,18 +153,18 @@ public class AppView extends JFrame {
                 }
             });
 
-            this.setBackground(UIStandards.BACKGROUND_BLUE);
+            this.setBackground(UIConstants.BACKGROUND_BLUE);
             this.setBorder(new EmptyBorder(8, 8, 8, 8));
             this.setFloatable(false);
 
             labelType = new JLabel(AppView.get().isClient() ? "Client" : "Server");
-            labelType.setFont(UIStandards.DEFAULT_FONT);
+            labelType.setFont(UIConstants.DEFAULT_FONT);
             this.add(labelType);
             this.add(Box.createHorizontalGlue());
 
             buttonToggle = new JButton("Start");
-            buttonToggle.setFont(UIStandards.DEFAULT_FONT);
-            buttonToggle.setBackground(UIStandards.BACKGROUND_PINK);
+            buttonToggle.setFont(UIConstants.DEFAULT_FONT);
+            buttonToggle.setBackground(UIConstants.BACKGROUND_PINK);
             buttonToggle.setFocusPainted(false);
             buttonToggle.addActionListener(e -> {
                 if(AppView.this.isServer()) {

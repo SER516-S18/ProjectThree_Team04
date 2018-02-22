@@ -3,11 +3,11 @@ package edu.asu.ser516.projecttwo.team04.constants;
 import java.awt.*;
 
 /**
- * UIStandards, a data bag of the colors used in the program
+ * UIConstants, a data bag of the colors used in the program
  * @author  David Henderson (dchende2@asu.edu)
  */
 
-public class UIStandards {
+public class UIConstants {
     public static Font DEFAULT_FONT = new Font("Monospaced", Font.PLAIN, 16);
     public static Font SMALL_FONT = new Font("Monospaced", Font.PLAIN, 13);
     public static Color BACKGROUND_PINK = new Color(236, 219, 219);

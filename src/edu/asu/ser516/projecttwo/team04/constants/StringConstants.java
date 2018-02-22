@@ -1,6 +1,6 @@
 package edu.asu.ser516.projecttwo.team04.constants;
 
-public class AppConstants {
+public class StringConstants {
     public static final String HIGHEST_VALUE_STRING = "<html>Highest<br>value:</html>";
     public static final String LOWEST_VALUE_STRING = "<html>Lowest<br>value:</html>";
     public static final String AVERAGE_VALUE_STRING = "<html>Average:</html>";

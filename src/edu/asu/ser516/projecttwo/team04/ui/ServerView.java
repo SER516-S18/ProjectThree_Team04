@@ -1,20 +1,14 @@
 package edu.asu.ser516.projecttwo.team04.ui;
 
-import edu.asu.ser516.projecttwo.team04.ClientModel;
 import edu.asu.ser516.projecttwo.team04.ServerModel;
-import edu.asu.ser516.projecttwo.team04.constants.AppConstants;
+import edu.asu.ser516.projecttwo.team04.constants.StringConstants;
+import edu.asu.ser516.projecttwo.team04.constants.UIConstants;
 import edu.asu.ser516.projecttwo.team04.listeners.ServerListener;
-import edu.asu.ser516.projecttwo.team04.constants.UIStandards;
-import edu.asu.ser516.projecttwo.team04.util.Log;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.net.Socket;
 
 /**
  * ServerView, the main UI for the server application
@@ -30,7 +24,7 @@ public class ServerView extends JPanel {
         parent = appView;
 
         this.setLayout(new BorderLayout());
-        this.setBackground(UIStandards.BACKGROUND_GRAY);
+        this.setBackground(UIConstants.BACKGROUND_GRAY);
 
         statusView = new ServerStatusView();
         this.add(statusView, BorderLayout.LINE_START);
@@ -77,10 +71,10 @@ public class ServerView extends JPanel {
             timer.start();
 
             this.setLayout(new BorderLayout());
-            this.setBackground(UIStandards.BACKGROUND_PINK);
+            this.setBackground(UIConstants.BACKGROUND_PINK);
 
             labelIndicator = new JLabel("•");
-            labelIndicator.setFont(new Font("Monospaced", Font.PLAIN, UIStandards.DEFAULT_FONT.getSize() * 16));
+            labelIndicator.setFont(new Font("Monospaced", Font.PLAIN, UIConstants.DEFAULT_FONT.getSize() * 16));
             labelIndicator.setForeground(running ? COLOR_ON_BRIGHT : COLOR_OFF);
             this.add(labelIndicator, BorderLayout.CENTER);
         }
@@ -92,14 +86,14 @@ public class ServerView extends JPanel {
             this.setOpaque(false);
 
             // Maximum - Prompt
-            JLabel labelPromptMaximum = new JLabel(AppConstants.HIGHEST_VALUE_STRING);
-            labelPromptMaximum.setFont(UIStandards.DEFAULT_FONT);
+            JLabel labelPromptMaximum = new JLabel(StringConstants.HIGHEST_VALUE_STRING);
+            labelPromptMaximum.setFont(UIConstants.DEFAULT_FONT);
             labelPromptMaximum.setHorizontalAlignment(JLabel.CENTER);
             labelPromptMaximum.setVerticalAlignment(JLabel.CENTER);
 
             JPanel panelPromptMaximum = new JPanel();
             panelPromptMaximum.setBorder(BorderFactory.createLineBorder(Color.black));
-            panelPromptMaximum.setBackground(UIStandards.BACKGROUND_BLUEGRAY);
+            panelPromptMaximum.setBackground(UIConstants.BACKGROUND_BLUEGRAY);
             panelPromptMaximum.add(labelPromptMaximum);
             this.add(panelPromptMaximum);
 
@@ -107,8 +101,8 @@ public class ServerView extends JPanel {
             JSpinner spinnerInputMaximum = new JSpinner( new SpinnerNumberModel(ServerModel.get().getValueMax(), Integer.MIN_VALUE, Integer.MAX_VALUE, 1) );
             spinnerInputMaximum.setVisible(true);
             spinnerInputMaximum.setBorder(null);
-            spinnerInputMaximum.getEditor().getComponent(0).setBackground(UIStandards.BACKGROUND_PINK);
-            spinnerInputMaximum.setFont(UIStandards.DEFAULT_FONT);
+            spinnerInputMaximum.getEditor().getComponent(0).setBackground(UIConstants.BACKGROUND_PINK);
+            spinnerInputMaximum.setFont(UIConstants.DEFAULT_FONT);
             spinnerInputMaximum.addChangeListener(new ChangeListener() {
                 @Override
                 public void stateChanged(ChangeEvent e) {
@@ -118,19 +112,19 @@ public class ServerView extends JPanel {
 
             JPanel panelInputMaximum = new JPanel();
             panelInputMaximum.setBorder(BorderFactory.createLineBorder(Color.black));
-            panelInputMaximum.setBackground(UIStandards.BACKGROUND_PINK);
+            panelInputMaximum.setBackground(UIConstants.BACKGROUND_PINK);
             panelInputMaximum.add(spinnerInputMaximum);
             this.add(panelInputMaximum);
 
             // Minimum - Prompt
-            JLabel labelPromptMinimum = new JLabel(AppConstants.LOWEST_VALUE_STRING);
-            labelPromptMinimum.setFont(UIStandards.DEFAULT_FONT);
+            JLabel labelPromptMinimum = new JLabel(StringConstants.LOWEST_VALUE_STRING);
+            labelPromptMinimum.setFont(UIConstants.DEFAULT_FONT);
             labelPromptMinimum.setHorizontalAlignment(JLabel.CENTER);
             labelPromptMinimum.setVerticalAlignment(JLabel.CENTER);
 
             JPanel panelPromptMinimum = new JPanel();
             panelPromptMinimum.setBorder(BorderFactory.createLineBorder(Color.black));
-            panelPromptMinimum.setBackground(UIStandards.BACKGROUND_PINK);
+            panelPromptMinimum.setBackground(UIConstants.BACKGROUND_PINK);
             panelPromptMinimum.add(labelPromptMinimum);
             this.add(panelPromptMinimum);
 
@@ -138,8 +132,8 @@ public class ServerView extends JPanel {
             JSpinner spinnerInputMinimum = new JSpinner( new SpinnerNumberModel(ServerModel.get().getValueMin(), Integer.MIN_VALUE, Integer.MAX_VALUE, 1) );
             spinnerInputMinimum.setVisible(true);
             spinnerInputMinimum.setBorder(null);
-            spinnerInputMinimum.getEditor().getComponent(0).setBackground(UIStandards.BACKGROUND_BLUEGRAY);
-            spinnerInputMinimum.setFont(UIStandards.DEFAULT_FONT);
+            spinnerInputMinimum.getEditor().getComponent(0).setBackground(UIConstants.BACKGROUND_BLUEGRAY);
+            spinnerInputMinimum.setFont(UIConstants.DEFAULT_FONT);
             spinnerInputMinimum.addChangeListener(new ChangeListener() {
                 @Override
                 public void stateChanged(ChangeEvent e) {
@@ -149,19 +143,19 @@ public class ServerView extends JPanel {
 
             JPanel panelInputMinimum = new JPanel();
             panelInputMinimum.setBorder(BorderFactory.createLineBorder(Color.black));
-            panelInputMinimum.setBackground(UIStandards.BACKGROUND_BLUEGRAY);
+            panelInputMinimum.setBackground(UIConstants.BACKGROUND_BLUEGRAY);
             panelInputMinimum.add(spinnerInputMinimum);
             this.add(panelInputMinimum);
 
             // Frequency - Prompt
-            JLabel labelPromptFrequency = new JLabel(AppConstants.FREQUENCY_VALUE_STRING);
-            labelPromptFrequency.setFont(UIStandards.DEFAULT_FONT);
+            JLabel labelPromptFrequency = new JLabel(StringConstants.FREQUENCY_VALUE_STRING);
+            labelPromptFrequency.setFont(UIConstants.DEFAULT_FONT);
             labelPromptFrequency.setHorizontalAlignment(JLabel.CENTER);
             labelPromptFrequency.setVerticalAlignment(JLabel.CENTER);
 
             JPanel panelPromptFrequency = new JPanel();
             panelPromptFrequency.setBorder(BorderFactory.createLineBorder(Color.black));
-            panelPromptFrequency.setBackground(UIStandards.BACKGROUND_BLUEGRAY);
+            panelPromptFrequency.setBackground(UIConstants.BACKGROUND_BLUEGRAY);
             panelPromptFrequency.add(labelPromptFrequency);
             this.add(panelPromptFrequency);
 
@@ -169,8 +163,8 @@ public class ServerView extends JPanel {
             JSpinner spinnerInputFrequency = new JSpinner( new SpinnerNumberModel(ServerModel.get().getFrequency(), Integer.MIN_VALUE, Integer.MAX_VALUE, 1) );
             spinnerInputFrequency.setVisible(true);
             spinnerInputFrequency.setBorder(null);
-            spinnerInputFrequency.getEditor().getComponent(0).setBackground(UIStandards.BACKGROUND_PINK);
-            spinnerInputFrequency.setFont(UIStandards.DEFAULT_FONT);
+            spinnerInputFrequency.getEditor().getComponent(0).setBackground(UIConstants.BACKGROUND_PINK);
+            spinnerInputFrequency.setFont(UIConstants.DEFAULT_FONT);
             spinnerInputFrequency.addChangeListener(new ChangeListener() {
                 @Override
                 public void stateChanged(ChangeEvent e) {
@@ -180,7 +174,7 @@ public class ServerView extends JPanel {
 
             JPanel panelInputFrequency = new JPanel();
             panelInputFrequency.setBorder(BorderFactory.createLineBorder(Color.black));
-            panelInputFrequency.setBackground(UIStandards.BACKGROUND_PINK);
+            panelInputFrequency.setBackground(UIConstants.BACKGROUND_PINK);
             panelInputFrequency.add(spinnerInputFrequency);
             this.add(panelInputFrequency);
 
