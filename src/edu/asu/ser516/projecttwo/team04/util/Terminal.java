@@ -1,9 +1,12 @@
 package edu.asu.ser516.projecttwo.team04.util;
 
+import edu.asu.ser516.projecttwo.team04.constants.TextConstants;
 import edu.asu.ser516.projecttwo.team04.model.client.ClientModel;
 import edu.asu.ser516.projecttwo.team04.model.server.ServerModel;
 import edu.asu.ser516.projecttwo.team04.ui.AppView;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Scanner;
 
 /**
@@ -71,9 +74,9 @@ public class Terminal {
         String[] words = line.split(" ");
         if(line.equalsIgnoreCase("help")) {
             Log.d("Valid commands include:" +
-                    "\n\t- \"init (client | server)\" to initialize the app as a client or server" +
-                    "\n\t- \"port (#)\" to set the communication port number" +
-                    "\n\t- \"channels (#)\" to set the number of channels in a client" +
+                    "\n\t- \"init ('client' | 'server')\" to initialize the app as a client or server" +
+                    "\n\t- \"port <#>\" to set the communication port number" +
+                    "\n\t- \"host ('localhost' | <hostname or ip>)\" to set host to connect to as a client" +
                     "\n\t- \"help\" to view this help list.", Terminal.class);
         } else if (line.toLowerCase().startsWith("init") && words.length == 2) {
             if(words[1].equalsIgnoreCase("server"))
@@ -85,12 +88,21 @@ public class Terminal {
             ClientModel.get().setPort(port);
             ServerModel.get().setPort(port);
             Log.d("Port set to " + port, Terminal.class);
-        } else if(line.toLowerCase().startsWith("channels") && words.length == 2 && Util.isInteger(words[1])) {
+        } else if(line.toLowerCase().startsWith("host") && words.length == 2) {
             if(AppView.get().isClient()) {
-                ClientModel.get().setChannelCount(Integer.parseInt(words[1]));
-                Log.d("Channel count set to " + words[1], Terminal.class);
+                if (words[1].equalsIgnoreCase("localhost")) {
+                    ClientModel.get().setHostToLocalhost();
+                    Log.d("Host set to localhost", Terminal.class);
+                } else {
+                    try {
+                        ClientModel.get().setHost(InetAddress.getByName(words[1]));
+                        Log.d("Host set to " + words[1], Terminal.class);
+                    } catch (UnknownHostException e) {
+                        Log.d("Failed set host (Host is invalid or unavailable)", Terminal.class);
+                    }
+                }
             } else {
-                Log.d("Failed to set channel count (Must be a client app to set channels)", Terminal.class);
+                Log.d("Failed to set host (Application must be set as client)", Terminal.class);
             }
         } else {
             Log.d("Invalid command, type \"help\" for list of all commands", Terminal.class);

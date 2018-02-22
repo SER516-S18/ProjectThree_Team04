@@ -283,14 +283,19 @@ public class ClientModel {
     }
 
     /**
-     * setHost - Set the host to connect to
+     * setHost - Changes the host (WILL shutdown if Client is running)
      * @param host The host to connect to
      */
     public void setHost(InetAddress host) {
         if(host == null)
             throw new IllegalArgumentException("Host must be non-null");
-        else
+        else {
+            // Shutdown if running
+            if(this.isRunning())
+                this.shutdown();
+
             HOST = host;
+        }
     }
 
     /**
