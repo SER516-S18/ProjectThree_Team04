@@ -75,7 +75,9 @@ public class ServerModel {
                         new ServerWorker(clientSocket, ++clientID);
                         Log.i("Client #" + clientID + " connected successfully", ServerModel.class);
                     } catch(IOException e) {
-                        Log.e("Failed to accept a socket connection to a client on port " + PORT, ServerModel.class);
+                        if(run) {
+                            Log.e("Failed to accept a socket connection to a client on port " + PORT, ServerModel.class);
+                        }
                     }
                 }
             }).start();
