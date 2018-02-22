@@ -29,7 +29,7 @@ public class AppView extends JFrame {
     }
 
     private int _type = TYPE_CLIENT;
-    private AppToolbar viewToolbar;
+    private AppToolbarView viewToolbar;
     private JPanel viewMenu;
     private ConsoleView viewConsole;
 
@@ -60,7 +60,7 @@ public class AppView extends JFrame {
         this.setBackground(ColorConstants.BACKGROUND_BLUE);
 
         // Add top
-        viewToolbar = new AppToolbar();
+        viewToolbar = new AppToolbarView();
         this.add(viewToolbar, BorderLayout.PAGE_START);
 
         // Add center
@@ -94,20 +94,16 @@ public class AppView extends JFrame {
             viewMenu = new ClientView();
             this.setTitle("Client - SER516 Project Two: Team 4");
 
-            if(this.viewToolbar != null) {
-                this.viewToolbar.labelType.setText("Client");
-                this.viewToolbar.buttonToggle.setText(ClientModel.get().isRunning() ? "Stop" : "Start");
-            }
+            if(this.viewToolbar != null)
+                this.viewToolbar.updateType();
         }
         else if(_type == AppView.TYPE_SERVER) {
             Log.i("Application initializing as a Server", AppView.class);
             viewMenu = new ServerView();
             this.setTitle("Server - SER516 Project Two: Team 4");
 
-            if(this.viewToolbar != null) {
-                this.viewToolbar.labelType.setText("Server");
-                this.viewToolbar.buttonToggle.setText(ServerModel.get().isRunning() ? "Stop" : "Start");
-            }
+            if(this.viewToolbar != null)
+                this.viewToolbar.updateType();
         } else {
             throw new IllegalStateException("Type is not client or server");
         }
@@ -115,86 +111,6 @@ public class AppView extends JFrame {
         this.add(viewMenu, BorderLayout.CENTER);
         this.repaint();
         this.revalidate();
-    }
-
-    /**
-     * AppToolbar, the toolbar with the start/stop button
-     */
-    private class AppToolbar extends JToolBar {
-        private JButton buttonToggle;
-        private JLabel labelType;
-
-        public AppToolbar() {
-            // When server is starting or stopping, update button
-            ServerModel.get().addListener(new ServerListener() {
-                @Override
-                public void started() {
-                    if(AppView.this.isServer())
-                        buttonToggle.setText("Stop");
-                }
-
-                @Override
-                public void shutdown() {
-                    if(AppView.this.isServer())
-                        buttonToggle.setText("Start");
-                }
-            });
-
-            // When client is starting or stopping, update button
-            ClientModel.get().addListener(new ClientListener() {
-                @Override
-                public void changedValues() {}
-
-                @Override
-                public void changedChannelCount() {}
-
-                @Override
-                public void started() {
-                    if(AppView.this.isClient())
-                        buttonToggle.setText("Stop");
-                }
-
-                @Override
-                public void shutdown() {
-                    if(AppView.this.isClient())
-                        buttonToggle.setText("Start");
-                }
-            });
-
-            this.setBackground(ColorConstants.BACKGROUND_BLUE);
-            this.setBorder(new EmptyBorder(8, 8, 8, 8));
-            this.setFloatable(false);
-
-            labelType = new JLabel(AppView.get().isClient() ? "Client" : "Server");
-            labelType.setFont(ColorConstants.DEFAULT_FONT);
-            this.add(labelType);
-            this.add(Box.createHorizontalGlue());
-
-            buttonToggle = new JButton("Start");
-            buttonToggle.setFont(ColorConstants.DEFAULT_FONT);
-            buttonToggle.setBackground(ColorConstants.BACKGROUND_PINK);
-            buttonToggle.setFocusPainted(false);
-            buttonToggle.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(Color.BLACK, 1),
-                    BorderFactory.createLineBorder(ColorConstants.BACKGROUND_PINK, 4)
-                    )
-            );
-            buttonToggle.addActionListener(e -> {
-                // Check if it is client or server, then stop or start respectively
-                if(AppView.this.isServer()) {
-                    if (ServerModel.get().isRunning())
-                        ServerModel.get().shutdown();
-                    else
-                        ServerModel.get().start();
-                } else {
-                    if(ClientModel.get().isRunning())
-                        ClientModel.get().shutdown();
-                    else
-                        ClientModel.get().start();
-                }
-            });
-            this.add(buttonToggle);
-        }
     }
 
     /**
