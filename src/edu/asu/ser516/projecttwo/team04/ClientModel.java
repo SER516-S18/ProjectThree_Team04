@@ -116,6 +116,8 @@ public class ClientModel {
         valueMin = null;
         valueMax = null;
         valueAvg = null;
+        for(ClientChannel channel : channels)
+            channel.clear();
 
         this.notifyClientShutdown();
     }
@@ -256,7 +258,7 @@ public class ClientModel {
             if(count > CHANNEL_COUNT) {
                 // Adding channels
                 for(int i = CHANNEL_COUNT; i < count; i++) {
-                    channels.add(new ClientChannel());
+                    channels.add(new ClientChannel(i));
                 }
             } else if(count < CHANNEL_COUNT) {
                 // Removing channels
@@ -458,6 +460,7 @@ public class ClientModel {
      * ClientInputHandler - Handles input at the client's set frequency
      */
     private class ClientInputHandler implements Runnable {
+        private int tick;
         private boolean running;
         private ClientWorker worker;
 
@@ -468,6 +471,7 @@ public class ClientModel {
 
         @Override
         public void run() {
+            tick = 0;
             running = true;
 
             while(ClientModel.this.run) {
@@ -485,7 +489,7 @@ public class ClientModel {
                             if(value == null)
                                 continue;
 
-                            channels.get(i).add(value);
+                            channels.get(i).add(value, tick);
 
                             // First value edge case
                             if (valueList.size() == 0) {
@@ -521,6 +525,8 @@ public class ClientModel {
                 } catch (InterruptedException e) {
                     Log.w("Interrupted exception thrown while waiting for client frequency", ClientModel.class);
                 }
+
+                tick++;
             }
 
             running = false;
@@ -531,20 +537,39 @@ public class ClientModel {
      * ClientChannel - Represents the data values in a channel
      */
     public static class ClientChannel {
-        private ArrayList<Integer> values;
+        private final ArrayList<ClientValueTuple> values;
+        public final int id;
 
-        private ClientChannel() {
+        private ClientChannel(int id) {
+            this.id = id;
             values = new ArrayList<>();
         }
-        private void add(Integer value) {
-            values.add(value);
+
+        private void add(Integer value, Integer tick) {
+            values.add(new ClientValueTuple(value, tick));
+        }
+        private void clear() {
+            values.clear();
         }
 
-        public Integer getLast() {
+        public ClientValueTuple getLast() {
             return values.get(values.size());
         }
-        public List<Integer> getValues() {
+        public List<ClientValueTuple> getValues() {
             return Collections.unmodifiableList(values);
+        }
+    }
+
+    /**
+     * ClientValueTuple - Pairs a value with a tick (time)
+     */
+    public static class ClientValueTuple {
+        public final Integer value;
+        public final Integer tick;
+
+        private ClientValueTuple(Integer value, Integer tick) {
+            this.value = value;
+            this.tick = tick;
         }
     }
 }
