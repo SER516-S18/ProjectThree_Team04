@@ -365,6 +365,7 @@ public class ClientModel {
                     } else if(data.type == Datagram.TYPE.SHUTDOWN) {
                         // Server is notifying this client it intends to shutdown
                         Log.i("Server is disconnecting from client", ClientModel.class);
+                        worker.outputHandler.serverNotifyDisconnect = true;
                         ClientModel.this.shutdown();
                     }
                 } catch(ClassNotFoundException e) {
@@ -396,6 +397,7 @@ public class ClientModel {
      */
     private class ClientOutputHandler implements Runnable {
         private boolean running;
+        private boolean serverNotifyDisconnect = false;
         private ClientWorker worker;
         private ArrayList<Datagram> datagrams = new ArrayList<>();
 
@@ -415,6 +417,7 @@ public class ClientModel {
         @Override
         public void run() {
             running = true;
+            serverNotifyDisconnect = false;
 
             while(ClientModel.this.run) {
                 // If we have any data to send
@@ -436,13 +439,15 @@ public class ClientModel {
                 }
             }
 
-            // Gracefully disconnect from server
-            try {
-                worker.streamOut.writeObject(new Datagram(Datagram.TYPE.SHUTDOWN, null));
-                worker.streamOut.flush();
-                worker.streamOut.close();
-            } catch (IOException e) {
-                Log.w("Failed to notify graceful disconnect with server (" + e.getMessage() + ")", ClientModel.class);
+            // Gracefully disconnect from server (if the client isn't the one disconnecting)
+            if(!serverNotifyDisconnect) {
+                try {
+                    worker.streamOut.writeObject(new Datagram(Datagram.TYPE.SHUTDOWN, null));
+                    worker.streamOut.flush();
+                    worker.streamOut.close();
+                } catch (IOException e) {
+                    Log.w("Failed to notify graceful disconnect with server (" + e.getMessage() + ")", ClientModel.class);
+                }
             }
 
             running = false;

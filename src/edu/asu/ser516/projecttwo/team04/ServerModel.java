@@ -227,6 +227,7 @@ public class ServerModel {
         private int channels = 1;
         private ObjectOutputStream streamOut;
         private ObjectInputStream streamIn;
+        private boolean clientNotifyDisconnect = false;
 
         public ServerWorker(Socket socket, int clientID) {
             id = clientID;
@@ -238,6 +239,8 @@ public class ServerModel {
 
                 // Output to the client
                 Runnable output = () -> {
+                    clientNotifyDisconnect = false;
+
                     while(ServerWorker.this.run && ServerModel.this.run) {
                         // Create a 'packet' with a value for each channel the client has
                         ArrayList<Integer> values = new ArrayList<>();
@@ -262,13 +265,15 @@ public class ServerModel {
                         }
                     }
 
-                    // Gracefully disconnect client
-                    try {
-                        streamOut.writeObject(new Datagram(Datagram.TYPE.SHUTDOWN, null));
-                        streamOut.flush();
-                        streamOut.close();
-                    } catch (IOException e) {
-                        Log.w("Failed to notify graceful disconnect with client (" + e.getMessage() + ")", ServerModel.class);
+                    // Gracefully disconnect client (if the server isn't the one shutting down)
+                    if(!clientNotifyDisconnect) {
+                        try {
+                            streamOut.writeObject(new Datagram(Datagram.TYPE.SHUTDOWN, null));
+                            streamOut.flush();
+                            streamOut.close();
+                        } catch (IOException e) {
+                            Log.w("Failed to notify graceful disconnect with client (" + e.getMessage() + ")", ServerModel.class);
+                        }
                     }
                 };
 
@@ -291,6 +296,7 @@ public class ServerModel {
                                 }
                             } else if(data.type == Datagram.TYPE.SHUTDOWN) {
                                 // If the data is to notify the client intends to shutdown, disconnect
+                                clientNotifyDisconnect = true;
                                 ServerWorker.this.disconnect();
                                 Log.i("Client #" + id + " disconnected successfully", ServerModel.class);
                             }
