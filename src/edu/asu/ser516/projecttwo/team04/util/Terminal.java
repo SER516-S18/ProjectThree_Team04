@@ -42,15 +42,7 @@ public class Terminal {
      * Starts the Terminal thread to accept input
      */
     public void start() {
-        new Thread(new ConsoleRunnable()).start();
-    }
-
-    /**
-     * Runs the terminal, loops retrieving input from a user
-     */
-    private class ConsoleRunnable implements Runnable {
-        @Override
-        public void run() {
+        new Thread(() -> {
             scan = new Scanner(System.in);
             while (run) {
                 Log.d("Terminal started, type \"help\" for available commands", Terminal.class);
@@ -68,7 +60,7 @@ public class Terminal {
                     }
                 }
             }
-        }
+        }).start();
     }
 
     /**
