@@ -183,7 +183,7 @@ public class ClientModel {
 
     private void notifyChannelCountChanged() {
         for(ClientListener listener : listeners) {
-            listener.changedChannelCount(CHANNEL_COUNT);
+            listener.changedChannelCount();
         }
     }
 

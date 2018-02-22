@@ -143,7 +143,7 @@ public class AppView extends JFrame {
                 public void changedValues() {}
 
                 @Override
-                public void changedChannelCount(int count) {}
+                public void changedChannelCount() {}
 
                 @Override
                 public void started() {

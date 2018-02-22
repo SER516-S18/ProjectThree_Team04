@@ -58,7 +58,7 @@ public class ClientView extends JPanel {
                 }
 
                 @Override
-                public void changedChannelCount(int count) {
+                public void changedChannelCount() {
                     ClientGraphView.this.updateSeries();
                 }
 
@@ -292,7 +292,7 @@ public class ClientView extends JPanel {
                 }
 
                 @Override
-                public void changedChannelCount(int count) {}
+                public void changedChannelCount() {}
 
                 @Override
                 public void started() {}
