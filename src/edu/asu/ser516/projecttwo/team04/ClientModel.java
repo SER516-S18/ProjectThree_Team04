@@ -255,12 +255,12 @@ public class ClientModel {
             // Create new channels on clientside
             if(count > CHANNEL_COUNT) {
                 // Adding channels
-                for(int i = 0; i < count - CHANNEL_COUNT; i++) {
+                for(int i = CHANNEL_COUNT; i < count; i++) {
                     channels.add(new ClientChannel());
                 }
             } else if(count < CHANNEL_COUNT) {
                 // Removing channels
-                for(int i = CHANNEL_COUNT - 1; i > count; i--) {
+                for(int i = CHANNEL_COUNT - 1; i > count - 1; i--) {
                     channels.remove(i);
                 }
             }
