@@ -5,5 +5,7 @@ out/*
 .idea/*
 *.iml
 *.jar
+!lib/jcommon*.jar
+!lib/jfreechart*.jar
 *.zip
 *MANIFEST.MF
