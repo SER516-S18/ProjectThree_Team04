@@ -11,10 +11,12 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
+/**
+ * AppToolbarView, the toolbar with the start/stop button and Label which denotes
+ * whether the application is of type client or server7
+ */
 public class AppToolbarView extends JToolBar {
-    /**
-     * AppToolbarView, the toolbar with the start/stop button
-     */
+
     private JButton buttonToggle;
     private JLabel labelType;
 
