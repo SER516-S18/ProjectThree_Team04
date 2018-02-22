@@ -4,12 +4,12 @@ import edu.asu.ser516.projecttwo.team04.ClientModel;
 import edu.asu.ser516.projecttwo.team04.constants.ColorConstants;
 import edu.asu.ser516.projecttwo.team04.constants.StringConstants;
 import edu.asu.ser516.projecttwo.team04.listeners.ClientListener;
+import edu.asu.ser516.projecttwo.team04.util.Log;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
@@ -18,7 +18,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.util.*;
 import java.util.List;
 
 /**
@@ -48,8 +47,7 @@ public class ClientView extends JPanel {
     }
 
     private class ClientGraphView extends JPanel {
-        private ArrayList<XYSeries> series;
-        private XYDataset dataset;
+        private XYSeriesCollection dataset;
         private JFreeChart chart;
         private ChartPanel panelChart;
         private JPanel panelBuffer;
@@ -58,12 +56,12 @@ public class ClientView extends JPanel {
             ClientModel.get().addListener(new ClientListener() {
                 @Override
                 public void changedValues() {
-                    ClientGraphView.this.initGraph();
+                    ClientGraphView.this.updateValues();
                 }
 
                 @Override
                 public void changedChannelCount(int count) {
-                    // ClientGraphView.this.updateSeries();
+                    ClientGraphView.this.updateSeries();
                 }
 
                 @Override
@@ -86,7 +84,8 @@ public class ClientView extends JPanel {
             panelBuffer.setBorder(BorderFactory.createLineBorder(Color.black));
 
             // Create the chart
-            dataset = this.getDataset();
+            dataset = new XYSeriesCollection();
+            updateSeries();
             chart = ChartFactory.createXYLineChart("", "", "", dataset, PlotOrientation.VERTICAL, false, false, false);
             chart.setBackgroundPaint(ColorConstants.BACKGROUND_PINK);
             chart.getPlot().setOutlineVisible(false);
@@ -108,20 +107,43 @@ public class ClientView extends JPanel {
             this.add(panelBuffer, BorderLayout.CENTER);
         }
 
-        private XYSeriesCollection getDataset() {
-            XYSeriesCollection collection = new XYSeriesCollection();
+        private void updateSeries() {
+            // Each series is a line, displaying a channel
+            List<ClientModel.ClientChannel> channels = ClientModel.get().getChannels();
 
-            for(ClientModel.ClientChannel channel : ClientModel.get().getChannels()) {
-                XYSeries series = new XYSeries("Channel " + channel.id);
-                for(ClientModel.ClientValueTuple tuple : channel.getValues()) {
-                    series.add(tuple.tick, tuple.value);
+            if(channels.size() > dataset.getSeriesCount()) {
+                // Was added
+                for(int i = dataset.getSeriesCount(); i < channels.size(); i++) {
+                    ClientModel.ClientChannel channel = channels.get(i);
+                    XYSeries series = new XYSeries("Channel " + channel.id);
+                    for(ClientModel.ClientValueTuple tuple : channel.getValues()) {
+                        series.add(tuple.tick, tuple.value);
+                    }
+                    dataset.addSeries(series);
                 }
-                collection.addSeries(series);
+            } else if(channels.size() < dataset.getSeriesCount()) {
+                // Was removed
+                for(int i = dataset.getSeriesCount() - 1; i > channels.size() - 1; i--) {
+                    XYSeries series = dataset.getSeries(i);
+                    series.clear();
+                    dataset.removeSeries(i);
+                }
             }
-
-            return collection;
         }
 
+        private void updateValues() {
+            List<ClientModel.ClientChannel> channels = ClientModel.get().getChannels();
+            for(int i = 0; i < dataset.getSeriesCount(); i++) {
+                if(channels.size() == dataset.getSeriesCount()) {
+                    XYSeries series = dataset.getSeries(i);
+                    ClientModel.ClientValueTuple tuple = channels.get(i).getLast();
+                    if(tuple != null)
+                        series.add(tuple.tick, tuple.value);
+                } else {
+                    Log.w("Channel and series size differ (" + channels.size() + " : " + dataset.getSeriesCount() + ")", ClientView.class);
+                }
+            }
+        }
     }
 
     private class ClientSettingsView extends JPanel {
