@@ -11,7 +11,7 @@
 - Saheb Johar ([@sahebjohar92](https://github.com/sahebjohar92))
 - Jeb Johnson
 - Nagarjuna Kalluri ([@nkalluri11](https://github.com/nkalluri11))
-- Sai Saran Kandimalla
+- Sai Saran Kandimalla ([@saran1856](https://github.com/saran1856))
 - Vineesha Kasam ([@VineeshaKasam](https://github.com/VineeshaKasam))
 
 ## Running our Project Two - Team 04 Client and Server
