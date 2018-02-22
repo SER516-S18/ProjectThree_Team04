@@ -79,45 +79,6 @@ public class Log {
     }
 
     /**
-     * LogRecord, a databag with the message and its other attributes
-     */
-    public static class LogRecord {
-        private String _formattedMessage;
-        private String _message;
-        private POLICY _policy;
-        private Class _class;
-        private long _timestamp;
-
-        public LogRecord(String formattedMessage, String message, POLICY policy, Class javaClass) {
-            _formattedMessage = formattedMessage;
-            _message = message;
-            _policy = policy;
-            _class = javaClass;
-            _timestamp = System.currentTimeMillis();
-        }
-
-        public String getFormattedMessage() {
-            return this._formattedMessage;
-        }
-
-        public String getMessage() {
-            return this._message;
-        }
-
-        public POLICY getOriginatingPolicy() {
-            return this._policy;
-        }
-
-        public Class getOriginatingClass() {
-            return this._class;
-        }
-
-        public long getTimestamp() {
-            return this._timestamp;
-        }
-    }
-
-    /**
      * log, to log system messages to the terminal and console
      * @param msg, the message to display
      * @param javaClass, the originating Java class
