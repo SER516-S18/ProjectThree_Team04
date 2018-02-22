@@ -51,7 +51,6 @@ public class ClientModel {
     private int FREQUENCY;
     private int CHANNEL_COUNT;
 
-    private final ExecutorService executors = Executors.newCachedThreadPool();
     private final ArrayList<ClientListener> listeners = new ArrayList<>();
     private boolean run = false;
     private ClientWorker worker;
@@ -128,6 +127,44 @@ public class ClientModel {
             channel.clear();
 
         this.notifyClientShutdown();
+    }
+
+    public void handleNewInputValues(ArrayList<Integer> values, int tick) {
+        // For each value, add to the correct channel (and calculate min/max/avg)
+        for(int i = 0; i < values.size(); i++) {
+            Integer value = values.get(i);
+            if(value == null)
+                continue;
+
+            // Add value to the channel
+            channels.get(i).add(value, tick);
+
+            // Now to calculate the min/max/avg across all channels
+            // First value edge case
+            if (valueList.size() == 0) {
+                valueMin = value;
+                valueMax = value;
+                valueAvg = value;
+            }
+
+            // Average
+            valueList.add(value);
+            valueAvg = 0;
+            for (int val : valueList)
+                valueAvg += val;
+            valueAvg /= valueList.size();
+
+            // Minimum
+            if (value < ClientModel.this.valueMin)
+                valueMin = value;
+
+            // Maximum
+            if (value > ClientModel.this.valueMax)
+                valueMax = value;
+
+            // Notify listeners of the new value
+            this.notifyValuesChanged();
+        }
     }
 
     /**
@@ -303,276 +340,5 @@ public class ClientModel {
      */
     public int getChannelCount() {
         return CHANNEL_COUNT;
-    }
-
-    /**
-     * ClientWorker - Class that contains the input listener and handler, and the output handler
-     */
-    private class ClientWorker {
-        private ObjectInputStream streamIn;
-        private ObjectOutputStream streamOut;
-
-        private ClientOutputHandler outputHandler;
-        private ClientInputListener inputListener;
-        private ClientInputHandler inputHandler;
-
-        private ClientWorker(Socket socket) {
-            try {
-                // Open streams, start handlers and listeners
-                streamOut = new ObjectOutputStream(socket.getOutputStream());
-                streamIn = new ObjectInputStream(socket.getInputStream());
-
-                // Create output handler (output to server)
-                outputHandler = new ClientOutputHandler(this);
-                executors.submit(outputHandler);
-
-                // Create input listener (input from server, at server's frequency)
-                inputListener = new ClientInputListener(this);
-                executors.submit(inputListener);
-
-                // Create input handler (handles input from listener, at client's frequency)
-                inputHandler = new ClientInputHandler(this);
-                executors.submit(inputHandler);
-            } catch (IOException e) {
-                Log.w("Client failed to read input stream (" + e.getMessage() + ")", ClientModel.class);
-            }
-        }
-
-        /**
-         * isRunning - Considered running if all three listeners/handlers are running
-         * @return If ClientWorker is running
-         */
-        private boolean isRunning() {
-            return (outputHandler != null && outputHandler.running &&
-                    inputListener != null && inputListener.running &&
-                    inputHandler != null && inputHandler.running);
-        }
-    }
-
-    /**
-     * ClientInputListener - Necessary because server may send values at a different frequency
-     */
-    private class ClientInputListener implements Runnable {
-        private boolean running;
-        private ClientWorker worker;
-        private ArrayList<Integer> value;
-
-        /**
-         * ClientInputListener - Accepts values from server at server's frequency
-         * @param worker Parent worker (to link between input listener/input handler/output handler)
-         */
-        private ClientInputListener(ClientWorker worker) {
-            this.worker = worker;
-            this.running = false;
-        }
-
-        /**
-         * getValue - Gets the most recently received value
-         * @param clear - Whether to clear the value to null after getting
-         * @return value - Most recent value (or or null if not available)
-         */
-        public ArrayList<Integer> getValue(boolean clear) {
-            if(clear) {
-                ArrayList<Integer> temp = value;
-                value = null;
-                return temp;
-            } else {
-                return value;
-            }
-        }
-
-        @Override
-        public void run() {
-            running = true;
-
-            while (ClientModel.this.run) {
-                Datagram data;
-                try {
-                    // Wait until data is available, then get it
-                    data = (Datagram) worker.streamIn.readObject();
-                    if(data == null)
-                        continue;
-
-                    if(data.type == Datagram.TYPE.PAYLOAD) {
-                        // If it's payload, set it as the new value
-                        value = (ArrayList<Integer>) data.data;
-                    } else if(data.type == Datagram.TYPE.SHUTDOWN) {
-                        // Server is notifying this client it intends to shutdown
-                        Log.i("Server is disconnecting from client", ClientModel.class);
-                        worker.outputHandler.serverNotifyDisconnect = true;
-                        ClientModel.this.shutdown();
-                    }
-                } catch(ClassNotFoundException e) {
-                    if(ClientModel.this.run)
-                        Log.w("Failed to read in object from stream (Class not found: " + e.getMessage() + ")", ClientModel.class);
-                    continue;
-                } catch(IOException e) {
-                    if(ClientModel.this.run) {
-                        // Only error if we should be running right now
-                        Log.e("Failed to read in object from stream, shutting down (IOException: " + e.getMessage() + ")", ClientModel.class);
-                        ClientModel.this.shutdown();
-                    }
-                    continue;
-                }
-            }
-
-            // Attempt to gracefully shut down input
-            try {
-                worker.streamIn.close();
-            } catch (IOException e) {
-                Log.w("Failed to gracefully close input socket (" + e.getMessage() + ")", ClientModel.class);
-            }
-
-            running = false;
-        }
-    }
-
-    /**
-     * ClientOutputHandler - Outputs datagrams to the server (e.g., channel count, shutdown message)
-     */
-    private class ClientOutputHandler implements Runnable {
-        private boolean running;
-        private boolean serverNotifyDisconnect = false;
-        private ClientWorker worker;
-        private ArrayList<Datagram> datagrams = new ArrayList<>();
-
-        /**
-         * ClientOutputHandler - Sends output to server
-         * @param worker Parent worker (to link between input listener/input handler/output handler)
-         */
-        private ClientOutputHandler(ClientWorker worker) {
-            this.worker = worker;
-            this.running = false;
-        }
-
-        /**
-         * sendDatagram - Adds datagram to queue to send to server
-         * @param data Datagram to send to server
-         */
-        private synchronized void sendDatagram(Datagram data) {
-            datagrams.add(data);
-        }
-
-        @Override
-        public void run() {
-            running = true;
-            serverNotifyDisconnect = false;
-
-            while(ClientModel.this.run) {
-                // If we have any data to send
-                if(datagrams.size() > 0) {
-                    Datagram data = datagrams.get(0);
-                    try {
-                        worker.streamOut.writeObject(data);
-                        worker.streamOut.flush();
-                        datagrams.remove(0);
-                    } catch (IOException e) {
-                        Log.w("Failed send server data from client", ClientModel.class);
-                    }
-                }
-
-                try {
-                    Thread.sleep(20L);
-                } catch (InterruptedException e) {
-                    Log.w("Failed to sleep in client output (" + e.getMessage() + ")", ClientModel.class);
-                }
-            }
-
-            // Gracefully disconnect from server (if the client isn't the one disconnecting)
-            if(!serverNotifyDisconnect) {
-                try {
-                    worker.streamOut.writeObject(new Datagram(Datagram.TYPE.SHUTDOWN, null));
-                    worker.streamOut.flush();
-                    worker.streamOut.close();
-                } catch (IOException e) {
-                    Log.w("Failed to notify graceful disconnect with server (" + e.getMessage() + ")", ClientModel.class);
-                }
-            }
-
-            running = false;
-        }
-    }
-
-    /**
-     * ClientInputHandler - Handles input at the client's set frequency
-     */
-    private class ClientInputHandler implements Runnable {
-        private int tick;
-        private boolean running;
-        private ClientWorker worker;
-
-        /**
-         * ClientInputHandler - Handles input from input listener, at the client's frequency
-         * @param worker Parent worker (to link between input listener/input handler/output handler)
-         */
-        private ClientInputHandler(ClientWorker worker) {
-            this.worker = worker;
-            this.running = false;
-        }
-
-        @Override
-        public void run() {
-            tick = 0;
-            running = true;
-
-            while(ClientModel.this.run) {
-                // Get the most recent input at our own client's frequency
-                ArrayList<Integer> values = worker.inputListener.getValue(false);
-
-                if(values != null) {
-                    if(values.size() != CHANNEL_COUNT) {
-                        // If the values sent aren't the correct number of channels, notify server of correct count
-                        worker.outputHandler.sendDatagram(new Datagram(Datagram.TYPE.SETTING, CHANNEL_COUNT));
-                    } else {
-                        // For each value, add to the correct channel (and calculate min/max/avg)
-                        for(int i = 0; i < values.size(); i++) {
-                            Integer value = values.get(i);
-                            if(value == null)
-                                continue;
-
-                            // Add value to the channel
-                            channels.get(i).add(value, tick);
-
-                            // Now to calculate the min/max/avg across all channels
-                            // First value edge case
-                            if (valueList.size() == 0) {
-                                valueMin = value;
-                                valueMax = value;
-                                valueAvg = value;
-                            }
-
-                            // Average
-                            ClientModel.this.valueList.add(value);
-                            valueAvg = 0;
-                            for (int val : valueList)
-                                valueAvg += val;
-                            valueAvg /= valueList.size();
-
-                            // Minimum
-                            if (value < ClientModel.this.valueMin)
-                                ClientModel.this.valueMin = value;
-
-                            // Maximum
-                            if (value > ClientModel.this.valueMax)
-                                ClientModel.this.valueMax = value;
-
-                            // Notify listeners of the new value
-                            ClientModel.this.notifyValuesChanged();
-                        }
-                    }
-                }
-
-                // Sleep to meet Client's frequency
-                try {
-                    Thread.sleep(1000 / ClientModel.this.FREQUENCY);
-                } catch (InterruptedException e) {
-                    Log.w("Interrupted exception thrown while waiting for client frequency", ClientModel.class);
-                }
-
-                tick++;
-            }
-
-            running = false;
-        }
     }
 }

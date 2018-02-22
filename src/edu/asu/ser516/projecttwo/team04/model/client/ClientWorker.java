@@ -1,0 +1,65 @@
+package edu.asu.ser516.projecttwo.team04.model.client;
+
+import edu.asu.ser516.projecttwo.team04.util.Log;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+/**
+ * ClientWorker - Class that contains the input listener and handler, and the output handler
+ */
+public class ClientWorker {
+    private static final ExecutorService executors = Executors.newCachedThreadPool();
+
+    private ObjectInputStream streamIn;
+    private ObjectOutputStream streamOut;
+
+    private ClientOutputHandler outputHandler;
+    private ClientInputListener inputListener;
+    private ClientInputHandler inputHandler;
+
+    public ClientWorker(Socket socket) {
+        try {
+            // Open streams, start handlers and listeners
+            streamOut = new ObjectOutputStream(socket.getOutputStream());
+            streamIn = new ObjectInputStream(socket.getInputStream());
+
+            // Create output handler (output to server)
+            outputHandler = new ClientOutputHandler(this, streamOut);
+            executors.submit(outputHandler);
+
+            // Create input listener (input from server, at server's frequency)
+            inputListener = new ClientInputListener(this, streamIn);
+            executors.submit(inputListener);
+
+            // Create input handler (handles input from listener, at client's frequency)
+            inputHandler = new ClientInputHandler(this);
+            executors.submit(inputHandler);
+        } catch (IOException e) {
+            Log.w("Client failed to read input stream (" + e.getMessage() + ")", ClientWorker.class);
+        }
+    }
+
+    /**
+     * isRunning - Considered running if all three listeners/handlers are running
+     * @return If ClientWorker is running
+     */
+    public boolean isRunning() {
+        return (outputHandler != null && outputHandler.isRunning() &&
+                inputListener != null && inputListener.isRunning() &&
+                inputHandler != null && inputHandler.isRunning());
+    }
+
+    public ClientInputListener getInputListener() {
+        return inputListener;
+    }
+
+    public ClientOutputHandler getOutputHandler() {
+        return outputHandler;
+    }
+}
+
