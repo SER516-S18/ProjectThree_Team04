@@ -7,7 +7,7 @@
 - Shreyas Hosahalli Govindaraja ([@shreyashg027](https://github.com/shreyashg027) | shosahal | shosahal@asu.edu)
 - Drishty Kapoor ([@Drishtykapoor](https://github.com/Drishtykapoor) | dkapoor3 | dkapoor3@asu.edu)
 - Yiru Hu ([@yiruhu](https://github.com/yiruhu) | yiruhu | yiruhu@asu.edu)
-- Paulo Jaimer ([@pjaimeSchool](https://github.com/pjaimeSchool) | pjaime | pjaime@asu.edu)
+- Paulo Jaime ([@pjaimeSchool](https://github.com/pjaimeSchool) | pjaime | pjaime@asu.edu)
 - Saheb Johar ([@sahebjohar92](https://github.com/sahebjohar92) | ssjohar | ssjohar@asu.edu)
 - Jeb Johnson ([@jajohn64](https://github.com/jajohn64) | jajohn64 | jajohn64@asu.edu)
 - Nagarjuna Kalluri ([@nkalluri11](https://github.com/nkalluri11) | nkalluri | nkalluri@asu.edu)
