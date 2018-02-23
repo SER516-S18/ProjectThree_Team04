@@ -4,8 +4,6 @@ import edu.asu.ser516.projecttwo.team04.ui.AppView;
 import edu.asu.ser516.projecttwo.team04.util.Log;
 import edu.asu.ser516.projecttwo.team04.util.Terminal;
 
-import javax.sound.midi.SysexMessage;
-
 /**
  * Main, contains Java main, arg processing, console initialization, and UI initialization
  * Pass "-init server" or "-init client" to start the program as a server or client

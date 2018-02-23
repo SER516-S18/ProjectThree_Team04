@@ -61,14 +61,14 @@ public class AppView extends JFrame {
         this.setLayout(new BorderLayout(8, 8));
         this.setBackground(ColorConstants.BACKGROUND_BLUE);
 
-        // Added a component to display Client or Server Label and the button to start or stop the connection        
+        // Add top toolbar component
         viewToolbar = new AppToolbarView();
         this.add(viewToolbar, BorderLayout.PAGE_START);
 
-        // Added a component to update the Client/Server Header
+        // Add respective Client or Server panel to the center
         this.updateType();
 
-        // Add footer (console)
+        // Add bottom footer console component
         viewConsole = new ConsoleView();
         this.add(viewConsole, BorderLayout.PAGE_END);
 

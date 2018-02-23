@@ -1,6 +1,5 @@
 package edu.asu.ser516.projecttwo.team04.util;
 
-import edu.asu.ser516.projecttwo.team04.constants.TextConstants;
 import edu.asu.ser516.projecttwo.team04.model.client.ClientModel;
 import edu.asu.ser516.projecttwo.team04.model.server.ServerModel;
 import edu.asu.ser516.projecttwo.team04.ui.AppView;
