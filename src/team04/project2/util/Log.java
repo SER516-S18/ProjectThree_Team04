@@ -215,7 +215,7 @@ public class Log {
 
     /**
      * Set the minimum policy to display in the console and terminal
-     * @param POLICY
+     * @param POLICY The minimum policy to display in console
      */
     public static void setConsolePolicy(POLICY POLICY) {
         CONSOLE_POLICY = POLICY;
@@ -223,7 +223,7 @@ public class Log {
 
     /**
      * Get the minimum policy to display in the console and terminal
-     * @return
+     * @return The minimum policy to display in console
      */
     public static POLICY getConsolePolicy() {
         return CONSOLE_POLICY;
@@ -231,7 +231,7 @@ public class Log {
 
     /**
      * Specific method to set the policy from the initial program startup arguments
-     * @param arg
+     * @param arg String argument to parse into policy
      */
     public static void setPoliciesFromArg(String arg) {
         if(Util.isInteger(arg)) {

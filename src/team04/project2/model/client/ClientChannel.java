@@ -48,7 +48,7 @@ public class ClientChannel {
     }
 
     /**
-     * gettValues - Returns all values in the channel
+     * getValues - Returns all values in the channel
      * @return Unmodifiable list of values (which can be null)
      */
     public List<ClientValueTuple> getValues() {
