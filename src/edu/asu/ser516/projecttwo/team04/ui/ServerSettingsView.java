@@ -35,7 +35,8 @@ public class ServerSettingsView extends JPanel {
         this.add(panelPromptMaximum);
 
         // Maximum - Input
-        JSpinner spinnerInputMaximum = new JSpinner( new SpinnerNumberModel(ServerModel.get().getValueMax(), -65536, 65536, 1) );
+        JSpinner spinnerInputMaximum = new JSpinner( new SpinnerNumberModel(ServerModel.get().getValueMax(), 
+                                                                            -65536, 65536, 1) );
         spinnerInputMaximum.setVisible(true);
         spinnerInputMaximum.setBorder(null);
         spinnerInputMaximum.getEditor().getComponent(0).setBackground(ColorConstants.BACKGROUND_PINK);
@@ -63,7 +64,8 @@ public class ServerSettingsView extends JPanel {
         this.add(panelPromptMinimum);
 
         // Minimum - Input
-        JSpinner spinnerInputMinimum = new JSpinner( new SpinnerNumberModel(ServerModel.get().getValueMin(), -65536, 65536, 1) );
+        JSpinner spinnerInputMinimum = new JSpinner( new SpinnerNumberModel(ServerModel.get().getValueMin(), 
+                                                                            -65536, 65536, 1) );
         spinnerInputMinimum.setVisible(true);
         spinnerInputMinimum.setBorder(null);
         spinnerInputMinimum.getEditor().getComponent(0).setBackground(ColorConstants.BACKGROUND_BLUEGRAY);
@@ -91,7 +93,8 @@ public class ServerSettingsView extends JPanel {
         this.add(panelPromptFrequency);
 
         // Frequency - Input
-        JSpinner spinnerInputFrequency = new JSpinner( new SpinnerNumberModel(ServerModel.get().getFrequency(), -65536, 65536, 1) );
+        JSpinner spinnerInputFrequency = new JSpinner( new SpinnerNumberModel(ServerModel.get().getFrequency(), 
+                                                                              -65536, 65536, 1) );
         spinnerInputFrequency.setVisible(true);
         spinnerInputFrequency.setBorder(null);
         spinnerInputFrequency.getEditor().getComponent(0).setBackground(ColorConstants.BACKGROUND_PINK);
