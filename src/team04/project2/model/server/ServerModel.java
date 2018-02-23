@@ -216,7 +216,8 @@ public class ServerModel {
     public void setPort(int port) {
         if(port < 0)
             throw new IllegalArgumentException("Port must be greater than zero");
-        PORT = port;
+        else if(this.getPort() != port)
+            PORT = port;
     }
 
     /**

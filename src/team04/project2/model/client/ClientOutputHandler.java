@@ -13,16 +13,13 @@ import java.util.ArrayList;
 public class ClientOutputHandler implements Runnable {
     private boolean isRunning;
     private boolean serverNotifyDisconnect = false;
-    private ClientWorker worker;
     private ObjectOutputStream streamOut;
     private ArrayList<Datagram> datagrams = new ArrayList<>();
 
     /**
      * ClientOutputHandler - Sends output to server
-     * @param worker Parent worker (to link between input listener/input handler/output handler)
      */
-    public ClientOutputHandler(ClientWorker worker, ObjectOutputStream outputStream) {
-        this.worker = worker;
+    public ClientOutputHandler(ObjectOutputStream outputStream) {
         this.streamOut = outputStream;
         this.isRunning = false;
     }

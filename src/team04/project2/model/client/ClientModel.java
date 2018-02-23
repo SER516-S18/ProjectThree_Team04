@@ -270,7 +270,7 @@ public class ClientModel {
     public void setPort(int port) {
         if(port < 0)
             throw new IllegalArgumentException("Port must be greater than zero");
-        else
+        else if(this.getPort() != port)
             PORT = port;
     }
 
