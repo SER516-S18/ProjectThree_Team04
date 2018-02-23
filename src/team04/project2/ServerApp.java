@@ -12,7 +12,9 @@ import team04.project2.util.Terminal;
  * @since   2018-02-22
  */
 public class ServerApp {
-    // Private constructor, container for Java main
+    /**
+     * ServerApp - Private constructor as the Class is mainly a wrapper for the Java main
+     */
     private ServerApp() {}
 
     /**
