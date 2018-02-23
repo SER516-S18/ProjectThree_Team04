@@ -23,14 +23,6 @@ public class ConsoleView extends JPanel {
      * Constructor for the view containing the console
      */
     public ConsoleView() {
-        // It is customary to have an initialize method for Swing UIs to allow reinitialization
-        this.init();
-    }
-
-    /**
-     * init - Initializes the Swing UI (standard for Swing)
-     */
-    public void init() {
         // Create transparent border around class
         this.setLayout(new BorderLayout());
         this.setOpaque(false);
