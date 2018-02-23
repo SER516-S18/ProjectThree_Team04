@@ -40,7 +40,8 @@ public class ClientSettingsView extends JPanel {
         this.add(panelPromptMaximum);
 
         // Maximum - Value
-        labelValueMaximum = new JLabel(String.valueOf(ClientModel.get().getMaximum() == null ? "" : ClientModel.get().getMinimum()));
+        labelValueMaximum = new JLabel(String.valueOf(ClientModel.get().getMaximum() == null ? "" :
+                                                      ClientModel.get().getMinimum()));
         labelValueMaximum.setFont(TextConstants.LARGE_FONT);
 
         JPanel panelValueMaximum = new JPanel();
@@ -62,7 +63,8 @@ public class ClientSettingsView extends JPanel {
         this.add(panelPromptMinimum);
 
         // Minimum - Value
-        labelValueMinimum = new JLabel(String.valueOf(ClientModel.get().getMinimum() == null ? "" : ClientModel.get().getMinimum()));
+        labelValueMinimum = new JLabel(String.valueOf(ClientModel.get().getMinimum() == null ? "" :
+                                                      ClientModel.get().getMinimum()));
         labelValueMinimum.setFont(TextConstants.LARGE_FONT);
 
         JPanel panelValueMinimum = new JPanel();
@@ -84,7 +86,8 @@ public class ClientSettingsView extends JPanel {
         this.add(panelPromptAverage);
 
         // Average - Value
-        labelValueAverage = new JLabel(String.valueOf(ClientModel.get().getAverage() == null ? "" : ClientModel.get().getAverage()));
+        labelValueAverage = new JLabel(String.valueOf(ClientModel.get().getAverage() == null ? "" :
+                                                      ClientModel.get().getAverage()));
         labelValueAverage.setFont(TextConstants.LARGE_FONT);
 
         JPanel panelValueAverage = new JPanel();
@@ -153,9 +156,12 @@ public class ClientSettingsView extends JPanel {
             @Override
             public void changedValues() {
                 // When the min/max/freq values change, update the text
-                labelValueMaximum.setText( ClientModel.get().getMaximum() == null ? "" : Integer.toString(ClientModel.get().getMaximum()) );
-                labelValueMinimum.setText( ClientModel.get().getMinimum() == null ? "" : Integer.toString(ClientModel.get().getMinimum()) );
-                labelValueAverage.setText( ClientModel.get().getAverage() == null ? "" : Integer.toString(ClientModel.get().getAverage()) );
+                labelValueMaximum.setText( ClientModel.get().getMaximum() == null ? "" :
+                                          Integer.toString(ClientModel.get().getMaximum()) );
+                labelValueMinimum.setText( ClientModel.get().getMinimum() == null ? "" :
+                                          Integer.toString(ClientModel.get().getMinimum()) );
+                labelValueAverage.setText( ClientModel.get().getAverage() == null ? "" :
+                                          Integer.toString(ClientModel.get().getAverage()) );
             }
 
             @Override
