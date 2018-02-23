@@ -1,71 +1,55 @@
-package src.edu.asu.ser516.projecttwo.team04.ui;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
+package edu.asu.ser516.projecttwo.team04.ui;
 
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
-
+import edu.asu.ser516.projecttwo.team04.constants.ColorConstants;
+import edu.asu.ser516.projecttwo.team04.listeners.ClientListener;
+import edu.asu.ser516.projecttwo.team04.model.client.ClientChannel;
+import edu.asu.ser516.projecttwo.team04.model.client.ClientModel;
+import edu.asu.ser516.projecttwo.team04.model.client.ClientValueTuple;
+import edu.asu.ser516.projecttwo.team04.util.Log;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.xy.XYDataItem;
-import org.jfree.data.xy.XYDataset;
+import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
-import src.edu.asu.ser516.projecttwo.team04.constants.ColorConstants;
-import src.edu.asu.ser516.projecttwo.team04.listeners.ClientListener;
-import src.edu.asu.ser516.projecttwo.team04.model.client.ClientChannel;
-import src.edu.asu.ser516.projecttwo.team04.model.client.ClientModel;
-import src.edu.asu.ser516.projecttwo.team04.model.client.ClientValueTuple;
-import src.edu.asu.ser516.projecttwo.team04.util.Log;
-
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.util.List;
 
 /**
- * ClientGraphView, class that plots the graph when client frame is running.
- * @author  Sai Saran Kandimalla. (skandim2@asu.edu) 
- * @since   FEB 2018
- * @version 1.
+ * ClientGraphView - The left hand JPanel containing the graph in the client view
  */
-public class ClientGraphView extends JPanel  {
-	
-	
-	JFreeChart plotGraph;
-	private int channelCount;
-	private ArrayList<XYDataset> datasetList = new ArrayList<XYDataset>();;
-	ArrayList<XYSeries> seriesList = new ArrayList<XYSeries>();
-	JPanel graphPanel = new JPanel(new BorderLayout());
-	ChartPanel panelChart = new ChartPanel(plotGraph, false);
-	
-	
-	/**
-	 * default constructor for class.
-	 */
-	public ClientGraphView() {
-		
-		ClientModel.get().addListener(new ClientListener() {
+public class ClientGraphView extends JPanel {
+    private XYSeriesCollection dataset;
+    private JFreeChart chart;
+    private ChartPanel panelChart;
+    private JPanel panelBuffer;
+
+    /**
+     * ClientGraphView - The left hand side of the client view, containing the graph
+     */
+    public ClientGraphView() {
+        ClientModel.get().addListener(new ClientListener() {
             @Override
             public void changedValues() {
-                
+                // When the channel(s) get new values, add them to the graph
                 ClientGraphView.this.updateValues();
             }
 
             @Override
             public void changedChannelCount() {
-                
+                // When the number of channels changes, update the series (dataset lines in graph)
                 ClientGraphView.this.updateSeries();
             }
 
             @Override
             public void started() {
-                
-                for(int i = 0; i < datasetList.size(); i++) {
-                    datasetList.remove(i);
+                // If we're restarting, clear the previous values stored in the dataset
+                for(int i = 0; i < dataset.getSeriesCount(); i++) {
+                    dataset.getSeries(i).clear();
                 }
             }
 
@@ -73,73 +57,87 @@ public class ClientGraphView extends JPanel  {
             public void shutdown() {}
         });
 
-	    createGraph();
-	}
+        // Create transparent border around graph
+        this.setLayout(new BorderLayout());
+        this.setOpaque(false);
+        this.setBorder(new EmptyBorder(8, 8, 8, 8));
 
-	public void createGraph() {
-		
-		
-        graphPanel.setBackground(ColorConstants.BACKGROUND_PINK);
-        graphPanel.setBorder(BorderFactory.createLineBorder(Color.black));
- 
-		
-		updateSeries();
-		
-		this.plotGraph = ChartFactory.createXYLineChart("Display", "Number", "Value", 
-			(XYDataset) datasetList,PlotOrientation.VERTICAL, true, true, false);
-		
-		
-		graphPanel.add(panelChart, BorderLayout.CENTER);
-		this.add(graphPanel, BorderLayout.CENTER);
+        initGraph();
+    }
 
-	}
+    /**
+     * initGraph - Creates and adds the graph to the panel
+     */
+    private void initGraph() {
+        panelBuffer = new JPanel(new BorderLayout());
+        panelBuffer.setBackground(ColorConstants.BACKGROUND_PINK);
+        panelBuffer.setBorder(BorderFactory.createLineBorder(Color.black));
 
-	private void updateSeries() {
-		// TODO Auto-generated method stub
-		channelCount = ClientModel.get().getChannels().size(); 
-		List<ClientChannel> channelList = ClientModel.get().getChannels();
-		if(channelCount > datasetList.size())
-	    {
-	    	
-	    	for (int i=datasetList.size();i<channelCount;i++)
-	    	{
-	    		ClientChannel channel = channelList.get(i);
+        // Create the chart
+        dataset = new XYSeriesCollection();
+        updateSeries();
+        chart = ChartFactory.createXYLineChart("", "", "", dataset, PlotOrientation.VERTICAL, false, false, false);
+        chart.setBackgroundPaint(ColorConstants.BACKGROUND_PINK);
+        chart.getPlot().setOutlineVisible(false);
+        chart.getPlot().setBackgroundAlpha(0);
+        ((XYPlot) chart.getPlot()).getDomainAxis().setVisible(false);
+        ((XYPlot) chart.getPlot()).setDomainGridlinesVisible(false);
+        ((XYPlot) chart.getPlot()).setDomainMinorGridlinesVisible(false);
+        ((XYPlot) chart.getPlot()).getRangeAxis().setVisible(false);
+        ((XYPlot) chart.getPlot()).setRangeGridlinesVisible(false);
+        ((XYPlot) chart.getPlot()).setRangeMinorGridlinesVisible(false);
+
+        // Put chart in panel
+        panelChart = new ChartPanel(chart, false);
+        panelChart.setDomainZoomable(false);
+        panelChart.setRangeZoomable(false);
+
+        // Put in buffer (for border), then in the ClientView
+        panelBuffer.add(panelChart, BorderLayout.CENTER);
+        this.add(panelBuffer, BorderLayout.CENTER);
+    }
+
+    /**
+     * updateSeries - Called when the number of channels changes, to update the series (graph's lines)
+     */
+    private void updateSeries() {
+        // Each series is a line, displaying a channel
+        java.util.List<ClientChannel> channels = ClientModel.get().getChannels();
+
+        if(channels.size() > dataset.getSeriesCount()) {
+            // Was added
+            for(int i = dataset.getSeriesCount(); i < channels.size(); i++) {
+                ClientChannel channel = channels.get(i);
                 XYSeries series = new XYSeries("Channel " + channel.id);
-                for(ClientValueTuple tuple : channel.getValues())
-                {
-                	series.add(tuple.tick, tuple.value);
-                }
-                	datasetList.add((XYDataset) series);
-	    	}
-	    }
-		else if 
-		(channelCount > datasetList.size()) 
-		{
-		     for(int i = channelCount; i<datasetList.size();i++)
-		     {
-		    	 datasetList.remove(i);
-		     }
-		}
-	
-	}
-	
-
-	private void updateValues() {
-        List<ClientChannel> channels = ClientModel.get().getChannels();
-        for(int i = 0; i < datasetList.size(); i++) {
-            if(channels.size() == datasetList.size()) {
-                XYSeries series = (XYSeries) datasetList.get(i);
-                ClientValueTuple tuple = channels.get(i).getLast();
-                if(tuple != null)
+                for(ClientValueTuple tuple : channel.getValues()) {
                     series.add(tuple.tick, tuple.value);
-            } else {
-                Log.w("Channel and series size differ (" + channels.size() + " : " 
-		      + datasetList.size() + ")", ClientGraphView.class);
+                }
+                dataset.addSeries(series);
+            }
+        } else if(channels.size() < dataset.getSeriesCount()) {
+            // Was removed
+            for(int i = dataset.getSeriesCount() - 1; i > channels.size() - 1; i--) {
+                XYSeries series = dataset.getSeries(i);
+                series.clear();
+                dataset.removeSeries(i);
             }
         }
     }
 
-
-
-	}
-
+    /**
+     * updateValues - Called when new values need to be added to the graph
+     */
+    private void updateValues() {
+        List<ClientChannel> channels = ClientModel.get().getChannels();
+        for(int i = 0; i < dataset.getSeriesCount(); i++) {
+            if(channels.size() == dataset.getSeriesCount()) {
+                XYSeries series = dataset.getSeries(i);
+                ClientValueTuple tuple = channels.get(i).getLast();
+                if(tuple != null)
+                    series.add(tuple.tick, tuple.value);
+            } else {
+                Log.w("Channel and series size differ (" + channels.size() + " : " + dataset.getSeriesCount() + ")", ClientGraphView.class);
+            }
+        }
+    }
+}
