@@ -1,28 +1,28 @@
-package edu.asu.ser516.projecttwo.team04;
-
 import edu.asu.ser516.projecttwo.team04.ui.AppView;
 import edu.asu.ser516.projecttwo.team04.util.Log;
 import edu.asu.ser516.projecttwo.team04.util.Terminal;
 
 /**
- * Main, contains Java main, arg processing, console initialization, and UI initialization
- * Pass "-init server" or "-init client" to start the program as a server or client
+ * ClientApp, contains Java main, arg processing, console initialization, and UI initialization
  *
  * @author  David Henderson (dchende2@asu.edu)
  * @version 1.0
- * @since   2018-02-15
+ * @since   2018-02-22
  */
-
-public class Main {
+public class ClientApp {
     // Private constructor, container for Java main
-    private Main() {}
+    private ClientApp() {}
 
     /**
-     * Java main for both the client and server
+     * Java main for the Client
      * @param args String arguments
      */
     public static void main(final String[] args) {
+        // Show verbose messages in the log
         Log.setPolicies(Log.POLICY.VERBOSE);
+
+        // Set the application type to Client
+        AppView.get().setType(AppView.TYPE_CLIENT);
 
         // Argument processing (to console)
         if (args.length > 0) {
@@ -44,7 +44,7 @@ public class Main {
 
                         if ((argj.startsWith("-") || j == args.length - 1) && line.length() > 0) {
                             String temp = arg.substring(1) + line;
-                            Log.i("Passing program argument \"" + temp + "\" to console", Main.class);
+                            Log.i("Passing program argument \"" + temp + "\" to console", ClientApp.class);
                             Terminal.handle(temp);
                             break;
                         }
