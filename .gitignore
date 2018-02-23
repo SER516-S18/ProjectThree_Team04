@@ -5,6 +5,8 @@ out/*
 .idea/*
 *.iml
 *.jar
+*.ipr
+*.iws
 !lib/jcommon*.jar
 !lib/jfreechart*.jar
 *.zip
