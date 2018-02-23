@@ -23,9 +23,9 @@ public class Log {
         private final String _name;
 
         /**
-         *
-         * @param level
-         * @param name
+         * POLICY - The enumeration with a level of severity and the name of it
+         * @param level Severity level of the policy
+         * @param name The name of the policy
          */
         private POLICY(int level, String name) {
             this._level = level;
@@ -68,7 +68,7 @@ public class Log {
     }
 
     private static POLICY CONSOLE_POLICY = POLICY.ERROR;
-    private static int _length = -1;
+    private static int _longestPolicyNameLength = -1;
     private static transient ArrayList<ConsoleRecordListener> _recordListeners = new ArrayList<>();
 
     /**
@@ -109,17 +109,17 @@ public class Log {
      */
     public static void log(String msg, Class javaClass, POLICY policy) {
         // Formatting
-        if(_length < 0) {
+        if(_longestPolicyNameLength < 0) {
             for(POLICY POLICY : POLICY.values()) {
-                if(POLICY.getName().length() > _length)
-                    _length = POLICY.getName().length();
+                if(POLICY.getName().length() > _longestPolicyNameLength)
+                    _longestPolicyNameLength = POLICY.getName().length();
             }
-            _length += 3;
+            _longestPolicyNameLength += 3;
         }
 
         String message = null;
         if(policy.isEqualOrWorse(CONSOLE_POLICY)) {
-            message = String.format("%" + _length + "s", "[" + policy.getName() + "] ") + javaClass.getSimpleName() + ": " + msg;
+            message = String.format("%" + _longestPolicyNameLength + "s", "[" + policy.getName() + "] ") + javaClass.getSimpleName() + ": " + msg;
 
             // Print to terminal
             System.out.println( message );
@@ -137,7 +137,7 @@ public class Log {
     public static void error(String msg, Class javaClass) { Log.e(msg, javaClass); }
 
     /**
-     * e - Log an error message
+     * e - Log an error message (Shorthand for "error")
      * @param msg Message to log
      * @param javaClass Class log message is from
      */
@@ -153,7 +153,7 @@ public class Log {
     public static void warn(String msg, Class javaClass) { Log.w(msg, javaClass); }
 
     /**
-     * w - Log an warn message
+     * w - Log an warn message (Shorthand for "warn")
      * @param msg Message to log
      * @param javaClass Class log message is from
      */
@@ -169,7 +169,7 @@ public class Log {
     public static void info(String msg, Class javaClass) { Log.i(msg, javaClass); }
 
     /**
-     * i - Log an info message
+     * i - Log an info message (Shorthand for "info")
      * @param msg Message to log
      * @param javaClass Class log message is from
      */
@@ -185,7 +185,7 @@ public class Log {
     public static void debug(String msg, Class javaClass) { Log.d(msg, javaClass); }
 
     /**
-     * d - Log an debug message
+     * d - Log an debug message (Shorthand for "debug")
      * @param msg Message to log
      * @param javaClass Class log message is from
      */
@@ -201,7 +201,7 @@ public class Log {
     public static void verbose(String msg, Class javaClass) { Log.v(msg, javaClass); }
 
     /**
-     * v - Log an verbose message
+     * v - Log an verbose message (Shorthand for "verbose")
      * @param msg Message to log
      * @param javaClass Class log message is from
      */
