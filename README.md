@@ -1,5 +1,5 @@
-# ASU SER516 Spring 2018 - Project Two (Team 04)
-> Client/server application
+# Project Two (Team 04) - Client / Server Application
+> Arizona State University | SER516 - Software Enterprise: Project and Process Management | Spring 2018
 
 ## Team members
 >
@@ -15,7 +15,7 @@
 - Vineesha Kasam ([@VineeshaKasam](https://github.com/VineeshaKasam) | vkasam | vkasam@asu.edu)
 - Venkata Sai Shirisha Kakarla ([@kvsshirisha](https://github.com/kvsshirisha) | vkakarla | vkakarla@asu.edu)
 
-## Running our Project Two - Team 04 Client and Server
+## Running Project Two - Team 04 Client and Server
 Compile all classes (and packages) with the two jar dependencies with:
 ```
 javac -cp ".;./lib/jcommon-1.0.23.jar;./lib/jfreechart-1.0.19.jar" src/team04/project2/*.java src/team04/project2/constants/*.java src/team04/project2/listeners/*.java src/team04/project2/util/*.java src/team04/project2/ui/*.java src/team04/project2/model/*.java src/team04/project2/model/client/*.java src/team04/project2/model/server/*.java
@@ -31,7 +31,4 @@ After compiling, run the Server with:
 java -cp ".;./src/;./lib/jcommon-1.0.23.jar;./lib/jfreechart-1.0.19.jar" team04.project2.ServerApp
 ```
 
-Switch between the client and server application without rebooting by typing "init server" or "init client" in the console's input field.
-
-Also, create a .jar file for the code and run with the following command,
-'java -jar ProjectTwo_Team04.jar -init  client;' for client and 'java -jar ProjectTwo_Team04.jar -init  server;' for server
+Note: One can switch between the Client and Server application without rebooting by typing "init server" or "init client" in the console's input field.
