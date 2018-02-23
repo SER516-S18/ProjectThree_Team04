@@ -23,7 +23,7 @@ public class ClientApp {
      */
     public static void main(final String[] args) {
         // Show verbose messages in the log
-        Log.setPolicies(Log.POLICY.VERBOSE);
+        Log.setConsolePolicy(Log.POLICY.DEBUG);
 
         // Set the application type to Client
         AppView.get().setType(AppView.TYPE_CLIENT);

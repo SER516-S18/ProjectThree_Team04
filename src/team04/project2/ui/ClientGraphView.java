@@ -1,11 +1,5 @@
 package team04.project2.ui;
 
-import team04.project2.constants.ColorConstants;
-import team04.project2.listeners.ClientListener;
-import team04.project2.model.client.ClientChannel;
-import team04.project2.model.client.ClientModel;
-import team04.project2.model.client.ClientValueTuple;
-import team04.project2.util.Log;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -13,6 +7,12 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import team04.project2.constants.ColorConstants;
+import team04.project2.listeners.ClientListener;
+import team04.project2.model.client.ClientChannel;
+import team04.project2.model.client.ClientModel;
+import team04.project2.model.client.ClientValueTuple;
+import team04.project2.util.Log;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

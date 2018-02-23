@@ -56,15 +56,6 @@ public class Log {
         public boolean isEqualOrWorse(POLICY POLICY) {
             return this._level >= POLICY._level;
         }
-
-        /**
-         * isWorse - Compares two policies to check which is worse
-         * @param POLICY Second policy to compare
-         * @return Whether this policy is worse than input POLICY
-         */
-        public boolean isWorse(POLICY POLICY) {
-            return this._level > POLICY._level;
-        }
     }
 
     private static POLICY CONSOLE_POLICY = POLICY.ERROR;
@@ -117,13 +108,16 @@ public class Log {
             _longestPolicyNameLength += 3;
         }
 
-        String message = null;
-        if(policy.isEqualOrWorse(CONSOLE_POLICY)) {
-            message = String.format("%" + _longestPolicyNameLength + "s", "[" + policy.getName() + "] ") + javaClass.getSimpleName() + ": " + msg;
+        String message = String.format(
+                "%" + _longestPolicyNameLength + "s",
+                "[" + policy.getName() + "] ")
+                + javaClass.getSimpleName() + ": "
+                + msg;
 
-            // Print to terminal
-            System.out.println( message );
+        // Print to terminal
+        System.out.println( message );
 
+        if(policy.isEqualOrWorse(Log.getConsolePolicy())) {
             // Print to console
             Log.record(message, msg, policy, javaClass);
         }
@@ -134,7 +128,9 @@ public class Log {
      * @param msg Message to log
      * @param javaClass Class log message is from
      */
-    public static void error(String msg, Class javaClass) { Log.e(msg, javaClass); }
+    public static void error(String msg, Class javaClass) {
+        Log.log(msg, javaClass, POLICY.ERROR);
+    }
 
     /**
      * e - Log an error message (Shorthand for "error")
@@ -142,7 +138,7 @@ public class Log {
      * @param javaClass Class log message is from
      */
     public static void e(String msg, Class javaClass) {
-        Log.log(msg, javaClass, POLICY.ERROR);
+        Log.error(msg, javaClass);
     }
 
     /**
@@ -150,7 +146,9 @@ public class Log {
      * @param msg Message to log
      * @param javaClass Class log message is from
      */
-    public static void warn(String msg, Class javaClass) { Log.w(msg, javaClass); }
+    public static void warn(String msg, Class javaClass) {
+        Log.log(msg, javaClass, POLICY.WARNING);
+    }
 
     /**
      * w - Log an warn message (Shorthand for "warn")
@@ -158,7 +156,7 @@ public class Log {
      * @param javaClass Class log message is from
      */
     public static void w(String msg, Class javaClass) {
-        Log.log(msg, javaClass, POLICY.WARNING);
+        Log.warn(msg, javaClass);
     }
 
     /**
@@ -166,7 +164,9 @@ public class Log {
      * @param msg Message to log
      * @param javaClass Class log message is from
      */
-    public static void info(String msg, Class javaClass) { Log.i(msg, javaClass); }
+    public static void info(String msg, Class javaClass) {
+        Log.log(msg, javaClass, POLICY.INFO);
+    }
 
     /**
      * i - Log an info message (Shorthand for "info")
@@ -174,7 +174,7 @@ public class Log {
      * @param javaClass Class log message is from
      */
     public static void i(String msg, Class javaClass) {
-        Log.log(msg, javaClass, POLICY.INFO);
+        Log.info(msg, javaClass);
     }
 
     /**
@@ -182,7 +182,9 @@ public class Log {
      * @param msg Message to log
      * @param javaClass Class log message is from
      */
-    public static void debug(String msg, Class javaClass) { Log.d(msg, javaClass); }
+    public static void debug(String msg, Class javaClass) {
+        Log.log(msg, javaClass, POLICY.DEBUG);
+    }
 
     /**
      * d - Log an debug message (Shorthand for "debug")
@@ -190,7 +192,7 @@ public class Log {
      * @param javaClass Class log message is from
      */
     public static void d(String msg, Class javaClass) {
-        Log.log(msg, javaClass, POLICY.DEBUG);
+        Log.debug(msg, javaClass);
     }
 
     /**
@@ -198,7 +200,9 @@ public class Log {
      * @param msg Message to log
      * @param javaClass Class log message is from
      */
-    public static void verbose(String msg, Class javaClass) { Log.v(msg, javaClass); }
+    public static void verbose(String msg, Class javaClass) {
+        Log.log(msg, javaClass, POLICY.VERBOSE);
+    }
 
     /**
      * v - Log an verbose message (Shorthand for "verbose")
@@ -206,7 +210,7 @@ public class Log {
      * @param javaClass Class log message is from
      */
     public static void v(String msg, Class javaClass) {
-        Log.log(msg, javaClass, POLICY.VERBOSE);
+        Log.verbose(msg, javaClass);
     }
 
     /**
@@ -226,14 +230,6 @@ public class Log {
     }
 
     /**
-     * setPolicies - Set the console's minimum policy
-     * @param policy Policy to set
-     */
-    public static void setPolicies(POLICY policy) {
-        CONSOLE_POLICY = policy;
-    }
-
-    /**
      * Specific method to set the policy from the initial program startup arguments
      * @param arg
      */
@@ -242,7 +238,7 @@ public class Log {
             int argLevel = Integer.parseInt(arg);
             for(Log.POLICY POLICY : Log.POLICY.values()) {
                 if(POLICY.getLevel() == argLevel) {
-                    Log.setPolicies(POLICY);
+                    Log.setConsolePolicy(POLICY);
                     break;
                 }
             }
@@ -251,18 +247,18 @@ public class Log {
 
             for(Log.POLICY POLICY : Log.POLICY.values()) {
                 if(POLICY.getName().equalsIgnoreCase(arg)) {
-                    Log.setPolicies(POLICY);
+                    Log.setConsolePolicy(POLICY);
                     match = true;
                     break;
                 }
             }
 
             if(!match) {
-                Log.setPolicies(Log.POLICY.VERBOSE);
+                Log.setConsolePolicy(Log.POLICY.VERBOSE);
                 Log.d("Unable to match log level \"" + arg + "\", defaulting to VERBOSE", Log.class);
             }
         } else {
-            Log.setPolicies(Log.POLICY.VERBOSE);
+            Log.setConsolePolicy(Log.POLICY.VERBOSE);
         }
     }
 }

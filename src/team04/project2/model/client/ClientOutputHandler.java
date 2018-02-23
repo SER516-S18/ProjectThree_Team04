@@ -13,13 +13,15 @@ import java.util.ArrayList;
 public class ClientOutputHandler implements Runnable {
     private boolean isRunning;
     private boolean serverNotifyDisconnect = false;
+    private ClientWorker worker;
     private ObjectOutputStream streamOut;
     private ArrayList<Datagram> datagrams = new ArrayList<>();
 
     /**
      * ClientOutputHandler - Sends output to server
      */
-    public ClientOutputHandler(ObjectOutputStream outputStream) {
+    public ClientOutputHandler(ClientWorker worker, ObjectOutputStream outputStream) {
+        this.worker = worker;
         this.streamOut = outputStream;
         this.isRunning = false;
     }
@@ -42,7 +44,7 @@ public class ClientOutputHandler implements Runnable {
 
         while(ClientModel.get().isRunning()) {
             // If we have any data to send
-            if(datagrams.size() > 0) {
+            if(datagrams.size() > 0 && worker != null) {
                 Datagram data = datagrams.get(0);
                 try {
                     streamOut.writeObject(data);

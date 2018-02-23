@@ -43,6 +43,8 @@ public class ClientWorker {
             // Create input handler (handles input from listener, at client's frequency)
             inputHandler = new ClientInputHandler(this);
             executors.submit(inputHandler);
+
+            Log.v("ClientWorker has initialized all three threads", ClientWorker.class);
         } catch (IOException e) {
             Log.w("Client failed to read input stream (" + e.getMessage() + ")", ClientWorker.class);
         }

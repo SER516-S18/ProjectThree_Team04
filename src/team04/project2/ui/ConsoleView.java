@@ -3,21 +3,26 @@ package team04.project2.ui;
 import team04.project2.constants.ColorConstants;
 import team04.project2.constants.TextConstants;
 import team04.project2.util.Log;
+import team04.project2.util.LogRecord;
 import team04.project2.util.Terminal;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * ConsoleView, UI element to display system messages through a console
  * @author  David Henderson (dchende2@asu.edu)
  */
 public class ConsoleView extends JPanel {
+    private static final SimpleDateFormat timestampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private JLabel labelHeader;
     private JScrollPane scrollpaneLog;
     private JTextArea textareaLog;
     private JTextField textfieldInput;
+    public boolean timestamp = false;
 
     /**
      * Constructor for the view containing the console
@@ -69,8 +74,30 @@ public class ConsoleView extends JPanel {
 
         // Subscribe and listen to new records
         Log.addRecordListener(record -> {
-            textareaLog.append(record.getFormattedMessage() + "\n");
-            textareaLog.setCaretPosition(textareaLog.getText().length());
+            ConsoleView.this.handleLogRecord(record);
         });
+    }
+
+    /**
+     * handleLogRecord - Adds a new log record to the textarea
+     * @param record New record to add
+     */
+    private void handleLogRecord(LogRecord record) {
+        String msg;
+
+        if(record.getOriginatingClass() == Terminal.class && !record.getOriginatingPolicy().isEqualOrWorse(Log.POLICY.WARNING)) {
+            // If the record is from the terminal and not a warning or error (from handling user input)
+            msg = "- " + record.getMessage();
+        } else {
+            // Otherwise display message
+            msg = record.getFormattedMessage();
+        }
+
+        // Add timestamps if necessary
+        if(timestamp)
+            msg = msg + timestampFormat.format(new Date(record.getTimestamp())) + " " + msg;
+
+        textareaLog.append(msg + "\n");
+        textareaLog.setCaretPosition(textareaLog.getText().length());
     }
 }

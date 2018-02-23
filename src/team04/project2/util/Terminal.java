@@ -47,7 +47,7 @@ public class Terminal {
         new Thread(() -> {
             scan = new Scanner(System.in);
             while (run) {
-                Log.d("Terminal started, type \"help\" for available commands", Terminal.class);
+                Log.i("Terminal started, type \"help\" for available commands", Terminal.class);
                 scan = new Scanner(System.in);
                 while (run) {
                     if(scan.hasNext()) {
@@ -72,7 +72,7 @@ public class Terminal {
     public static void handle(String line) {
         String[] words = line.split(" ");
         if(line.equalsIgnoreCase("help")) {
-            Log.d("Valid commands include:" +
+            Log.i("Valid commands include:" +
                     "\n\t- \"init ('client' | 'server')\" to initialize the app as a client or server" +
                     "\n\t- \"port <#>\" to set the communication port number" +
                     "\n\t- \"host ('localhost' | <hostname or ip>)\" to set host to connect to as a client" +
@@ -86,25 +86,25 @@ public class Terminal {
             int port = Integer.parseInt(words[1]);
             ClientModel.get().setPort(port);
             ServerModel.get().setPort(port);
-            Log.d("Port set to " + port, Terminal.class);
+            Log.i("Port set to " + port, Terminal.class);
         } else if(line.toLowerCase().startsWith("host") && words.length == 2) {
             if(AppView.get().isClient()) {
                 if (words[1].equalsIgnoreCase("localhost")) {
                     ClientModel.get().setHostToLocalhost();
-                    Log.d("Host set to localhost", Terminal.class);
+                    Log.i("Host set to localhost", Terminal.class);
                 } else {
                     try {
                         ClientModel.get().setHost(InetAddress.getByName(words[1]));
-                        Log.d("Host set to " + words[1], Terminal.class);
+                        Log.i("Host set to " + words[1], Terminal.class);
                     } catch (UnknownHostException e) {
-                        Log.d("Failed set host (Host is invalid or unavailable)", Terminal.class);
+                        Log.i("Failed set host (Host is invalid or unavailable)", Terminal.class);
                     }
                 }
             } else {
-                Log.d("Failed to set host (Application must be set as client)", Terminal.class);
+                Log.i("Failed to set host (Application must be set as client)", Terminal.class);
             }
         } else {
-            Log.d("Invalid command, type \"help\" for list of all commands", Terminal.class);
+            Log.i("Invalid command, type \"help\" for list of all commands", Terminal.class);
         }
     }
 }
