@@ -61,11 +61,11 @@ public class AppView extends JFrame {
         this.setLayout(new BorderLayout(8, 8));
         this.setBackground(ColorConstants.BACKGROUND_BLUE);
 
-        // Add top
+        // Added a component to display Client or Server Label and the button to start or stop the connection        
         viewToolbar = new AppToolbarView();
         this.add(viewToolbar, BorderLayout.PAGE_START);
 
-        // Add center
+        // Added a component to update the Client/Server Header
         this.updateType();
 
         // Add footer (console)
@@ -76,7 +76,8 @@ public class AppView extends JFrame {
         this.getContentPane().setBackground(ColorConstants.BACKGROUND_BLUE);
         this.setVisible(true);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setLocation(dim.width/2-this.getSize().width/2+(this.getSize().width/2 * (isClient() ? 1 : -1)), dim.height/2-this.getSize().height/2);
+        this.setLocation(dim.width/2-this.getSize().width/2+(this.getSize().width/2 * (isClient() ? 1 : -1)), 
+                         dim.height/2-this.getSize().height/2);
     }
 
     /**
@@ -90,7 +91,7 @@ public class AppView extends JFrame {
             this.remove(viewMenu);
             viewMenu = null;
         }
-
+        // Update the AppView with the Client UI for @param type TYPE_CLIENT
         if(_type == AppView.TYPE_CLIENT) {
             Log.i("Application initializing as a Client", AppView.class);
             viewMenu = new ClientView();
@@ -99,6 +100,7 @@ public class AppView extends JFrame {
             if(this.viewToolbar != null)
                 this.viewToolbar.updateType();
         }
+        // Update the AppView with the Server UI for @param type TYPE_SERVER
         else if(_type == AppView.TYPE_SERVER) {
             Log.i("Application initializing as a Server", AppView.class);
             viewMenu = new ServerView();
