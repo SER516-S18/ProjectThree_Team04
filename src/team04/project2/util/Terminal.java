@@ -74,6 +74,7 @@ public class Terminal {
         if(line.equalsIgnoreCase("help")) {
             Log.i("Valid commands include:" +
                     "\n\t- \"init ('client' | 'server')\" to initialize the app as a client or server" +
+                    "\n\t- \"timestamps ('true' | 'false')\" to turn console timestamps on or off" +
                     "\n\t- \"port <#>\" to set the communication port number" +
                     "\n\t- \"host ('localhost' | <hostname or ip>)\" to set host to connect to as a client" +
                     "\n\t- \"help\" to view this help list.", Terminal.class);
@@ -87,6 +88,18 @@ public class Terminal {
             ClientModel.get().setPort(port);
             ServerModel.get().setPort(port);
             Log.i("Port set to " + port, Terminal.class);
+        } else if (line.toLowerCase().startsWith("timestamps") && words.length == 2) {
+            if(words[1].equalsIgnoreCase("true")) {
+                AppView.get().showConsoleTimestamps(true);
+                Log.i("Console messages will now show timestamps", Terminal.class);
+            }
+            else if(words[1].equalsIgnoreCase("false")) {
+                AppView.get().showConsoleTimestamps(false);
+                Log.i("Console messages will no longer show timestamps", Terminal.class);
+            }
+            else {
+                Log.i("Failed to set timestamps (must be 'true' or 'false')", Terminal.class);
+            }
         } else if(line.toLowerCase().startsWith("host") && words.length == 2) {
             if(AppView.get().isClient()) {
                 if (words[1].equalsIgnoreCase("localhost")) {

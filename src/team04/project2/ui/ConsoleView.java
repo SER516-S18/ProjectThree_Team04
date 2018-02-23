@@ -57,7 +57,14 @@ public class ConsoleView extends JPanel {
         textfieldInput.setFont(TextConstants.DEFAULT_FONT);
         textfieldInput.addActionListener(e -> {
             // Upon taking input, append the input to the console and send it to the terminal to handle
-            textareaLog.append("> " + textfieldInput.getText() + "\n");
+            if(timestamp) {
+                // Show a timestamp
+                textareaLog.append(timestampFormat.format(new Date()) + " > " + textfieldInput.getText() + "\n");
+            } else {
+                // Don't show a timestamp
+                textareaLog.append("> " + textfieldInput.getText() + "\n");
+            }
+
             Terminal.handle(textfieldInput.getText());
             textareaLog.setCaretPosition(textareaLog.getText().length());
             textfieldInput.setText("");
@@ -95,7 +102,7 @@ public class ConsoleView extends JPanel {
 
         // Add timestamps if necessary
         if(timestamp)
-            msg = msg + timestampFormat.format(new Date(record.getTimestamp())) + " " + msg;
+            msg = timestampFormat.format(new Date(record.getTimestamp())) + " " + msg;
 
         textareaLog.append(msg + "\n");
         textareaLog.setCaretPosition(textareaLog.getText().length());

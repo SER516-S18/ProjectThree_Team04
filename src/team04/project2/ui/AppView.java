@@ -51,6 +51,14 @@ public class AppView extends JFrame {
     }
 
     /**
+     * showConsoleTimestamps - Enables/disables the Console having timestamps prefixing messages
+     * @param show True/false to show timestamps in Console
+     */
+    public void showConsoleTimestamps(boolean show) {
+        this.viewConsole.timestamp = show;
+    }
+
+    /**
      * Initialize the AppView frame UI
      */
     public void init() {
