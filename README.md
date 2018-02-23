@@ -10,7 +10,7 @@
 - Paulo Jaime
 - Saheb Johar ([@sahebjohar92](https://github.com/sahebjohar92))
 - Jeb Johnson
-- Nagarjuna Kalluri ([@nkalluri11](https://github.com/nkalluri11))
+- Nagarjuna Kalluri ([@nkalluri11](https://github.com/nkalluri11)| nkalluri@asu.edu)
 - Sai Saran Kandimalla ([@saran1856](https://github.com/saran1856))
 - Vineesha Kasam ([@VineeshaKasam](https://github.com/VineeshaKasam))
 - Venkata Sai Shirisha Kakarla
