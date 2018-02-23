@@ -65,8 +65,8 @@ public class ServerStatusView extends  JPanel {
         panelBuffer.setBackground(ColorConstants.BACKGROUND_PINK);
         panelBuffer.setBorder(BorderFactory.createLineBorder(Color.black));
 
-        // Create the indicator
-        labelIndicator = new JLabel("•", SwingConstants.CENTER);
+        // Create the indicator (The circular bullet character is Unicode hex 0x2022)
+        labelIndicator = new JLabel(Character.toString((char) 0x2022), SwingConstants.CENTER);
         labelIndicator.setFont(new Font("Monospaced", Font.PLAIN, TextConstants.DEFAULT_FONT.getSize() * 16));
         labelIndicator.setForeground(running ? COLOR_ON_BRIGHT : COLOR_OFF);
         panelBuffer.add(labelIndicator, BorderLayout.CENTER);
