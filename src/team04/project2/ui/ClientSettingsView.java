@@ -11,6 +11,7 @@ import java.awt.*;
 
 /**
  * ClientSettingsView - The right hand side of the Client app, containing settings and the min/max/avg
+ * @author  David Henderson (dchende2@asu.edu)
  */
 public class ClientSettingsView extends JPanel {
     private JLabel labelValueMaximum;

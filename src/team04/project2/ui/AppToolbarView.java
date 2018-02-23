@@ -14,6 +14,7 @@ import java.awt.*;
 /**
  * AppToolbarView, the toolbar with the start/stop button and label which denotes
  * whether the application is of type Client or Server
+ * @author  David Henderson (dchende2@asu.edu)
  */
 public class AppToolbarView extends JToolBar {
 

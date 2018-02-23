@@ -21,6 +21,7 @@ import java.util.List;
 
 /**
  * ClientGraphView - The left hand JPanel containing the graph in the client view
+ * @author  David Henderson (dchende2@asu.edu)
  */
 public class ClientGraphView extends JPanel {
     private XYSeriesCollection dataset;
