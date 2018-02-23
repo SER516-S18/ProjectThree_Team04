@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * ClientInputListener - Necessary because server may send values at a different frequency
  */
 public class ClientInputListener implements Runnable {
-    private boolean running;
+    private boolean isRunning;
     private ClientWorker worker;
     private ObjectInputStream streamIn;
     private ArrayList<Integer> value;
@@ -23,7 +23,7 @@ public class ClientInputListener implements Runnable {
     public ClientInputListener(ClientWorker worker, ObjectInputStream inputStream) {
         this.worker = worker;
         this.streamIn = inputStream;
-        this.running = false;
+        this.isRunning = false;
     }
 
     /**
@@ -46,7 +46,7 @@ public class ClientInputListener implements Runnable {
      */
     @Override
     public void run() {
-        running = true;
+        isRunning = true;
 
         while (ClientModel.get().isRunning()) {
             Datagram data;
@@ -90,7 +90,7 @@ public class ClientInputListener implements Runnable {
             Log.w("Failed to gracefully close input socket (" + e.getMessage() + ")", ClientInputListener.class);
         }
 
-        running = false;
+        isRunning = false;
     }
 
     /**
@@ -98,7 +98,7 @@ public class ClientInputListener implements Runnable {
      * @return boolean whether the input listener is running
      */
     public boolean isRunning() {
-        return running;
+        return isRunning;
     }
 }
 

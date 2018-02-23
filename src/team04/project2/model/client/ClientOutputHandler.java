@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * ClientOutputHandler - Outputs datagrams to the server (e.g., channel count, shutdown message)
  */
 public class ClientOutputHandler implements Runnable {
-    private boolean running;
+    private boolean isRunning;
     private boolean serverNotifyDisconnect = false;
     private ClientWorker worker;
     private ObjectOutputStream streamOut;
@@ -24,7 +24,7 @@ public class ClientOutputHandler implements Runnable {
     public ClientOutputHandler(ClientWorker worker, ObjectOutputStream outputStream) {
         this.worker = worker;
         this.streamOut = outputStream;
-        this.running = false;
+        this.isRunning = false;
     }
 
     /**
@@ -40,7 +40,7 @@ public class ClientOutputHandler implements Runnable {
      */
     @Override
     public void run() {
-        running = true;
+        isRunning = true;
         serverNotifyDisconnect = false;
 
         while(ClientModel.get().isRunning()) {
@@ -74,7 +74,7 @@ public class ClientOutputHandler implements Runnable {
             }
         }
 
-        running = false;
+        isRunning = false;
     }
 
     /**
@@ -82,7 +82,7 @@ public class ClientOutputHandler implements Runnable {
      * @return boolean whether the output handler is running
      */
     public boolean isRunning() {
-        return running;
+        return isRunning;
     }
 
     /**

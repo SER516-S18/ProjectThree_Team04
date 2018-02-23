@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 public class ClientInputHandler implements Runnable {
     private int tick;
-    private boolean running;
+    private boolean isRunning;
     private ClientWorker worker;
 
     /**
@@ -19,7 +19,7 @@ public class ClientInputHandler implements Runnable {
      */
     public ClientInputHandler(ClientWorker worker) {
         this.worker = worker;
-        this.running = false;
+        this.isRunning = false;
     }
 
     /**
@@ -28,7 +28,7 @@ public class ClientInputHandler implements Runnable {
     @Override
     public void run() {
         tick = 0;
-        running = true;
+        isRunning = true;
 
         while(ClientModel.get().isRunning()) {
             // Get the most recent input at our own client's frequency
@@ -53,7 +53,7 @@ public class ClientInputHandler implements Runnable {
             tick++;
         }
 
-        running = false;
+        isRunning = false;
     }
 
     /**
@@ -61,6 +61,6 @@ public class ClientInputHandler implements Runnable {
      * @return boolean whether the input handler is running
      */
     public boolean isRunning() {
-        return running;
+        return isRunning;
     }
 }
