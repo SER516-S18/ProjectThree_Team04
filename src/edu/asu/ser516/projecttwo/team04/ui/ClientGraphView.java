@@ -85,8 +85,8 @@ public class ClientGraphView extends JPanel  {
 		
 		updateSeries();
 		
-		this.plotGraph = ChartFactory.createXYLineChart("Display", "Number", "Value", (XYDataset) datasetList,
-				PlotOrientation.VERTICAL, true, true, false);
+		this.plotGraph = ChartFactory.createXYLineChart("Display", "Number", "Value", 
+			(XYDataset) datasetList,PlotOrientation.VERTICAL, true, true, false);
 		
 		
 		graphPanel.add(panelChart, BorderLayout.CENTER);
@@ -133,7 +133,8 @@ public class ClientGraphView extends JPanel  {
                 if(tuple != null)
                     series.add(tuple.tick, tuple.value);
             } else {
-                Log.w("Channel and series size differ (" + channels.size() + " : " + datasetList.size() + ")", ClientGraphView.class);
+                Log.w("Channel and series size differ (" + channels.size() + " : " 
+		      + datasetList.size() + ")", ClientGraphView.class);
             }
         }
     }
