@@ -7,6 +7,7 @@
 - Shreyas Hosahalli Govindaraja ([@shreyashg027](https://github.com/shreyashg027) | shosahal | shosahal@asu.edu)
 - Drishty Kapoor ([@Drishtykapoor](https://github.com/Drishtykapoor) | dkapoor3 | dkapoor3@asu.edu)
 - Yiru Hu ([@yiruhu](https://github.com/yiruhu) | yiruhu | yiruhu@asu.edu)
+- Supriya Ramaswamy Iyer ([@siyer12](https://github.com/siyer12) | siyer12 | siyer12@asu.edu)
 - Paulo Jaime ([@pjaimeSchool](https://github.com/pjaimeSchool) | pjaime | pjaime@asu.edu)
 - Saheb Johar ([@sahebjohar92](https://github.com/sahebjohar92) | ssjohar | ssjohar@asu.edu)
 - Jeb Johnson ([@jajohn64](https://github.com/jajohn64) | jajohn64 | jajohn64@asu.edu)
@@ -14,6 +15,7 @@
 - Sai Saran Kandimalla ([@saran1856](https://github.com/saran1856) | skandim2 | skandim2@asu.edu)
 - Vineesha Kasam ([@VineeshaKasam](https://github.com/VineeshaKasam) | vkasam | vkasam@asu.edu)
 - Venkata Sai Shirisha Kakarla ([@kvsshirisha](https://github.com/kvsshirisha) | vkakarla | vkakarla@asu.edu)
+
 
 ## Running Project Two - Team 04 Client and Server
 (Do note that Windows Java uses ";" and macOS/Linux use ":" as separators, replace as necessary)
