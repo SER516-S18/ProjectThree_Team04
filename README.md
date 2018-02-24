@@ -13,6 +13,7 @@
 - Jeb Johnson ([@jajohn64](https://github.com/jajohn64) | jajohn64 | jajohn64@asu.edu)
 - Nagarjuna Kalluri ([@nkalluri11](https://github.com/nkalluri11) | nkalluri | nkalluri@asu.edu)
 - Sai Saran Kandimalla ([@saran1856](https://github.com/saran1856) | skandim2 | skandim2@asu.edu)
+- Zubin Kapadia ([@zubinkapadia93](https://github.com/zubinkapadia93) | zkapadia | zkapadia@asu.edu)
 - Vineesha Kasam ([@VineeshaKasam](https://github.com/VineeshaKasam) | vkasam | vkasam@asu.edu)
 - Venkata Sai Shirisha Kakarla ([@kvsshirisha](https://github.com/kvsshirisha) | vkakarla | vkakarla@asu.edu)
 
