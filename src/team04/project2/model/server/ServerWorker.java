@@ -105,13 +105,17 @@ public class ServerWorker {
                             Log.i("Client #" + id + " disconnected successfully", ServerWorker.class);
                         }
                     } catch(ClassNotFoundException e) {
-                        Log.w("Failed to read in object from stream, disconnecting (Class not found: " + e.getMessage() + ")", ServerWorker.class);
-                        this.disconnect();
-                        continue;
+                        if(model.isRunning()) {
+                            Log.w("Failed to read in object from stream, disconnecting (Class not found: " + e.getMessage() + ")", ServerWorker.class);
+                            this.disconnect();
+                            continue;
+                        }
                     } catch(IOException e) {
-                        Log.w("Failed to read in object from stream, disconnecting (IOException: " + e.getMessage() + ")", ServerWorker.class);
-                        this.disconnect();
-                        continue;
+                        if(model.isRunning()) {
+                            Log.w("Failed to read in object from stream, disconnecting (IOException: " + e.getMessage() + ")", ServerWorker.class);
+                            this.disconnect();
+                            continue;
+                        }
                     }
                 }
             };
