@@ -10,7 +10,6 @@ import java.util.Scanner;
 
 /**
  * Terminal, a non-UI singleton for terminal user input
- *
  * @author  David Henderson (dchende2@asu.edu)
  * @version 1.0
  * @since   2018-02-15
@@ -67,7 +66,7 @@ public class Terminal {
 
     /**
      * Large conditional chain to handle input from a console, accepts the user input line to handle
-     * @param line
+     * @param line Line of text to handle (input)
      */
     public static void handle(String line) {
         String[] words = line.split(" ");

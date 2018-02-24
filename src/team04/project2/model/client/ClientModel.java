@@ -307,7 +307,7 @@ public class ClientModel {
 
     /**
      * Setter for client's frequency
-     * @param freq Client's frequency, must be > 0
+     * @param freq Client's frequency, must be greater than 0
      */
     public void setFrequency(int freq) {
         if(freq < 1)
@@ -326,7 +326,7 @@ public class ClientModel {
 
     /**
      * Setter for channel count
-     * @param count Number of channels, must be > 0
+     * @param count Number of channels, must be greater than 0
      */
     public void setChannelCount(int count) {
         if(count < 1)

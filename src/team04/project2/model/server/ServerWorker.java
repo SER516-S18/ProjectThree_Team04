@@ -28,6 +28,7 @@ public class ServerWorker {
 
     /**
      * ServerWorker The worker that handles input and output
+     * @param model The parent server model
      * @param socket The socket the client is connecting from
      * @param clientID The id of the client
      */

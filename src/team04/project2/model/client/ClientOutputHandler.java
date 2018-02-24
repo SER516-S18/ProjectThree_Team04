@@ -19,6 +19,8 @@ public class ClientOutputHandler implements Runnable {
 
     /**
      * ClientOutputHandler - Sends output to server
+     * @param worker Parent worker
+     * @param outputStream Output stream to send to server
      */
     public ClientOutputHandler(ClientWorker worker, ObjectOutputStream outputStream) {
         this.worker = worker;

@@ -19,6 +19,7 @@ public class ClientInputListener implements Runnable {
     /**
      * ClientInputListener - Accepts values from server at server's frequency
      * @param worker Parent worker (to link between input listener/input handler/output handler)
+     * @param inputStream Input stream to listen from the server
      */
     public ClientInputListener(ClientWorker worker, ObjectInputStream inputStream) {
         this.worker = worker;

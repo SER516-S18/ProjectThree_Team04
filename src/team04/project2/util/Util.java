@@ -9,7 +9,7 @@ public class Util {
     /**
      * isInteger, returns if a String s is a valid integer
      * @param s String to check if is integer
-     * @return boolean
+     * @return boolean Whether String is an integer
      */
     public static boolean isInteger(String s) {
         return isInteger(s,10);
@@ -17,9 +17,9 @@ public class Util {
 
     /**
      * See @isInteger
-     * @param s
-     * @param radix
-     * @return boolean
+     * @param s String to check if is integer
+     * @param radix Radix to parse by
+     * @return boolean Whether string is integer
      */
     public static boolean isInteger(String s, int radix) {
         if(s.isEmpty()) return false;
