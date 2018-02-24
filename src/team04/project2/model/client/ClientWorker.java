@@ -10,7 +10,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * ClientWorker - Class that contains the input listener and handler, and the output handler
+ * Class that contains the input listener and handler, and the output handler
  */
 public class ClientWorker {
     private static final ExecutorService executors = Executors.newCachedThreadPool();
@@ -51,7 +51,7 @@ public class ClientWorker {
     }
 
     /**
-     * isRunning - Considered running if all three listeners/handlers are running
+     * Considered running if all three listeners/handlers are running
      * @return If ClientWorker is running
      */
     public boolean isRunning() {
@@ -61,7 +61,7 @@ public class ClientWorker {
     }
 
     /**
-     * getInputListener Gets the client's input listener
+     * Gets the client's input listener
      * @return Client's input listener
      */
     public ClientInputListener getInputListener() {
@@ -69,7 +69,7 @@ public class ClientWorker {
     }
 
     /**
-     * getOutputHandler Gets the client's output handler
+     * Gets the client's output handler
      * @return Client's output handler
      */
     public ClientOutputHandler getOutputHandler() {

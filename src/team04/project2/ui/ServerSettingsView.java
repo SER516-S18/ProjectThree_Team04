@@ -9,12 +9,12 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 /**
- * ServerSettingsView - The right hand side to change the output min/max/frequency
+ * The right hand side to change the output min/max/frequency
  * @author  David Henderson (dchende2@asu.edu)
  */
 public class ServerSettingsView extends JPanel {
     /**
-     * ServerSettingsView - The right hand side to change the output min/max/frequency
+     * The right hand side to change the output min/max/frequency
      */
     public ServerSettingsView() {
         // Create the settings view with a transparent border encompassing

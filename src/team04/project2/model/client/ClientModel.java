@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * ClientModel, the main model for client
+ * The main model for client
  * @author  David Henderson (dchende2@asu.edu)
  */
 
@@ -57,14 +57,14 @@ public class ClientModel {
     private Integer valueAvg = null;
 
     /**
-     * ClientModel - Default constructor, defaulting to port 1516 and LOCALHOST
+     * Default constructor, defaulting to port 1516 and LOCALHOST
      */
     private ClientModel() {
         this(1516, LOCALHOST);
     }
 
     /**
-     * ClientModel - Full constructor
+     * Full constructor
      * @param port Port to connect to
      * @param host Host to connect to
      */
@@ -82,7 +82,7 @@ public class ClientModel {
     }
 
     /**
-     * start - Called to start the client model and connect
+     * Called to start the client model and connect
      */
     public void start() {
         if(run)
@@ -102,7 +102,7 @@ public class ClientModel {
     }
 
     /**
-     * shutdown - Called to disconnect the client from the server
+     * Called to disconnect the client from the server
      */
     public void shutdown() {
         if(!run)
@@ -132,7 +132,7 @@ public class ClientModel {
     }
 
     /**
-     * handleNewInputValues - Called to add new input values from the Server into the Client
+     * Called to add new input values from the Server into the Client
      * @param values List of the values for the respective channels
      * @param tick The tick (time) the values were retrieved on
      */
@@ -175,7 +175,7 @@ public class ClientModel {
     }
 
     /**
-     * getChannels - The list of channels
+     * The list of channels
      * @return List of all channels
      */
     public List<ClientChannel> getChannels() {
@@ -183,7 +183,7 @@ public class ClientModel {
     }
 
     /**
-     * getMaximum - Gets the maximum, if any
+     * Gets the maximum, if any
      * @return Maximum or null, if there are no values
      */
     public Integer getMaximum() {
@@ -191,7 +191,7 @@ public class ClientModel {
     }
 
     /**
-     * getMinimum - Gets the minimum, if any
+     * Gets the minimum, if any
      * @return Minimum or null, if there are no values
      */
     public Integer getMinimum() {
@@ -199,7 +199,7 @@ public class ClientModel {
     }
 
     /**
-     * getAverage - Gets the average, if any
+     * Gets the average, if any
      * @return Average or null, if there are no values
      */
     public Integer getAverage() {
@@ -207,7 +207,7 @@ public class ClientModel {
     }
 
     /**
-     * addListener - Add ClientListeners to ClientModel
+     * Add ClientListeners to ClientModel
      * @param listener ClientListener to inform
      */
     public void addListener(ClientListener listener) {
@@ -218,7 +218,7 @@ public class ClientModel {
     }
 
     /**
-     * notifyClientShutdown - Method called when ClientModel is shut down
+     * Method called when ClientModel is shut down
      */
     private void notifyClientShutdown() {
         Log.i("Client shutdown successfully", ClientModel.class);
@@ -228,7 +228,7 @@ public class ClientModel {
     }
 
     /**
-     * notifyClientShutdown - Method called when ClientModel is started up
+     * Method called when ClientModel is started up
      */
     private void notifyClientStarted() {
         Log.i("Client started and connected to server at " + HOST.getCanonicalHostName() + " port " + PORT, ClientModel.class);
@@ -238,7 +238,7 @@ public class ClientModel {
     }
 
     /**
-     * notifyClientShutdown - Method called when the input values from servers change
+     * Method called when the input values from servers change
      */
     private void notifyValuesChanged() {
         for(ClientListener listener : listeners) {
@@ -247,7 +247,7 @@ public class ClientModel {
     }
 
     /**
-     * notifyClientShutdown - Method called when the number of channels changes (added/removed)
+     * Method called when the number of channels changes (added/removed)
      */
     private void notifyChannelCountChanged() {
         for(ClientListener listener : listeners) {
@@ -256,7 +256,7 @@ public class ClientModel {
     }
 
     /**
-     * isRunning - If the client is running
+     * Check if the client is running
      * @return boolean if client is running
      */
     public boolean isRunning() {
@@ -283,7 +283,7 @@ public class ClientModel {
     }
 
     /**
-     * setHost - Changes the host (WILL shutdown if Client is running)
+     * Changes the host (WILL shutdown if Client is running)
      * @param host The host to connect to
      */
     public void setHost(InetAddress host) {

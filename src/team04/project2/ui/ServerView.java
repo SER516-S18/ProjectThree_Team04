@@ -7,7 +7,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 /**
- * ServerView, the main UI for the server application
+ * The main UI for the server application
  * @author  David Henderson (dchende2@asu.edu)
  */
 public class ServerView extends JPanel {
@@ -15,7 +15,7 @@ public class ServerView extends JPanel {
     private ServerSettingsView settingsView;
 
     /**
-     * ServerView - The container for the left (indicator) and right (input) views
+     * The container for the left (indicator) and right (input) views
      */
     public ServerView() {
         // Create transparent border around view

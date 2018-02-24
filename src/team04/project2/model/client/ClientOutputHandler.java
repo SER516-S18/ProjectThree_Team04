@@ -8,7 +8,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 /**
- * ClientOutputHandler - Outputs datagrams to the server (e.g., channel count, shutdown message)
+ * Outputs datagrams to the server (e.g., channel count, shutdown message)
  */
 public class ClientOutputHandler implements Runnable {
     private boolean isRunning;
@@ -18,7 +18,7 @@ public class ClientOutputHandler implements Runnable {
     private ArrayList<Datagram> datagrams = new ArrayList<>();
 
     /**
-     * ClientOutputHandler - Sends output to server
+     * Sends output to server
      * @param worker Parent worker
      * @param outputStream Output stream to send to server
      */
@@ -29,7 +29,7 @@ public class ClientOutputHandler implements Runnable {
     }
 
     /**
-     * sendDatagram - Adds datagram to queue to send to server
+     * Adds datagram to queue to send to server
      * @param data Datagram to send to server
      */
     public synchronized void sendDatagram(Datagram data) {
@@ -79,7 +79,7 @@ public class ClientOutputHandler implements Runnable {
     }
 
     /**
-     * isRunning
+     * Whether the output handler is running
      * @return boolean whether the output handler is running
      */
     public boolean isRunning() {
@@ -87,7 +87,7 @@ public class ClientOutputHandler implements Runnable {
     }
 
     /**
-     * notifyServerDisconnecting - Used to notify the server is disconnecting, so don't error when it disconnects
+     * Call to notify the server is disconnecting, so don't error when it disconnects
      */
     public void notifyServerDisconnecting() {
         serverNotifyDisconnect = true;

@@ -3,7 +3,7 @@ package team04.project2.listeners;
 import team04.project2.util.LogRecord;
 
 /**
- * ConsoleRecordListener, a listener to notify new console record lines
+ * A listener to notify new console record lines
  *
  * @author  David Henderson (dchende2@asu.edu)
  * @version 1.0
@@ -12,7 +12,7 @@ import team04.project2.util.LogRecord;
 
 public interface ConsoleRecordListener {
     /**
-     * added - Called when a new log record is added
+     * Called when a new log record is added
      * @param record The added record
      */
     public void added(LogRecord record);

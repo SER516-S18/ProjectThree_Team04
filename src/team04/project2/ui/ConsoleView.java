@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * ConsoleView, UI element to display system messages through a console
+ * UI element to display system messages through a console
  * @author  David Henderson (dchende2@asu.edu)
  */
 public class ConsoleView extends JPanel {
@@ -86,7 +86,7 @@ public class ConsoleView extends JPanel {
     }
 
     /**
-     * handleLogRecord - Adds a new log record to the textarea
+     * Adds a new log record to the textarea
      * @param record New record to add
      */
     private void handleLogRecord(LogRecord record) {

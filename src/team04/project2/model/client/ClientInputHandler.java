@@ -6,7 +6,7 @@ import team04.project2.util.Log;
 import java.util.ArrayList;
 
 /**
- * ClientInputHandler - Handles input at the client's set frequency
+ * Handles input at the client's set frequency
  */
 public class ClientInputHandler implements Runnable {
     private int tick;
@@ -14,7 +14,7 @@ public class ClientInputHandler implements Runnable {
     private ClientWorker worker;
 
     /**
-     * ClientInputHandler - Handles input from input listener, at the client's frequency
+     * Handles input from input listener, at the client's frequency
      * @param worker Parent worker (to link between input listener/input handler/output handler)
      */
     public ClientInputHandler(ClientWorker worker) {
@@ -23,7 +23,7 @@ public class ClientInputHandler implements Runnable {
     }
 
     /**
-     * run - Execution to run on the thread, handling input at Client's frequency
+     * Execution to run on the thread, handling input at Client's frequency
      */
     @Override
     public void run() {
@@ -57,7 +57,7 @@ public class ClientInputHandler implements Runnable {
     }
 
     /**
-     * isRunning
+     * Get if the input handler is running
      * @return boolean whether the input handler is running
      */
     public boolean isRunning() {

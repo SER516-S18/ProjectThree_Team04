@@ -1,7 +1,7 @@
 package team04.project2.listeners;
 
 /**
- * ServerListener, a listener to notify changes in the model
+ * A listener to notify changes in the model
  *
  * @author  David Henderson (dchende2@asu.edu)
  * @version 1.0
@@ -10,12 +10,12 @@ package team04.project2.listeners;
 
 public interface ServerListener {
     /**
-     * started - Called when the server is started (and open for connections)
+     * Called when the server is started (and open for connections)
      */
     public void started();
 
     /**
-     * shutdown - Called when the server is stopped (and connections are closed)
+     * Called when the server is stopped (and connections are closed)
      */
     public void shutdown();
 }

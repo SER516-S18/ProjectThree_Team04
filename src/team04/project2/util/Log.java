@@ -5,12 +5,12 @@ import team04.project2.listeners.ConsoleRecordListener;
 import java.util.ArrayList;
 
 /**
- * Log, a class that handles all system logging, to both terminal and console
+ * Handles all system logging, to both terminal and console
  * @author  David Henderson (dchende2@asu.edu)
  */
 public class Log {
     /**
-     * Policy, the level of urgency of a log message
+     * Level of urgency of a log message
      */
     public enum POLICY {
         VERBOSE(0, "VERBOSE"),
@@ -23,7 +23,7 @@ public class Log {
         private final String _name;
 
         /**
-         * POLICY - The enumeration with a level of severity and the name of it
+         * The enumeration with a level of severity and the name of it
          * @param level Severity level of the policy
          * @param name The name of the policy
          */
@@ -33,7 +33,7 @@ public class Log {
         }
 
         /**
-         * getLevel - Returns the record's urgency level
+         * gReturns the record's urgency level
          * @return Policy's level
          */
         public int getLevel() {
@@ -41,7 +41,7 @@ public class Log {
         }
 
         /**
-         * getName - Returns the policy name
+         * Returns the policy name
          * @return Policy's name
          */
         public String getName() {
@@ -49,7 +49,7 @@ public class Log {
         }
 
         /**
-         * isEqualOrWorse - Compares two policies to check which is worse
+         * Compares two policies to check which is worse
          * @param POLICY Second policy to compare
          * @return Whether this policy is equal or worse than input POLICY
          */
@@ -63,7 +63,7 @@ public class Log {
     private static transient ArrayList<ConsoleRecordListener> _recordListeners = new ArrayList<>();
 
     /**
-     * Record, to notify any listeners for system log messages
+     * To notify any listeners for system log messages
      * @param formattedMessage, a formatted string with all the info in a log message (class, policy, message)
      * @param message, the message without policy or class
      * @param policy, the policy of the log message
@@ -75,7 +75,7 @@ public class Log {
     }
 
     /**
-     * addRecordListener, adds a listener to subscribe and listen to new Log messages
+     * Adds a listener to subscribe and listen to new Log messages
      * @param listener, the listener to notify
      */
     public static void addRecordListener(ConsoleRecordListener listener) {
@@ -83,7 +83,7 @@ public class Log {
     }
 
     /**
-     * notifyRecordAdded, private method to notify all listeners of a new log record
+     * Private method to notify all listeners of a new log record
      * @param record, the record added
      */
     private static void notifyRecordAdded(LogRecord record) {
@@ -93,7 +93,7 @@ public class Log {
     }
 
     /**
-     * log, to log system messages to the terminal and console
+     * Log system messages to the terminal and console
      * @param msg, the message to display
      * @param javaClass, the originating Java class
      * @param policy, the log policy of the message
@@ -124,7 +124,7 @@ public class Log {
     }
 
     /**
-     * error - Log an error message
+     * Log an error message
      * @param msg Message to log
      * @param javaClass Class log message is from
      */
@@ -133,7 +133,7 @@ public class Log {
     }
 
     /**
-     * e - Log an error message (Shorthand for "error")
+     * Log an error message (Shorthand for "error")
      * @param msg Message to log
      * @param javaClass Class log message is from
      */
@@ -142,7 +142,7 @@ public class Log {
     }
 
     /**
-     * warn - Log an warn message
+     * Log an warn message
      * @param msg Message to log
      * @param javaClass Class log message is from
      */
@@ -151,7 +151,7 @@ public class Log {
     }
 
     /**
-     * w - Log an warn message (Shorthand for "warn")
+     * Log an warn message (Shorthand for "warn")
      * @param msg Message to log
      * @param javaClass Class log message is from
      */
@@ -160,7 +160,7 @@ public class Log {
     }
 
     /**
-     * info - Log an info message
+     * Log an info message
      * @param msg Message to log
      * @param javaClass Class log message is from
      */
@@ -169,7 +169,7 @@ public class Log {
     }
 
     /**
-     * i - Log an info message (Shorthand for "info")
+     * Log an info message (Shorthand for "info")
      * @param msg Message to log
      * @param javaClass Class log message is from
      */
@@ -178,7 +178,7 @@ public class Log {
     }
 
     /**
-     * debug - Log an debug message
+     * Log an debug message
      * @param msg Message to log
      * @param javaClass Class log message is from
      */
@@ -187,7 +187,7 @@ public class Log {
     }
 
     /**
-     * d - Log an debug message (Shorthand for "debug")
+     * Log an debug message (Shorthand for "debug")
      * @param msg Message to log
      * @param javaClass Class log message is from
      */
@@ -196,7 +196,7 @@ public class Log {
     }
 
     /**
-     * verbose - Log an verbose message
+     * Log an verbose message
      * @param msg Message to log
      * @param javaClass Class log message is from
      */
@@ -205,7 +205,7 @@ public class Log {
     }
 
     /**
-     * v - Log an verbose message (Shorthand for "verbose")
+     * Log an verbose message (Shorthand for "verbose")
      * @param msg Message to log
      * @param javaClass Class log message is from
      */

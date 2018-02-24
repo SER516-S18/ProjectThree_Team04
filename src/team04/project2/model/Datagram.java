@@ -3,7 +3,7 @@ package team04.project2.model;
 import java.io.Serializable;
 
 /**
- * Datagram, a listener to notify changes in the model
+ * A listener to notify changes in the model
  *
  * @author  David Henderson (dchende2@asu.edu)
  * @version 1.0
@@ -27,7 +27,7 @@ public class Datagram implements Serializable {
     public final Object data;
 
     /**
-     * Datagram - A payload tuple with the type of payload and data
+     * A payload tuple with the type of payload and data
      * @param type The type of payload
      * @param data The data of payload
      */

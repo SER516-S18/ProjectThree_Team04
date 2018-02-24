@@ -1,7 +1,7 @@
 package team04.project2.util;
 
 /**
- * LogRecord, a databag with the message and its other attributes
+ * A databag with the message and its other attributes
  */
 public class LogRecord {
     private String _formattedMessage;
@@ -11,7 +11,7 @@ public class LogRecord {
     private long _timestamp;
 
     /**
-     * LogRecord - Creates a record of a log message
+     * Creates a record of a log message
      * @param formattedMessage The full formatted message
      * @param message The log message
      * @param policy The policy of the log message
@@ -26,7 +26,7 @@ public class LogRecord {
     }
 
     /**
-     * getFormattedMessage - Gets the formatted message
+     * Gets the formatted message
      * @return The formatted message
      */
     public String getFormattedMessage() {
@@ -34,7 +34,7 @@ public class LogRecord {
     }
 
     /**
-     * getMessage - Returns the original log message
+     * Returns the original log message
      * @return The original log message
      */
     public String getMessage() {
@@ -42,7 +42,7 @@ public class LogRecord {
     }
 
     /**
-     * getOriginatingPolicy - Get the policy the log record is
+     * Get the policy the log record is
      * @return The log record's policy
      */
     public Log.POLICY getOriginatingPolicy() {
@@ -50,7 +50,7 @@ public class LogRecord {
     }
 
     /**
-     * getOriginatingClass - Gets the originating class
+     * Gets the originating class
      * @return The class the record is from
      */
     public Class getOriginatingClass() {
@@ -58,7 +58,7 @@ public class LogRecord {
     }
 
     /**
-     * getTimestamp - Gets the timestamp of the record
+     * Gets the timestamp of the record
      * @return The timestamp the record was created on
      */
     public long getTimestamp() {

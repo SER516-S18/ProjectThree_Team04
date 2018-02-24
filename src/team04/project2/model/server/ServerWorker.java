@@ -13,7 +13,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * ServerWorker - A worker that handles output and input to an individual client
+ * A worker that handles output and input to an individual client
  */
 public class ServerWorker {
     private static final ExecutorService executors = Executors.newCachedThreadPool();
@@ -27,7 +27,7 @@ public class ServerWorker {
     private boolean clientNotifyDisconnect = false;
 
     /**
-     * ServerWorker The worker that handles input and output
+     * The worker that handles input and output
      * @param model The parent server model
      * @param socket The socket the client is connecting from
      * @param clientID The id of the client
@@ -129,7 +129,7 @@ public class ServerWorker {
     }
 
     /**
-     * disconnect - Disconnects this individual connection from the client
+     * Disconnects this individual connection from the client
      */
     public void disconnect() {
         ServerWorker.this.run = false;
@@ -148,7 +148,7 @@ public class ServerWorker {
     }
 
     /**
-     * getRandom
+     * Gets a random value between server's min and max
      * @return A random value between the server's min and max, inclusive
      */
     private int getRandom() {

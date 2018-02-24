@@ -9,7 +9,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 /**
- * ServerModel - The center model for the server
+ * The center model for the server
  * @author  David Henderson (dchende2@asu.edu)
  */
 
@@ -17,7 +17,7 @@ public class ServerModel {
     private static ServerModel _instance = null;
 
     /**
-     * get - ServerModal singleton instance getter
+     * ServerModal singleton instance getter
      * @return ServerModel instance
      */
     public static ServerModel get() {
@@ -65,7 +65,7 @@ public class ServerModel {
     }
 
     /**
-     * start - A method called to start the server
+     * A method called to start the server
      */
     public void start() {
         if(run)
@@ -96,7 +96,7 @@ public class ServerModel {
     }
 
     /**
-     * shutdown - A method called to shut down the server
+     * A method called to shut down the server
      */
     public void shutdown() {
         if(!run)
@@ -134,7 +134,7 @@ public class ServerModel {
     }
 
     /**
-     * notifyServerShutdown - Notifies that the server is shutting down
+     * Notifies that the server is shutting down
      */
     private void notifyServerShutdown() {
         Log.i("Server shutdown successfully", ServerModel.class);
@@ -144,7 +144,7 @@ public class ServerModel {
     }
 
     /**
-     * notifyServerStarted - Notifies the server is starting
+     * Notifies the server is starting
      */
     private void notifyServerStarted() {
         Log.i("Server started on port " + PORT, ServerModel.class);

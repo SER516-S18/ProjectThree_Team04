@@ -5,14 +5,14 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * ClientChannel - Represents the data values in a channel
+ * Represents the data values in a channel
  */
 public class ClientChannel {
     private final ArrayList<ClientValueTuple> values;
     public final int id;
 
     /**
-     * ClientChannel - A wrapper for a list of values, with an ID for the channel
+     * A wrapper for a list of values, with an ID for the channel
      * @param id The channel identifier
      */
     public ClientChannel(int id) {
@@ -21,7 +21,7 @@ public class ClientChannel {
     }
 
     /**
-     * add - Add a value input to the channel
+     * Add a value input to the channel
      * @param value The input value
      * @param tick The tick (time) it happened
      */
@@ -30,14 +30,14 @@ public class ClientChannel {
     }
 
     /**
-     * clear - Remove all values from the channel
+     * Remove all values from the channel
      */
     public void clear() {
         values.clear();
     }
 
     /**
-     * getLast - Returns the last value in the list
+     * Returns the last value in the list
      * @return Last value (or null if empty) in the channel
      */
     public ClientValueTuple getLast() {
@@ -48,7 +48,7 @@ public class ClientChannel {
     }
 
     /**
-     * getValues - Returns all values in the channel
+     * Returns all values in the channel
      * @return Unmodifiable list of values (which can be null)
      */
     public List<ClientValueTuple> getValues() {

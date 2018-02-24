@@ -8,7 +8,7 @@ import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
 /**
- * ClientInputListener - Necessary because server may send values at a different frequency
+ * Necessary because server may send values at a different frequency
  */
 public class ClientInputListener implements Runnable {
     private boolean isRunning;
@@ -17,7 +17,7 @@ public class ClientInputListener implements Runnable {
     private ArrayList<Integer> value;
 
     /**
-     * ClientInputListener - Accepts values from server at server's frequency
+     * Accepts values from server at server's frequency
      * @param worker Parent worker (to link between input listener/input handler/output handler)
      * @param inputStream Input stream to listen from the server
      */
@@ -28,7 +28,7 @@ public class ClientInputListener implements Runnable {
     }
 
     /**
-     * getValue - Gets the most recently received value
+     * Gets the most recently received value
      * @param clear - Whether to clear the value to null after getting
      * @return value - Most recent value (or or null if not available)
      */
@@ -43,7 +43,7 @@ public class ClientInputListener implements Runnable {
     }
 
     /**
-     * run - Execution to run on the thread, listening for input at Server's frequency
+     * Execution to run on the thread, listening for input at Server's frequency
      */
     @Override
     public void run() {
@@ -95,7 +95,7 @@ public class ClientInputListener implements Runnable {
     }
 
     /**
-     * isRunning
+     * Get if the input listener is running
      * @return boolean whether the input listener is running
      */
     public boolean isRunning() {

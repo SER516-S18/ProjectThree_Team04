@@ -3,7 +3,7 @@ package team04.project2.constants;
 import java.awt.*;
 
 /**
- * ColorConstants, a data bag of the colors used in the program
+ * A data bag of the colors used in the program
  * @author  David Henderson (dchende2@asu.edu)
  */
 

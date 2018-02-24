@@ -7,7 +7,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 /**
- * ClientView, the main UI for the client application
+ * Main UI for the client application
  * @author  David Henderson (dchende2@asu.edu)
  */
 public class ClientView extends JPanel {
@@ -15,7 +15,7 @@ public class ClientView extends JPanel {
     private ClientSettingsView settingsView;
 
     /**
-     * ClientView, representing the UI for the client application
+     * Representing the UI for the client application
      */
     public ClientView() {
         // Create a transparent border around this view

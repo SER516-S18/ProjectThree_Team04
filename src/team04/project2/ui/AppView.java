@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * AppView, the main app singleton frame that contains either the client or server UI
+ * Main app singleton frame that contains either the client or server UI
  * @author  David Henderson (dchende2@asu.edu)
  */
 public class AppView extends JFrame {
@@ -33,7 +33,7 @@ public class AppView extends JFrame {
     private ConsoleView viewConsole;
 
     /**
-     * AppView - Private constructor for Singleton pattern
+     * Private constructor for Singleton pattern
      */
     private AppView() {}
 
@@ -51,7 +51,7 @@ public class AppView extends JFrame {
     }
 
     /**
-     * showConsoleTimestamps - Enables/disables the Console having timestamps prefixing messages
+     * Enables/disables the Console having timestamps prefixing messages
      * @param show True/false to show timestamps in Console
      */
     public void showConsoleTimestamps(boolean show) {
@@ -126,7 +126,7 @@ public class AppView extends JFrame {
     }
 
     /**
-     * isClient
+     * If the Application is a Client
      * @return boolean whether App is a client
      */
     public boolean isClient() {
@@ -134,7 +134,7 @@ public class AppView extends JFrame {
     }
 
     /**
-     * isServer
+     * If the Application is a Server
      * @return boolean whether App is a server
      */
     public boolean isServer() {

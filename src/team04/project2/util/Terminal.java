@@ -9,7 +9,7 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 
 /**
- * Terminal, a non-UI singleton for terminal user input
+ * A non-UI singleton for terminal user input
  * @author  David Henderson (dchende2@asu.edu)
  * @version 1.0
  * @since   2018-02-15

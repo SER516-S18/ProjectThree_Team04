@@ -10,7 +10,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 /**
- * ServerStatusView - The view that contains an indicator showing if the server is running
+ * The view that contains an indicator showing if the server is running
  * @author  David Henderson (dchende2@asu.edu)
  */
 public class ServerStatusView extends  JPanel {

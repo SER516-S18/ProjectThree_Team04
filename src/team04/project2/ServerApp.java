@@ -5,7 +5,7 @@ import team04.project2.util.Log;
 import team04.project2.util.Terminal;
 
 /**
- * ServerApp, contains Java main, arg processing, console initialization, and UI initialization
+ * Contains Java main, arg processing, console initialization, and UI initialization
  *
  * @author  David Henderson (dchende2@asu.edu)
  * @version 1.0
@@ -13,7 +13,7 @@ import team04.project2.util.Terminal;
  */
 public class ServerApp {
     /**
-     * ServerApp - Private constructor as the Class is mainly a wrapper for the Java main
+     * Private constructor as the Class is mainly a wrapper for the Java main
      */
     private ServerApp() {}
 

@@ -20,7 +20,7 @@ import java.awt.*;
 import java.util.List;
 
 /**
- * ClientGraphView - The left hand JPanel containing the graph in the client view
+ * The left hand JPanel containing the graph in the client view
  * @author  David Henderson (dchende2@asu.edu)
  */
 public class ClientGraphView extends JPanel {
@@ -30,7 +30,7 @@ public class ClientGraphView extends JPanel {
     private JPanel panelBuffer;
 
     /**
-     * ClientGraphView - The left hand side of the client view, containing the graph
+     * The left hand side of the client view, containing the graph
      */
     public ClientGraphView() {
         ClientModel.get().addListener(new ClientListener() {
@@ -67,7 +67,7 @@ public class ClientGraphView extends JPanel {
     }
 
     /**
-     * initGraph - Creates and adds the graph to the panel
+     * Creates and adds the graph to the panel
      */
     private void initGraph() {
         panelBuffer = new JPanel(new BorderLayout());
@@ -99,14 +99,14 @@ public class ClientGraphView extends JPanel {
     }
 
     /**
-     * updateSeries - Called when the number of channels changes, to update the series (graph's lines)
+     * Called when the number of channels changes, to update the series (graph's lines)
      */
     private void updateSeries() {
         // Each series is a line, displaying a channel
         java.util.List<ClientChannel> channels = ClientModel.get().getChannels();
 
         if(channels.size() > dataset.getSeriesCount()) {
-            // Was added
+            // A channel was added
             for(int i = dataset.getSeriesCount(); i < channels.size(); i++) {
                 ClientChannel channel = channels.get(i);
                 XYSeries series = new XYSeries("Channel " + channel.id);
@@ -116,7 +116,7 @@ public class ClientGraphView extends JPanel {
                 dataset.addSeries(series);
             }
         } else if(channels.size() < dataset.getSeriesCount()) {
-            // Was removed
+            // A channel was removed
             for(int i = dataset.getSeriesCount() - 1; i > channels.size() - 1; i--) {
                 XYSeries series = dataset.getSeries(i);
                 series.clear();
@@ -126,7 +126,7 @@ public class ClientGraphView extends JPanel {
     }
 
     /**
-     * updateValues - Called when new values need to be added to the graph
+     * Called when new values need to be added to the graph
      */
     private void updateValues() {
         List<ClientChannel> channels = ClientModel.get().getChannels();

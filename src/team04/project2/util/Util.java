@@ -1,13 +1,13 @@
 package team04.project2.util;
 
 /**
- * Util, a utilities class for misc. functions
+ * A utilities class for misc. functions
  * @author  David Henderson (dchende2@asu.edu)
  */
 
 public class Util {
     /**
-     * isInteger, returns if a String s is a valid integer
+     * Returns if a String s is a valid integer
      * @param s String to check if is integer
      * @return boolean Whether String is an integer
      */

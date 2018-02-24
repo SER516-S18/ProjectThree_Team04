@@ -10,7 +10,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 /**
- * ClientSettingsView - The right hand side of the Client app, containing settings and the min/max/avg
+ * The right hand side of the Client app, containing settings and the min/max/avg
  * @author  David Henderson (dchende2@asu.edu)
  */
 public class ClientSettingsView extends JPanel {
@@ -21,7 +21,7 @@ public class ClientSettingsView extends JPanel {
     private JSpinner spinnerInputFrequency;
 
     /**
-     * ClientSettingsView - The right hand side of the Client app, containing settings and the min/max/avg
+     * The right hand side of the Client app, containing settings and the min/max/avg
      */
     public ClientSettingsView() {
         this.setLayout(new GridLayout(5, 2, 8, 8));
