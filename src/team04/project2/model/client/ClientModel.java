@@ -18,7 +18,7 @@ import java.util.List;
 
 public class ClientModel {
     private static InetAddress LOCALHOST;
-    private static ClientModel _instance;
+    private static volatile ClientModel _instance;
 
     static {
         // Helper function to save the localhost as a default
@@ -35,10 +35,15 @@ public class ClientModel {
      * @return ClientModel instance
      */
     public static ClientModel get() {
-        if(_instance == null)
-            _instance = new ClientModel();
-
-        return _instance;
+        ClientModel result = _instance;
+        if(result == null){
+            synchronized (ClientModel.class) {
+                result = _instance;
+                if (result == null)
+                    _instance = result = new ClientModel();
+            }
+        }
+        return result;
     }
 
     private int PORT;
