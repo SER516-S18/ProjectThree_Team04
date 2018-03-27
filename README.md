@@ -1,4 +1,4 @@
-# Project Two (Team 04) - Client / Server Application
+# Project Three (Team 04) - Client / Server Application
 > Arizona State University | SER516 - Software Enterprise: Project and Process Management | Spring 2018
 
 ## Team members
@@ -18,22 +18,22 @@
 - Venkata Sai Shirisha Kakarla ([@kvsshirisha](https://github.com/kvsshirisha) | vkakarla | vkakarla@asu.edu)
 
 
-## Running Project Two - Team 04 Client and Server
+## Running Project Three - Team 04 Client and Server
 (Do note that Windows Java uses ";" and macOS/Linux use ":" as separators, replace as necessary)
 
 Compile all classes (and packages) with the two jar dependencies with:
 ```
-javac -cp ".;./lib/jcommon-1.0.23.jar;./lib/jfreechart-1.0.19.jar" src/team04/project2/*.java src/team04/project2/constants/*.java src/team04/project2/listeners/*.java src/team04/project2/util/*.java src/team04/project2/ui/*.java src/team04/project2/model/*.java src/team04/project2/model/client/*.java src/team04/project2/model/server/*.java
+javac -cp ".;./lib/jcommon-1.0.23.jar;./lib/jfreechart-1.0.19.jar" src/team04/project3/*.java src/team04/project3/constants/*.java src/team04/project3/listeners/*.java src/team04/project3/util/*.java src/team04/project3/ui/*.java src/team04/project3/model/*.java src/team04/project3/model/client/*.java src/team04/project3/model/server/*.java
 ```
 
 After compiling, run the Client with:
 ```
-java -cp ".;./src/;./lib/jcommon-1.0.23.jar;./lib/jfreechart-1.0.19.jar" team04.project2.ClientApp
+java -cp ".;./src/;./lib/jcommon-1.0.23.jar;./lib/jfreechart-1.0.19.jar" team04.project3.ClientApp
 ```
 
 After compiling, run the Server with:
 ```
-java -cp ".;./src/;./lib/jcommon-1.0.23.jar;./lib/jfreechart-1.0.19.jar" team04.project2.ServerApp
+java -cp ".;./src/;./lib/jcommon-1.0.23.jar;./lib/jfreechart-1.0.19.jar" team04.project3.ServerApp
 ```
 
 Note: One can switch between the Client and Server application without rebooting by typing "init server" or "init client" in the console's input field.
