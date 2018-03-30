@@ -1,15 +1,14 @@
 package team04.project3.model;
 
-/**
- * Created by there on 2018/03/29.
- */
+import com.google.gson.annotations.SerializedName;
+
 public enum Emotion {
-    INTEREST("Interest"),
-    ENGAGEMENT("Engagement"),
-    STRESS("Stress"),
-    RELAXATION("Relaxation"),
-    EXCITEMENT("Excitement"),
-    FOCUS("Focus");
+    @SerializedName("INTEREST") INTEREST("Interest"),
+    @SerializedName("ENGAGEMENT") ENGAGEMENT("Engagement"),
+    @SerializedName("STRESS") STRESS("Stress"),
+    @SerializedName("RELAXATION") RELAXATION("Relaxation"),
+    @SerializedName("EXCITEMENT") EXCITEMENT("Excitement"),
+    @SerializedName("FOCUS") FOCUS("Focus");
 
     public String name;
 

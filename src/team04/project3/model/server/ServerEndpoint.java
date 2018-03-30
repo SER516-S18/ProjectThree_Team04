@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-@ServerEndpoint(
+@javax.websocket.server.ServerEndpoint(
     value = "/emostate",
     decoders = MessageDecoder.class,
     encoders = MessageEncoder.class

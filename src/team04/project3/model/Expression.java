@@ -1,27 +1,34 @@
 package team04.project3.model;
 
-/**
- * Created by there on 2018/03/29.
- */
+import com.google.gson.annotations.SerializedName;
+
 public enum Expression {
-    BLINK("Blink", false),
-    WINK_RIGHT("Right wink", false),
-    WINK_LEFT("Left wink", false),
-    LOOK_RIGHT("Look right", false),
-    LOOK_LEFT("Look left", false),
-    BROW_FURROW("Furrow brow", true),
-    BROW_RAISE("Raise brow", true),
-    SMILE("Smile", true),
-    CLENCH("Clench", true),
-    SMIRK_LEFT("Left smirk", true),
-    SMIRK_RIGHT("Right smirk", true),
-    LAUGH("Laugh", true);
+    @SerializedName("BLINK") BLINK("Blink", false),
+    @SerializedName("WINK_RIGHT") WINK_RIGHT("Right wink", false),
+    @SerializedName("WINK_LEFT") WINK_LEFT("Left wink", false),
+    @SerializedName("LOOK_RIGHT") LOOK_RIGHT("Look right", false),
+    @SerializedName("LOOK_LEFT") LOOK_LEFT("Look left", false),
+    @SerializedName("BROW_FURROW") BROW_FURROW("Furrow brow", true),
+    @SerializedName("BROW_RAISE") BROW_RAISE("Raise brow", true),
+    @SerializedName("SMILE") SMILE("Smile", true),
+    @SerializedName("CLENCH") CLENCH("Clench", true),
+    @SerializedName("SMIRK_LEFT") SMIRK_LEFT("Left smirk", true),
+    @SerializedName("SMIRK_RIGHT") SMIRK_RIGHT("Right smirk", true),
+    @SerializedName("LAUGH") LAUGH("Laugh", true);
 
     public String name;
-    public boolean floating;
+    private boolean floating;
 
     private Expression(String name, boolean floating) {
         this.name = name;
         this.floating = floating;
+    }
+
+    public boolean isFloating() {
+        return floating;
+    }
+
+    public boolean isBinary() {
+        return !floating;
     }
 }

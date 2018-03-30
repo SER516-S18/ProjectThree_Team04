@@ -7,10 +7,12 @@ import team04.project3.model.websocket.MessageEncoder;
 import javax.websocket.OnMessage;
 import java.text.SimpleDateFormat;
 
-@ClientEndpoint(encoders = MessageEncoder.class, decoders = MessageDecoder.class)
-public class ClientEndpoint {
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
+@javax.websocket.ClientEndpoint(
+        encoders = MessageEncoder.class,
+        decoders = MessageDecoder.class
+)
 
+public class ClientEndpoint {
     @OnMessage
     public void onMessage(Message message) {
         // Message
