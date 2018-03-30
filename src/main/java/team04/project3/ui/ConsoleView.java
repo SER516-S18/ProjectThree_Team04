@@ -17,7 +17,7 @@ import java.util.Date;
 /**
  * UI element to display system messages through a console
  * @author  David Henderson (dchende2@asu.edu)
- * 			Sai Saran Kandimalla (skandim2@asu.edu)
+ * 			Sai Saran Kandimalla (skandim2@asu.edu) 
  */
 public class ConsoleView extends JPanel implements ActionListener{
     
