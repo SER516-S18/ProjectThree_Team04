@@ -28,7 +28,7 @@ public class ServerEndpoint {
 
     @OnMessage
     public void onMessage(Session session, EmostatePacket message) throws IOException, EncodeException {
-        // Handle new messages
+        // Handle incoming messages
     }
 
     @OnClose
@@ -41,6 +41,16 @@ public class ServerEndpoint {
     public void onError(Session session, Throwable throwable) {
         // Do error handling here
         sessions.remove(session);
+    }
+
+    public void send(EmostatePacket packet) {
+        for(Session session : sessions) {
+            try {
+                session.getBasicRemote().sendObject(packet);
+            } catch(EncodeException | IOException e) {
+                Log.w("Failed to send packet to session (" + e.getMessage() + ")", ServerEndpoint.class);
+            }
+        }
     }
 
     public void disconnect() {

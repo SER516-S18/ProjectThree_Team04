@@ -1,9 +1,14 @@
 package team04.project3.model.server;
 
 import team04.project3.listeners.ServerListener;
+import team04.project3.model.EmostatePacket;
+import team04.project3.model.websocket.EmostatePacketBuilder;
 import team04.project3.util.Log;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.glassfish.tyrus.server.Server;
 
 import javax.websocket.DeploymentException;
@@ -15,6 +20,7 @@ import javax.websocket.DeploymentException;
 
 public class ServerModel {
     private static ServerModel _instance = null;
+    private static final ExecutorService executors = Executors.newCachedThreadPool();
 
     /**
      * ServerModal singleton instance getter
@@ -28,18 +34,41 @@ public class ServerModel {
     }
 
     private int PORT;
+    private long INTERVAL;
 
     private ArrayList<ServerListener> listeners = new ArrayList<>();
     private ServerEndpoint endpoint;
     private Server server;
+    private Runnable output;
+    private EmostatePacketBuilder packet;
+    private float tick = 0.0f;
     private boolean run = false;
 
     private ServerModel() {
-        this(1726);
+        this(1726, 500);
     }
 
-    private ServerModel(int port) {
+    private ServerModel(int port, long interval) {
         this.setPort(port);
+        this.setInterval(interval);
+        this.setPacket(EmostatePacketBuilder.getZeroedEmostatePacket());
+
+        output = () -> {
+            while(ServerModel.this.isRunning()) {
+                try {
+                    endpoint.send(packet.setTick(tick).build());
+                    Thread.sleep(interval);
+                    tick += (interval / 1000f);
+                } catch(InterruptedException e) {
+                    Log.w("Failed to wait interval between packets (" + e.getMessage() + ")", ServerModel.class);
+                } catch (Exception e) {
+                    if(ServerModel.this.isRunning()) {
+                        Log.e("Model failed to send a packet, shutting down (" + e.getMessage() + ")", ServerModel.class);
+                        this.shutdown();
+                    }
+                }
+            }
+        };
 
         // Shutdown server on program shutdown
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -53,9 +82,13 @@ public class ServerModel {
             throw new IllegalArgumentException("Server is already running");
 
         try {
+            // Start server
             endpoint = new ServerEndpoint();
             server = new Server("localhost", PORT, "/ws", null, ServerEndpoint.class);
             server.start();
+
+            // Start output
+            executors.submit(output);
 
             this.run = true;
             this.notifyServerStarted();
@@ -71,6 +104,7 @@ public class ServerModel {
         endpoint.disconnect();
         server.stop();
 
+        tick = 0.0f;
         endpoint = null;
         server = null;
         run = false;
@@ -114,6 +148,31 @@ public class ServerModel {
         for(ServerListener listener : listeners) {
             listener.started();
         }
+    }
+
+    public void setPacket(EmostatePacketBuilder packet) {
+        if(packet == null)
+            throw new IllegalArgumentException("Packet must be non-null");
+        else
+            this.packet = packet;
+    }
+
+    public void setInterval(long interval) {
+        if(interval < 0L)
+            throw new IllegalArgumentException("Interval must be greater than zero");
+        else
+            INTERVAL = interval;
+    }
+
+    public long getInterval() {
+        return INTERVAL;
+    }
+
+    public void setTick(float tick) {
+        if(tick < 0.0f)
+            throw new IllegalArgumentException("Tick must be greater than zero");
+        else
+            this.tick = tick;
     }
 
     /**

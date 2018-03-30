@@ -108,6 +108,15 @@ public class ClientModel {
         if(!run)
             throw new IllegalArgumentException("Server is already stopped");
 
+        try {
+            session.close();
+            client.shutdown();
+        } catch(IOException e) {
+            Log.w("Failed to shut down client gracefully", ClientModel.class);
+        }
+
+        session = null;
+        client = null;
         run = false;
         this.notifyClientShutdown();
     }
