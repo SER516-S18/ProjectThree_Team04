@@ -85,7 +85,6 @@ public class Terminal {
         } else if (line.toLowerCase().startsWith("port") && words.length == 2 && Util.isInteger(words[1])) {
             int port = Integer.parseInt(words[1]);
             ClientModel.get().setPort(port);
-            ServerModel.get().setPort(port);
             Log.i("Port set to " + port, Terminal.class);
         } else if (line.toLowerCase().startsWith("timestamps") && words.length == 2) {
             if(words[1].equalsIgnoreCase("true")) {

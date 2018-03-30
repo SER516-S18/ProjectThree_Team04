@@ -41,8 +41,7 @@ public class ClientSettingsView extends JPanel {
         this.add(panelPromptMaximum);
 
         // Maximum - Value
-        labelValueMaximum = new JLabel(String.valueOf(ClientModel.get().getMaximum() == null ? "" :
-                                                      ClientModel.get().getMinimum()));
+        labelValueMaximum = new JLabel("DEPRECATED");
         labelValueMaximum.setFont(TextConstants.LARGE_FONT);
 
         JPanel panelValueMaximum = new JPanel();
@@ -64,8 +63,7 @@ public class ClientSettingsView extends JPanel {
         this.add(panelPromptMinimum);
 
         // Minimum - Value
-        labelValueMinimum = new JLabel(String.valueOf(ClientModel.get().getMinimum() == null ? "" :
-                                                      ClientModel.get().getMinimum()));
+        labelValueMinimum = new JLabel("DEPRECATED");
         labelValueMinimum.setFont(TextConstants.LARGE_FONT);
 
         JPanel panelValueMinimum = new JPanel();
@@ -87,8 +85,7 @@ public class ClientSettingsView extends JPanel {
         this.add(panelPromptAverage);
 
         // Average - Value
-        labelValueAverage = new JLabel(String.valueOf(ClientModel.get().getAverage() == null ? "" :
-                                                      ClientModel.get().getAverage()));
+        labelValueAverage = new JLabel("DEPRECATED");
         labelValueAverage.setFont(TextConstants.LARGE_FONT);
 
         JPanel panelValueAverage = new JPanel();
@@ -110,14 +107,11 @@ public class ClientSettingsView extends JPanel {
         this.add(panelPromptChannels);
 
         // Channels - Input
-        spinnerInputChannels = new JSpinner( new SpinnerNumberModel(ClientModel.get().getChannelCount(), 1, 65536, 1) );
+        spinnerInputChannels = new JSpinner( new SpinnerNumberModel(1, 1, 65536, 1) );
         spinnerInputChannels.setVisible(true);
         spinnerInputChannels.setBorder(null);
         spinnerInputChannels.getEditor().getComponent(0).setBackground(ColorConstants.BACKGROUND_BLUEGRAY);
         spinnerInputChannels.setFont(TextConstants.LARGE_FONT);
-        spinnerInputChannels.addChangeListener(e -> {
-            ClientModel.get().setChannelCount((Integer) spinnerInputChannels.getValue());
-        });
 
         JPanel panelInputChannels = new JPanel();
         panelInputChannels.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -138,41 +132,16 @@ public class ClientSettingsView extends JPanel {
         this.add(panelPromptFrequency);
 
         // Frequency - Input
-        spinnerInputFrequency = new JSpinner( new SpinnerNumberModel(ClientModel.get().getFrequency(), 1, 65536, 1) );
+        spinnerInputFrequency = new JSpinner( new SpinnerNumberModel(1, 1, 65536, 1) );
         spinnerInputFrequency.setVisible(true);
         spinnerInputFrequency.setBorder(null);
         spinnerInputFrequency.getEditor().getComponent(0).setBackground(ColorConstants.BACKGROUND_PINK);
         spinnerInputFrequency.setFont(TextConstants.LARGE_FONT);
-        spinnerInputFrequency.addChangeListener(e -> {
-            ClientModel.get().setFrequency((Integer) spinnerInputFrequency.getValue());
-        });
 
         JPanel panelInputFrequency = new JPanel();
         panelInputFrequency.setBorder(BorderFactory.createLineBorder(Color.black));
         panelInputFrequency.setBackground(ColorConstants.BACKGROUND_PINK);
         panelInputFrequency.add(spinnerInputFrequency);
         this.add(panelInputFrequency);
-
-        ClientModel.get().addListener(new ClientListener() {
-            @Override
-            public void changedValues() {
-                // When the min/max/freq values change, update the text
-                labelValueMaximum.setText( ClientModel.get().getMaximum() == null ? "" :
-                                          Integer.toString(ClientModel.get().getMaximum()) );
-                labelValueMinimum.setText( ClientModel.get().getMinimum() == null ? "" :
-                                          Integer.toString(ClientModel.get().getMinimum()) );
-                labelValueAverage.setText( ClientModel.get().getAverage() == null ? "" :
-                                          Integer.toString(ClientModel.get().getAverage()) );
-            }
-
-            @Override
-            public void changedChannelCount() {}
-
-            @Override
-            public void started() {}
-
-            @Override
-            public void shutdown() {}
-        });
     }
 }

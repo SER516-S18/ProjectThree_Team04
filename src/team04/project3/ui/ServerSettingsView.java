@@ -35,15 +35,11 @@ public class ServerSettingsView extends JPanel {
         this.add(panelPromptMaximum);
 
         // Maximum - Input
-        JSpinner spinnerInputMaximum = new JSpinner( new SpinnerNumberModel(ServerModel.get().getValueMax(), 
-                                                                            -65536, 65536, 1) );
+        JSpinner spinnerInputMaximum = new JSpinner( new SpinnerNumberModel(1, -65536, 65536, 1) );
         spinnerInputMaximum.setVisible(true);
         spinnerInputMaximum.setBorder(null);
         spinnerInputMaximum.getEditor().getComponent(0).setBackground(ColorConstants.BACKGROUND_PINK);
         spinnerInputMaximum.setFont(TextConstants.LARGE_FONT);
-        spinnerInputMaximum.addChangeListener(e -> {
-            ServerModel.get().setValueMax((Integer) spinnerInputMaximum.getValue());
-        });
 
         JPanel panelInputMaximum = new JPanel();
         panelInputMaximum.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -64,15 +60,11 @@ public class ServerSettingsView extends JPanel {
         this.add(panelPromptMinimum);
 
         // Minimum - Input
-        JSpinner spinnerInputMinimum = new JSpinner( new SpinnerNumberModel(ServerModel.get().getValueMin(), 
-                                                                            -65536, 65536, 1) );
+        JSpinner spinnerInputMinimum = new JSpinner( new SpinnerNumberModel(1, -65536, 65536, 1) );
         spinnerInputMinimum.setVisible(true);
         spinnerInputMinimum.setBorder(null);
         spinnerInputMinimum.getEditor().getComponent(0).setBackground(ColorConstants.BACKGROUND_BLUEGRAY);
         spinnerInputMinimum.setFont(TextConstants.LARGE_FONT);
-        spinnerInputMinimum.addChangeListener(e -> {
-            ServerModel.get().setValueMin((Integer) spinnerInputMinimum.getValue());
-        });
 
         JPanel panelInputMinimum = new JPanel();
         panelInputMinimum.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -93,15 +85,11 @@ public class ServerSettingsView extends JPanel {
         this.add(panelPromptFrequency);
 
         // Frequency - Input
-        JSpinner spinnerInputFrequency = new JSpinner( new SpinnerNumberModel(ServerModel.get().getFrequency(), 
-                                                                              -65536, 65536, 1) );
+        JSpinner spinnerInputFrequency = new JSpinner( new SpinnerNumberModel(1,-65536, 65536, 1) );
         spinnerInputFrequency.setVisible(true);
         spinnerInputFrequency.setBorder(null);
         spinnerInputFrequency.getEditor().getComponent(0).setBackground(ColorConstants.BACKGROUND_PINK);
         spinnerInputFrequency.setFont(TextConstants.LARGE_FONT);
-        spinnerInputFrequency.addChangeListener(e -> {
-            ServerModel.get().setFrequency((Integer) spinnerInputFrequency.getValue());
-        });
 
         JPanel panelInputFrequency = new JPanel();
         panelInputFrequency.setBorder(BorderFactory.createLineBorder(Color.black));

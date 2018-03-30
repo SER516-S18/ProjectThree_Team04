@@ -48,24 +48,15 @@ public class ClientModel {
 
     private int PORT;
     private InetAddress HOST;
-    private int FREQUENCY;
-    private int CHANNEL_COUNT;
 
     private final ArrayList<ClientListener> listeners = new ArrayList<>();
     private boolean run = false;
-    private ClientWorker worker;
-
-    private ArrayList<ClientChannel> channels = new ArrayList<>();
-    private ArrayList<Integer> valueList = new ArrayList<>();
-    private Integer valueMin = null;
-    private Integer valueMax = null;
-    private Integer valueAvg = null;
 
     /**
-     * Default constructor, defaulting to port 1516 and LOCALHOST
+     * Default constructor, defaulting to port 1726 and LOCALHOST
      */
     private ClientModel() {
-        this(1516, LOCALHOST);
+        this(1726, LOCALHOST);
     }
 
     /**
@@ -76,8 +67,6 @@ public class ClientModel {
     private ClientModel(int port, InetAddress host) {
         this.setHost(host);
         this.setPort(port);
-        this.setFrequency(5);
-        this.setChannelCount(1);
 
         // Shutdown client on program shutdown
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -94,16 +83,7 @@ public class ClientModel {
             throw new IllegalArgumentException("Server is already running");
 
         run = true;
-        try {
-            // Start worker to gather and handle input from server
-            worker = new ClientWorker( new Socket(HOST, PORT) );
-
-            // Notify the client is now running
-            this.notifyClientStarted();
-        } catch (IOException e) {
-            Log.e("Failed to connect to server at " + HOST.getCanonicalHostName() + " port " + PORT + " (" + e.getMessage() + ")", ClientModel.class);
-            run = false;
-        }
+        this.notifyClientStarted();
     }
 
     /**
@@ -114,101 +94,7 @@ public class ClientModel {
             throw new IllegalArgumentException("Server is already stopped");
 
         run = false;
-
-        // Wait for the worker to shut down gracefully
-        while(worker != null && worker.isRunning()) {
-            try {
-                Thread.sleep(100L);
-            } catch (InterruptedException e) {
-                Log.w("Failed to wait for worker while shutting down", ClientModel.class);
-            }
-        }
-
-        // Clear past values
-        worker = null;
-        valueList.clear();
-        valueMin = null;
-        valueMax = null;
-        valueAvg = null;
-        for(ClientChannel channel : channels)
-            channel.clear();
-
         this.notifyClientShutdown();
-    }
-
-    /**
-     * Called to add new input values from the Server into the Client
-     * @param values List of the values for the respective channels
-     * @param tick The tick (time) the values were retrieved on
-     */
-    public void handleNewInputValues(ArrayList<Integer> values, int tick) {
-        // For each value, add to the correct channel (and calculate min/max/avg)
-        for(int i = 0; i < values.size(); i++) {
-            Integer value = values.get(i);
-            if(value == null)
-                continue;
-
-            // Add value to the channel
-            channels.get(i).add(value, tick);
-
-            // Now to calculate the min/max/avg across all channels
-            // First value edge case
-            if (valueList.size() == 0) {
-                valueMin = value;
-                valueMax = value;
-                valueAvg = value;
-            }
-
-            // Average
-            valueList.add(value);
-            valueAvg = 0;
-            for (int val : valueList)
-                valueAvg += val;
-            valueAvg /= valueList.size();
-
-            // Minimum
-            if (value < ClientModel.this.valueMin)
-                valueMin = value;
-
-            // Maximum
-            if (value > ClientModel.this.valueMax)
-                valueMax = value;
-
-            // Notify listeners of the new value
-            this.notifyValuesChanged();
-        }
-    }
-
-    /**
-     * The list of channels
-     * @return List of all channels
-     */
-    public List<ClientChannel> getChannels() {
-        return Collections.unmodifiableList(channels);
-    }
-
-    /**
-     * Gets the maximum, if any
-     * @return Maximum or null, if there are no values
-     */
-    public Integer getMaximum() {
-        return valueMax;
-    }
-
-    /**
-     * Gets the minimum, if any
-     * @return Minimum or null, if there are no values
-     */
-    public Integer getMinimum() {
-        return valueMin;
-    }
-
-    /**
-     * Gets the average, if any
-     * @return Average or null, if there are no values
-     */
-    public Integer getAverage() {
-        return valueAvg;
     }
 
     /**
@@ -239,24 +125,6 @@ public class ClientModel {
         Log.i("Client started and connected to server at " + HOST.getCanonicalHostName() + " port " + PORT, ClientModel.class);
         for(ClientListener listener : listeners) {
             listener.started();
-        }
-    }
-
-    /**
-     * Method called when the input values from servers change
-     */
-    private void notifyValuesChanged() {
-        for(ClientListener listener : listeners) {
-            listener.changedValues();
-        }
-    }
-
-    /**
-     * Method called when the number of channels changes (added/removed)
-     */
-    private void notifyChannelCountChanged() {
-        for(ClientListener listener : listeners) {
-            listener.changedChannelCount();
         }
     }
 
@@ -308,58 +176,5 @@ public class ClientModel {
      */
     public void setHostToLocalhost() {
         this.setHost(LOCALHOST);
-    }
-
-    /**
-     * Setter for client's frequency
-     * @param freq Client's frequency, must be greater than 0
-     */
-    public void setFrequency(int freq) {
-        if(freq < 1)
-            throw new IllegalArgumentException("Frequency must be greater than zero");
-        else
-            FREQUENCY = freq;
-    }
-
-    /**
-     * Getter for client's frequency
-     * @return frequency
-     */
-    public int getFrequency() {
-        return FREQUENCY;
-    }
-
-    /**
-     * Setter for channel count
-     * @param count Number of channels, must be greater than 0
-     */
-    public void setChannelCount(int count) {
-        if(count < 1)
-            throw new IllegalArgumentException("Channel count must be greater than zero");
-        else if(count != CHANNEL_COUNT) {
-            // Create new channels on clientside
-            if(count > CHANNEL_COUNT) {
-                // Adding channels
-                for(int i = CHANNEL_COUNT; i < count; i++) {
-                    channels.add(new ClientChannel(i));
-                }
-            } else if(count < CHANNEL_COUNT) {
-                // Removing channels
-                for(int i = CHANNEL_COUNT - 1; i > count - 1; i--) {
-                    channels.remove(i);
-                }
-            }
-
-            CHANNEL_COUNT = count;
-            this.notifyChannelCountChanged();
-        }
-    }
-
-    /**
-     * Getter for channel count
-     * @return Number of channels
-     */
-    public int getChannelCount() {
-        return CHANNEL_COUNT;
     }
 }
