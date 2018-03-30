@@ -1,11 +1,10 @@
 package team04.project3.model.client;
 
-import team04.project3.model.websocket.Message;
+import team04.project3.model.EmostatePacket;
 import team04.project3.model.websocket.MessageDecoder;
 import team04.project3.model.websocket.MessageEncoder;
 
 import javax.websocket.OnMessage;
-import java.text.SimpleDateFormat;
 
 @javax.websocket.ClientEndpoint(
         encoders = MessageEncoder.class,
@@ -14,7 +13,7 @@ import java.text.SimpleDateFormat;
 
 public class ClientEndpoint {
     @OnMessage
-    public void onMessage(Message message) {
+    public void onMessage(EmostatePacket message) {
         // Message
     }
 }

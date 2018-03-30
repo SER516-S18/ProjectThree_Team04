@@ -1,16 +1,16 @@
 package team04.project3.model.websocket;
 
 import com.google.gson.Gson;
+import team04.project3.model.EmostatePacket;
 
-import javax.websocket.EncodeException;
 import javax.websocket.Encoder;
 import javax.websocket.EndpointConfig;
 
-public class MessageEncoder implements Encoder.Text<Message> {
+public class MessageEncoder implements Encoder.Text<EmostatePacket> {
     private static Gson gson = new Gson();
 
     @Override
-    public String encode(final Message message) throws EncodeException {
+    public String encode(final EmostatePacket message) {
         return gson.toJson(message);
     }
 

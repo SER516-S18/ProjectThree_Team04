@@ -5,8 +5,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EmostatePacket {
-    private HashMap<Expression, Float> expressions;
-    private HashMap<Emotion, Float> emotions;
+    private final HashMap<Expression, Float> expressions;
+    private final HashMap<Emotion, Float> emotions;
+    private Float tick = null;
+
+    public EmostatePacket(HashMap<Expression, Float> expressions, HashMap<Emotion, Float> emotions, float tick) {
+        this(expressions, emotions);
+        this.tick = tick;
+    }
 
     public EmostatePacket(HashMap<Expression, Float> expressions, HashMap<Emotion, Float> emotions) {
         // Data validation, must have values for every expression and emotion
@@ -67,9 +73,21 @@ public class EmostatePacket {
         return Collections.unmodifiableMap(emotions);
     }
 
+    public void setTick(float tick) {
+        if(this.tick == null)
+            this.tick = tick;
+        else
+            throw new IllegalStateException("Cannot set tick after it has already been set");
+    }
+
+    public Float getTick() {
+        return this.tick;
+    }
+
     public static class EmostatePacketBuilder {
         private HashMap<Expression, Float> expressions = new HashMap<>();
         private HashMap<Emotion, Float> emotions = new HashMap<>();
+        private Float tick = null;
 
         public static EmostatePacket getZeroedEmostatePacket() {
             EmostatePacketBuilder builder = new EmostatePacketBuilder();
@@ -118,6 +136,11 @@ public class EmostatePacket {
             }
 
             this.emotions.put(emotion, value);
+            return this;
+        }
+
+        public EmostatePacketBuilder setTick(Float tick) {
+            this.tick = tick;
             return this;
         }
 

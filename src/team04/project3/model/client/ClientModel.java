@@ -1,15 +1,17 @@
 package team04.project3.model.client;
 
+import org.glassfish.tyrus.client.ClientManager;
 import team04.project3.listeners.ClientListener;
 import team04.project3.util.Log;
 
+import javax.websocket.DeploymentException;
+import javax.websocket.Session;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.Socket;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * The main model for client
@@ -50,6 +52,8 @@ public class ClientModel {
     private InetAddress HOST;
 
     private final ArrayList<ClientListener> listeners = new ArrayList<>();
+    private ClientManager client;
+    private Session session;
     private boolean run = false;
 
     /**
@@ -82,8 +86,19 @@ public class ClientModel {
         if(run)
             throw new IllegalArgumentException("Server is already running");
 
-        run = true;
-        this.notifyClientStarted();
+        try {
+            client = ClientManager.createClient();
+            session = client.connectToServer(ClientEndpoint.class, new URI("ws://" + HOST.getHostAddress() + ":" + PORT + "/ws"));
+
+            this.run = true;
+            this.notifyClientStarted();
+        } catch(URISyntaxException e) {
+            Log.w("Failed to connect to server (Invalid URI: " + e.getMessage() + ")", ClientModel.class);
+        } catch (DeploymentException e) {
+            Log.w("Failed to connect to server (Deployment error: " + e.getMessage() + ")", ClientModel.class);
+        } catch (IOException e) {
+            Log.w("Failed to connect to server (IOException: " + e.getMessage() + ")", ClientModel.class);
+        }
     }
 
     /**

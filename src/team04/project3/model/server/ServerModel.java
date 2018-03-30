@@ -3,10 +3,10 @@ package team04.project3.model.server;
 import team04.project3.listeners.ServerListener;
 import team04.project3.util.Log;
 
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
+import org.glassfish.tyrus.server.Server;
+
+import javax.websocket.DeploymentException;
 
 /**
  * The center model for the server
@@ -27,10 +27,20 @@ public class ServerModel {
         return _instance;
     }
 
+    private int PORT;
+
     private ArrayList<ServerListener> listeners = new ArrayList<>();
+    private ServerEndpoint endpoint;
+    private Server server;
     private boolean run = false;
 
     private ServerModel() {
+        this(1726);
+    }
+
+    private ServerModel(int port) {
+        this.setPort(port);
+
         // Shutdown server on program shutdown
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             if(ServerModel.this.isRunning())
@@ -42,14 +52,27 @@ public class ServerModel {
         if(run)
             throw new IllegalArgumentException("Server is already running");
 
-        run = true;
-        this.notifyServerStarted();
+        try {
+            endpoint = new ServerEndpoint();
+            server = new Server("localhost", PORT, "/ws", null, ServerEndpoint.class);
+            server.start();
+
+            this.run = true;
+            this.notifyServerStarted();
+        } catch(DeploymentException e) {
+            Log.e("Failed to deploy web socket server (" + e.getMessage() + ")", ServerModel.class);
+        }
     }
 
     public void shutdown() {
         if(!run)
             throw new IllegalArgumentException("Server is already stopped");
 
+        endpoint.disconnect();
+        server.stop();
+
+        endpoint = null;
+        server = null;
         run = false;
         this.notifyServerShutdown();
     }
@@ -91,5 +114,24 @@ public class ServerModel {
         for(ServerListener listener : listeners) {
             listener.started();
         }
+    }
+
+    /**
+     * Setter for server's port
+     * @param port Port to connect to
+     */
+    public void setPort(int port) {
+        if(port < 0)
+            throw new IllegalArgumentException("Port must be greater than zero");
+        else if(this.getPort() != port)
+            PORT = port;
+    }
+
+    /**
+     * Getter for server's port
+     * @return port Server's port
+     */
+    public int getPort() {
+        return PORT;
     }
 }
