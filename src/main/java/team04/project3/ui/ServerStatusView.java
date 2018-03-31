@@ -98,7 +98,7 @@ public class ServerStatusView extends  JPanel {
         constraints.gridy = 1;
         panelBuffer.add(timeLabel,constraints);
         
-        timeField = new JTextField(7);
+        timeField = new JTextField(6);
         timeField.setBorder(BorderFactory.createLineBorder(Color.black));
         timeField.setVisible(true);
         constraints.weightx = 0.1;
