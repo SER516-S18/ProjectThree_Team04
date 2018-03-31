@@ -19,7 +19,6 @@ public class ServerStatusView extends  JPanel {
     private final Color COLOR_ON_BRIGHT = new Color(168,208,141);
 
     private boolean running;
-    private JLabel labelIndicator;
     private JLabel timeLabel;
     private JTextField timeField;
     private JPanel panelBuffer;
@@ -34,31 +33,20 @@ public class ServerStatusView extends  JPanel {
             @Override
             public void started() {
                 // When the server is started, set the label to on
-                running = true;
-                labelIndicator.setForeground(COLOR_ON_BRIGHT);
-            }
+                }
 
             @Override
             public void shutdown() {
                 // When the server is stopped, set the label to off
-                running = false;
-                labelIndicator.setForeground(COLOR_OFF);
-            }
+                }
         });
 
         // Create a timer to blink if on or off
         Timer timer = new Timer(1000, e2 -> {
             if(running) {
-                if(labelIndicator.getForeground() == COLOR_ON_DIM) {
-                    labelIndicator.setForeground(COLOR_ON_BRIGHT);
-                } else {
-                    labelIndicator.setForeground(COLOR_ON_DIM);
-                }
-            } else {
-                labelIndicator.setForeground(COLOR_OFF);
-            }
-        });
-        timer.start();
+                
+        }});
+        //timer.start();
 
         this.setLayout(new BorderLayout());
         this.setOpaque(false);
