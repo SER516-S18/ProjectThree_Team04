@@ -30,7 +30,8 @@ public class ServerStatusView extends  JPanel {
         running = ServerModel.get().isRunning();
         
         ServerModel.get().addListener(new ServerListener() {
-            @Override
+            
+        	@Override
             public void started() {
                 // When the server is started, set the label to on
                 }
@@ -45,7 +46,8 @@ public class ServerStatusView extends  JPanel {
         Timer timer = new Timer(1000, e2 -> {
             if(running) {
                 
-        }});
+            }	
+        });
         //timer.start();
 
         this.setLayout(new BorderLayout());
