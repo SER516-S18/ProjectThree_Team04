@@ -1,9 +1,9 @@
-package team04.project3.ui;
+package main.java.team04.project3.ui;
 
-import team04.project3.constants.ColorConstants;
-import team04.project3.constants.TextConstants;
-import team04.project3.listeners.ServerListener;
-import team04.project3.model.server.ServerModel;
+import main.java.team04.project3.constants.ColorConstants;
+import main.java.team04.project3.constants.TextConstants;
+import main.java.team04.project3.listeners.ServerListener;
+import main.java.team04.project3.model.server.ServerModel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -20,12 +20,16 @@ public class ServerStatusView extends  JPanel {
 
     private boolean running;
     private JLabel labelIndicator;
-
+    private JLabel timeLabel;
+    private JTextField timeField;
+    private JPanel panelBuffer;
+    
     /**
      * The view that contains an indicator showing if the server is running
      */
     public ServerStatusView() {
         running = ServerModel.get().isRunning();
+        
         ServerModel.get().addListener(new ServerListener() {
             @Override
             public void started() {
@@ -60,17 +64,53 @@ public class ServerStatusView extends  JPanel {
         this.setOpaque(false);
         this.setBorder(new EmptyBorder(8, 8, 8, 8));
 
+        
         // Put the main view in a "buffer", this creates a transparent border around the buffer's content
-        JPanel panelBuffer = new JPanel(new BorderLayout());
-        panelBuffer.setBackground(ColorConstants.BACKGROUND_PINK);
-        panelBuffer.setBorder(BorderFactory.createLineBorder(Color.black));
-
-        // Create the indicator (The circular bullet character is Unicode hex 0x2022)
-        labelIndicator = new JLabel(Character.toString((char) 0x2022), SwingConstants.CENTER);
-        labelIndicator.setFont(new Font("Monospaced", Font.PLAIN, TextConstants.DEFAULT_FONT.getSize() * 16));
-        labelIndicator.setForeground(running ? COLOR_ON_BRIGHT : COLOR_OFF);
-        panelBuffer.add(labelIndicator, BorderLayout.CENTER);
-
+        panelBuffer = new JPanel(new GridBagLayout());
+        panelBuffer.setBackground(Color.LIGHT_GRAY);
+        panelBuffer.setBorder(new EmptyBorder (8,8,8,8));
+        panelBuffer.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+        
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        
+        panelBuffer.add(new JLabel("EMOSTATE",JLabel.LEFT),constraints);
+        createTimeArea(constraints);    
+        
         this.add(panelBuffer, BorderLayout.CENTER);
+    }
+    
+    /**
+     * method that creates the time area and add to the "emostate" panel.
+     * 
+     * @param constraints to set the positions of labels and textfields.
+     */
+    public void createTimeArea (GridBagConstraints constraints) {
+    	
+    	timeLabel = new JLabel ("Time:",JLabel.LEFT);
+        timeLabel.setBorder(new EmptyBorder(10,10,10,10));
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.weightx = 0;
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        panelBuffer.add(timeLabel,constraints);
+        
+        timeField = new JTextField(6);
+        timeField.setBorder(BorderFactory.createLineBorder(Color.black));
+        timeField.setVisible(true);
+        constraints.weightx = 0.1;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.gridx = 1;
+        constraints.gridy = 1;
+        panelBuffer.add(timeField,constraints);
+        
+        JLabel secondsLabel = new JLabel(" Seconds");
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.weightx = 0.5;
+        constraints.gridx = 2;
+        constraints.gridy = 1;
+        panelBuffer.add(secondsLabel,constraints);
     }
 }
