@@ -65,7 +65,7 @@ public class AppToolbarView extends JToolBar {
         this.setBorder(new EmptyBorder(8, 8, 8, 8));
         this.setFloatable(false);
 
-        labelType = new JLabel(AppView.get().isClient() ? "Client" : "Server");
+        labelType = new JLabel(AppView.get().isClient() ? TextConstants.SERVER_TITLE_VALUE : TextConstants.CLIENT_TITLE_VALUE);
         labelType.setFont(TextConstants.DEFAULT_FONT);
         this.add(labelType);
         this.add(Box.createHorizontalGlue());
@@ -102,10 +102,10 @@ public class AppToolbarView extends JToolBar {
      */
     public void updateType() {
         if(AppView.get().isClient()) {
-            this.labelType.setText("Client");
+            this.labelType.setText(TextConstants.CLIENT_TITLE_VALUE);
             this.buttonToggle.setText(ClientModel.get().isRunning() ? "Stop" : "Start");
         } else if(AppView.get().isServer()) {
-            this.labelType.setText("Server");
+            this.labelType.setText(TextConstants.SERVER_TITLE_VALUE);
             this.buttonToggle.setText(ServerModel.get().isRunning() ? "Stop" : "Start");
         }
     }

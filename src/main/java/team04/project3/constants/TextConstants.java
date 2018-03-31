@@ -19,4 +19,9 @@ public class TextConstants {
     public static final String AVERAGE_VALUE_STRING = "<html>Average:</html>";
     public static final String CHANNELS_VALUE_STRING = "<html>Channels:</html>";
     public static final String FREQUENCY_VALUE_STRING = "<html>Frequency<br>(Hz):</html>";
+
+    public static final String EMO_STATE_INTERVAL_STRING = "<html>EmoState<br>Interval (Sec):</html>";
+
+    public static final String CLIENT_TITLE_VALUE = "EmoCompose";
+    public static final String SERVER_TITLE_VALUE = "Emotiv Xavier Control Panel";
 }

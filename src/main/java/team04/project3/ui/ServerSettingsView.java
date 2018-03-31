@@ -1,29 +1,39 @@
 package team04.project3.ui;
 
+import com.sun.tools.javadoc.Start;
 import team04.project3.constants.ColorConstants;
 import team04.project3.constants.TextConstants;
+import team04.project3.model.client.ClientModel;
 import team04.project3.model.server.ServerModel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 /**
  * The right hand side to change the output min/max/frequency
  * @author  David Henderson (dchende2@asu.edu)
  */
 public class ServerSettingsView extends JPanel {
+
+    private static String buttonState = "Send";
     /**
      * The right hand side to change the output min/max/frequency
      */
     public ServerSettingsView() {
         // Create the settings view with a transparent border encompassing
-        this.setLayout(new GridLayout(5, 2, 8, 8));
+        this.setLayout(new BorderLayout());
         this.setBorder(new EmptyBorder(8, 8, 8, 8));
         this.setOpaque(false);
 
+        JPanel panelBuffer = new JPanel(new GridLayout(2, 1, 50, 4));
+        panelBuffer.setBackground(Color.lightGray);
+        panelBuffer.setBorder(new EmptyBorder(15, 15, 15, 15));
+
         // Maximum - Prompt
-        JLabel labelPromptMaximum = new JLabel(TextConstants.HIGHEST_VALUE_STRING);
+        JLabel labelPromptMaximum = new JLabel(TextConstants.EMO_STATE_INTERVAL_STRING);
         labelPromptMaximum.setFont(TextConstants.DEFAULT_FONT);
         labelPromptMaximum.setHorizontalAlignment(JLabel.CENTER);
         labelPromptMaximum.setVerticalAlignment(JLabel.CENTER);
@@ -32,10 +42,10 @@ public class ServerSettingsView extends JPanel {
         panelPromptMaximum.setBorder(BorderFactory.createLineBorder(Color.black));
         panelPromptMaximum.setBackground(ColorConstants.BACKGROUND_BLUEGRAY);
         panelPromptMaximum.add(labelPromptMaximum);
-        this.add(panelPromptMaximum);
+        panelBuffer.add(panelPromptMaximum);
 
         // Maximum - Input
-        JSpinner spinnerInputMaximum = new JSpinner( new SpinnerNumberModel(1, -65536, 65536, 1) );
+        JSpinner spinnerInputMaximum = new JSpinner( new SpinnerNumberModel(0.25, -65536, 65536, 0.25) );
         spinnerInputMaximum.setVisible(true);
         spinnerInputMaximum.setBorder(null);
         spinnerInputMaximum.getEditor().getComponent(0).setBackground(ColorConstants.BACKGROUND_PINK);
@@ -45,63 +55,43 @@ public class ServerSettingsView extends JPanel {
         panelInputMaximum.setBorder(BorderFactory.createLineBorder(Color.black));
         panelInputMaximum.setBackground(ColorConstants.BACKGROUND_PINK);
         panelInputMaximum.add(spinnerInputMaximum);
-        this.add(panelInputMaximum);
+        panelBuffer.add(panelInputMaximum);
 
-        // Minimum - Prompt
-        JLabel labelPromptMinimum = new JLabel(TextConstants.LOWEST_VALUE_STRING);
-        labelPromptMinimum.setFont(TextConstants.DEFAULT_FONT);
-        labelPromptMinimum.setHorizontalAlignment(JLabel.CENTER);
-        labelPromptMinimum.setVerticalAlignment(JLabel.CENTER);
+        JCheckBox autoResetCheckBox = new JCheckBox("Auto Reset");
+        panelBuffer.add(autoResetCheckBox);
 
-        JPanel panelPromptMinimum = new JPanel();
-        panelPromptMinimum.setBorder(BorderFactory.createLineBorder(Color.black));
-        panelPromptMinimum.setBackground(ColorConstants.BACKGROUND_PINK);
-        panelPromptMinimum.add(labelPromptMinimum);
-        this.add(panelPromptMinimum);
+        JButton sendButton = new JButton(buttonState);
+        sendButton.setFont(TextConstants.DEFAULT_FONT);
+        sendButton.setBackground(ColorConstants.BACKGROUND_GRAY);
+        sendButton.setForeground(Color.BLACK);
+        sendButton.setFocusPainted(false);
+        panelBuffer.add(sendButton);
 
-        // Minimum - Input
-        JSpinner spinnerInputMinimum = new JSpinner( new SpinnerNumberModel(1, -65536, 65536, 1) );
-        spinnerInputMinimum.setVisible(true);
-        spinnerInputMinimum.setBorder(null);
-        spinnerInputMinimum.getEditor().getComponent(0).setBackground(ColorConstants.BACKGROUND_BLUEGRAY);
-        spinnerInputMinimum.setFont(TextConstants.LARGE_FONT);
+        autoResetCheckBox.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange()==ItemEvent.SELECTED) {
+                    buttonState = "Start";
+                    ServerModel.get().setAutoRepeat(true);
+                } else {
+                    buttonState = "Send";
+                    ServerModel.get().setAutoRepeat(false);
+                }
 
-        JPanel panelInputMinimum = new JPanel();
-        panelInputMinimum.setBorder(BorderFactory.createLineBorder(Color.black));
-        panelInputMinimum.setBackground(ColorConstants.BACKGROUND_BLUEGRAY);
-        panelInputMinimum.add(spinnerInputMinimum);
-        this.add(panelInputMinimum);
+                sendButton.setText(buttonState);
+            }
+        });
 
-        // Frequency - Prompt
-        JLabel labelPromptFrequency = new JLabel(TextConstants.FREQUENCY_VALUE_STRING);
-        labelPromptFrequency.setFont(TextConstants.DEFAULT_FONT);
-        labelPromptFrequency.setHorizontalAlignment(JLabel.CENTER);
-        labelPromptFrequency.setVerticalAlignment(JLabel.CENTER);
+        sendButton.addActionListener(e -> {
+            if (ServerModel.get().isRunning()) {
+                sendButton.setText(buttonState);
+                ServerModel.get().shutdown();
+            } else {
+                ServerModel.get().setInterval(Long.valueOf(spinnerInputMaximum.getValue().toString()) * 1000);
+                ServerModel.get().start();
+                sendButton.setText("Stop");
+            }
+        });
 
-        JPanel panelPromptFrequency = new JPanel();
-        panelPromptFrequency.setBorder(BorderFactory.createLineBorder(Color.black));
-        panelPromptFrequency.setBackground(ColorConstants.BACKGROUND_BLUEGRAY);
-        panelPromptFrequency.add(labelPromptFrequency);
-        this.add(panelPromptFrequency);
-
-        // Frequency - Input
-        JSpinner spinnerInputFrequency = new JSpinner( new SpinnerNumberModel(1,-65536, 65536, 1) );
-        spinnerInputFrequency.setVisible(true);
-        spinnerInputFrequency.setBorder(null);
-        spinnerInputFrequency.getEditor().getComponent(0).setBackground(ColorConstants.BACKGROUND_PINK);
-        spinnerInputFrequency.setFont(TextConstants.LARGE_FONT);
-
-        JPanel panelInputFrequency = new JPanel();
-        panelInputFrequency.setBorder(BorderFactory.createLineBorder(Color.black));
-        panelInputFrequency.setBackground(ColorConstants.BACKGROUND_PINK);
-        panelInputFrequency.add(spinnerInputFrequency);
-        this.add(panelInputFrequency);
-
-        // Add four empty panels (to scale like the specification and the client's 5 rows)
-        // (we have 3 rows, so add two rows, each with two empty columns)
-        this.add(new JLabel());
-        this.add(new JLabel());
-        this.add(new JLabel());
-        this.add(new JLabel());
+        this.add(panelBuffer);
     }
 }
