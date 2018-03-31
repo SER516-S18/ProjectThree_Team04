@@ -71,6 +71,7 @@ public class ServerStatusView extends  JPanel {
         panelBuffer.setBorder(new EmptyBorder (8,8,8,8));
         panelBuffer.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
         
+        //setting grid bag constraints for emostate label at the top of panel.
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.BOTH;
         constraints.gridx = 0;
@@ -97,7 +98,7 @@ public class ServerStatusView extends  JPanel {
         constraints.gridy = 1;
         panelBuffer.add(timeLabel,constraints);
         
-        timeField = new JTextField(6);
+        timeField = new JTextField(7);
         timeField.setBorder(BorderFactory.createLineBorder(Color.black));
         timeField.setVisible(true);
         constraints.weightx = 0.1;
