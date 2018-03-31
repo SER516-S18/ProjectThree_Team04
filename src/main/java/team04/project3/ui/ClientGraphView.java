@@ -5,17 +5,14 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import team04.project3.constants.ColorConstants;
 import team04.project3.listeners.ClientListener;
 import team04.project3.model.client.ClientModel;
-import team04.project3.util.Log;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.util.List;
 
 /**
  * The left hand JPanel containing the graph in the client view

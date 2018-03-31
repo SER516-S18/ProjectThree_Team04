@@ -1,9 +1,7 @@
 package main.java.team04.project3.ui;
 
-import main.java.team04.project3.constants.ColorConstants;
-import main.java.team04.project3.constants.TextConstants;
-import main.java.team04.project3.listeners.ServerListener;
-import main.java.team04.project3.model.server.ServerModel;
+import team04.project3.listeners.ServerListener;
+import team04.project3.model.server.ServerModel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

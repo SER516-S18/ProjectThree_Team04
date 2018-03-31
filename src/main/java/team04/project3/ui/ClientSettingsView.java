@@ -2,8 +2,6 @@ package team04.project3.ui;
 
 import team04.project3.constants.ColorConstants;
 import team04.project3.constants.TextConstants;
-import team04.project3.listeners.ClientListener;
-import team04.project3.model.client.ClientModel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
