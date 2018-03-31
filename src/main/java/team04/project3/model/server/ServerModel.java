@@ -1,17 +1,14 @@
 package team04.project3.model.server;
 
+import org.glassfish.tyrus.server.Server;
 import team04.project3.listeners.ServerListener;
-import team04.project3.model.EmostatePacket;
 import team04.project3.model.websocket.EmostatePacketBuilder;
 import team04.project3.util.Log;
 
+import javax.websocket.DeploymentException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import org.glassfish.tyrus.server.Server;
-
-import javax.websocket.DeploymentException;
 
 /**
  * The center model for the server

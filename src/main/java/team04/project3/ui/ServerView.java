@@ -1,5 +1,6 @@
 package team04.project3.ui;
 
+import team04.project3.ui.ServerStatusView;
 import team04.project3.constants.ColorConstants;
 
 import javax.swing.*;

@@ -1,7 +1,6 @@
 package team04.project3.util;
 
 import team04.project3.model.client.ClientModel;
-import team04.project3.model.server.ServerModel;
 import team04.project3.ui.AppView;
 
 import java.net.InetAddress;
