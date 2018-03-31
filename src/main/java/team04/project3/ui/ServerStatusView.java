@@ -2,9 +2,7 @@ package team04.project3.ui;
 
 import team04.project3.constants.ColorConstants;
 import team04.project3.constants.TextConstants;
-import team04.project3.listeners.ServerListener;
 import team04.project3.model.Expression;
-import team04.project3.model.server.ServerModel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -24,6 +22,10 @@ public class ServerStatusView extends  JPanel {
     private JComboBox<String> upperFaceDropDown;
     private JComboBox<String> downFaceDropDown;
     private JComboBox<String> eyeDropDown;
+
+    private JLabel timeLabel;
+    private JTextField timeField;
+    private JPanel panelBuffer;
 
     /**
      * The view that
@@ -123,7 +125,7 @@ public class ServerStatusView extends  JPanel {
 
         
         // Put the main view in a "buffer", this creates a transparent border around the buffer's content
-       /* panelBuffer = new JPanel(new GridBagLayout());
+        /*panelBuffer = new JPanel(new GridBagLayout());
         panelBuffer.setBackground(Color.LIGHT_GRAY);
         panelBuffer.setBorder(new EmptyBorder (8,8,8,8));
         panelBuffer.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
@@ -137,14 +139,14 @@ public class ServerStatusView extends  JPanel {
         panelBuffer.add(new JLabel("EMOSTATE",JLabel.LEFT),constraints);
         createTimeArea(constraints);    
         
-        this.add(panelBuffer, BorderLayout.CENTER);*/
+        this.add(panelBuffer, BorderLayout.CENTER); */
 
     }
     
     /**
      * method that creates the time area and add to the "emostate" panel.
      * 
-     * @param constraints to set the positions of labels and textfields.
+     * @param constraints to set the positions of labels and textfields. */
 
     public void createTimeArea (GridBagConstraints constraints) {
     	
@@ -171,5 +173,5 @@ public class ServerStatusView extends  JPanel {
         constraints.gridx = 2;
         constraints.gridy = 1;
         panelBuffer.add(secondsLabel,constraints);
-    } */
+    }
 }
