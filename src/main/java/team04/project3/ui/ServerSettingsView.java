@@ -1,10 +1,10 @@
-package main.java.team04.project3.ui;
+package team04.project3.ui;
 
 //import com.sun.tools.javadoc.Start;
-import main.java.team04.project3.constants.ColorConstants;
-import main.java.team04.project3.constants.TextConstants;
-import main.java.team04.project3.model.client.ClientModel;
-import main.java.team04.project3.model.server.ServerModel;
+import team04.project3.constants.ColorConstants;
+import team04.project3.constants.TextConstants;
+import team04.project3.model.client.ClientModel;
+import team04.project3.model.server.ServerModel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
