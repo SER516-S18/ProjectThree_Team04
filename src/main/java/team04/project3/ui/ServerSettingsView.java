@@ -25,7 +25,7 @@ public class ServerSettingsView extends JPanel {
     public ServerSettingsView() {
         // Create the settings view with a transparent border encompassing
         this.setLayout(new BorderLayout());
-        this.setBorder(new EmptyBorder(8, 8, 8, 8));
+        this.setBorder(new EmptyBorder(45, 8, 8, 8));
         this.setOpaque(false);
 
         JPanel panelBuffer = new JPanel(new GridLayout(2, 1, 50, 4));

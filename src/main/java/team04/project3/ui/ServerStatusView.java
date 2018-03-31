@@ -3,6 +3,7 @@ package team04.project3.ui;
 import team04.project3.constants.ColorConstants;
 import team04.project3.constants.TextConstants;
 import team04.project3.listeners.ServerListener;
+import team04.project3.model.Expression;
 import team04.project3.model.server.ServerModel;
 
 import javax.swing.*;
@@ -10,67 +11,114 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 /**
- * The view that contains an indicator showing if the server is running
+ * The view that contains an
  * @author  David Henderson (dchende2@asu.edu)
  */
 public class ServerStatusView extends  JPanel {
-    private final Color COLOR_OFF = Color.DARK_GRAY;
-    private final Color COLOR_ON_DIM = new Color(197, 224, 179);
-    private final Color COLOR_ON_BRIGHT = new Color(168,208,141);
 
-    private boolean running;
-    private JLabel labelIndicator;
+    private String[] eyeDropDownValues = new String[] {Expression.BLINK.name, Expression.WINK_LEFT.name, Expression.WINK_RIGHT.name,
+                                                        Expression.LOOK_LEFT.name, Expression.LOOK_RIGHT.name};
+    private String[] upperFaceDropDownValues = new String[] {Expression.BROW_RAISE.name, Expression.BROW_FURROW.name};
+    private String[] downFaceDropDownValues = new String[] {Expression.SMILE.name, Expression.CLENCH.name, Expression.SMIRK_LEFT.name,
+                                                      Expression.SMIRK_RIGHT.name, Expression.LAUGH.name};
+    private JComboBox<String> upperFaceDropDown;
+    private JComboBox<String> downFaceDropDown;
+    private JComboBox<String> eyeDropDown;
 
     /**
-     * The view that contains an indicator showing if the server is running
+     * The view that
      */
     public ServerStatusView() {
-        running = ServerModel.get().isRunning();
-        ServerModel.get().addListener(new ServerListener() {
-            @Override
-            public void started() {
-                // When the server is started, set the label to on
-                running = true;
-                labelIndicator.setForeground(COLOR_ON_BRIGHT);
-            }
-
-            @Override
-            public void shutdown() {
-                // When the server is stopped, set the label to off
-                running = false;
-                labelIndicator.setForeground(COLOR_OFF);
-            }
-        });
-
-        // Create a timer to blink if on or off
-        Timer timer = new Timer(1000, e2 -> {
-            if(running) {
-                if(labelIndicator.getForeground() == COLOR_ON_DIM) {
-                    labelIndicator.setForeground(COLOR_ON_BRIGHT);
-                } else {
-                    labelIndicator.setForeground(COLOR_ON_DIM);
-                }
-            } else {
-                labelIndicator.setForeground(COLOR_OFF);
-            }
-        });
-        timer.start();
 
         this.setLayout(new BorderLayout());
+        this.setBorder(new EmptyBorder(60, 8, 8, 8));
         this.setOpaque(false);
-        this.setBorder(new EmptyBorder(8, 8, 8, 8));
 
-        // Put the main view in a "buffer", this creates a transparent border around the buffer's content
-        JPanel panelBuffer = new JPanel(new BorderLayout());
-        panelBuffer.setBackground(ColorConstants.BACKGROUND_PINK);
-        panelBuffer.setBorder(BorderFactory.createLineBorder(Color.black));
+        JPanel panelBuffer = new JPanel(new GridLayout(4, 2, 50, 25));
+        panelBuffer.setBackground(Color.lightGray);
+        panelBuffer.setBorder(new EmptyBorder(15, 15, 15, 15));
 
-        // Create the indicator (The circular bullet character is Unicode hex 0x2022)
-        labelIndicator = new JLabel(Character.toString((char) 0x2022), SwingConstants.CENTER);
-        labelIndicator.setFont(new Font("Monospaced", Font.PLAIN, TextConstants.DEFAULT_FONT.getSize() * 16));
-        labelIndicator.setForeground(running ? COLOR_ON_BRIGHT : COLOR_OFF);
-        panelBuffer.add(labelIndicator, BorderLayout.CENTER);
+        // Maximum - Prompt
+        JLabel labelPromptMaximum = new JLabel(TextConstants.UPPER_FACE);
+        labelPromptMaximum.setFont(TextConstants.DEFAULT_FONT);
+        labelPromptMaximum.setHorizontalAlignment(JLabel.CENTER);
+        labelPromptMaximum.setVerticalAlignment(JLabel.CENTER);
 
-        this.add(panelBuffer, BorderLayout.CENTER);
+        JPanel panelPromptMaximum = new JPanel();
+        panelPromptMaximum.setBorder(BorderFactory.createLineBorder(Color.black));
+        panelPromptMaximum.setBackground(ColorConstants.BACKGROUND_BLUEGRAY);
+        panelPromptMaximum.add(labelPromptMaximum);
+        panelBuffer.add(panelPromptMaximum);
+
+        // Maximum - Input
+        upperFaceDropDown = new JComboBox<String>(upperFaceDropDownValues);
+        upperFaceDropDown.setMaximumSize(upperFaceDropDown.getPreferredSize());
+        upperFaceDropDown.setVisible(true);
+        upperFaceDropDown.setBackground(Color.white);
+
+        JSpinner spinnerUpperFace = new JSpinner( new SpinnerNumberModel(0.0, -65536, 65536, 0.10) );
+        spinnerUpperFace.setVisible(true);
+        spinnerUpperFace.setBorder(null);
+        spinnerUpperFace.getEditor().getComponent(0).setBackground(Color.gray);
+        spinnerUpperFace.setFont(TextConstants.LARGE_FONT);
+
+        JPanel panelUpperFace = new JPanel(new GridLayout(1,2,0,1));
+        panelUpperFace.setBackground(ColorConstants.BACKGROUND_BLUEGRAY);
+        panelUpperFace.add(upperFaceDropDown, BorderLayout.LINE_START);
+        panelUpperFace.add(spinnerUpperFace, BorderLayout.LINE_END);
+        panelBuffer.add(panelUpperFace);
+
+
+        JLabel labelPromptDownFace = new JLabel(TextConstants.DOWN_FACE);
+        labelPromptDownFace.setFont(TextConstants.DEFAULT_FONT);
+        labelPromptDownFace.setHorizontalAlignment(JLabel.CENTER);
+        labelPromptDownFace.setVerticalAlignment(JLabel.CENTER);
+
+        JPanel panelPromptDownFace = new JPanel();
+        panelPromptDownFace.setBorder(BorderFactory.createLineBorder(Color.black));
+        panelPromptDownFace.setBackground(ColorConstants.BACKGROUND_BLUEGRAY);
+        panelPromptDownFace.add(labelPromptDownFace);
+        panelBuffer.add(panelPromptDownFace);
+
+        downFaceDropDown = new JComboBox<String>(downFaceDropDownValues);
+        downFaceDropDown.setVisible(true);
+        downFaceDropDown.setBackground(Color.white);
+
+        JSpinner spinnerDownFace = new JSpinner( new SpinnerNumberModel(0.0, -65536, 65536, 0.10) );
+        spinnerDownFace.setVisible(true);
+        spinnerDownFace.setBorder(null);
+        spinnerDownFace.getEditor().getComponent(0).setBackground(Color.gray);
+        spinnerDownFace.setFont(TextConstants.LARGE_FONT);
+
+        JPanel panelDown = new JPanel(new GridLayout(1,2,10,1));
+        panelDown.setBackground(ColorConstants.BACKGROUND_BLUEGRAY);
+        panelDown.add(downFaceDropDown);
+        panelDown.add(spinnerDownFace);
+        panelBuffer.add(panelDown);
+
+
+        JLabel labelPromptEye = new JLabel(TextConstants.EYE);
+        labelPromptEye.setFont(TextConstants.DEFAULT_FONT);
+        labelPromptEye.setHorizontalAlignment(JLabel.CENTER);
+        labelPromptEye.setVerticalAlignment(JLabel.CENTER);
+
+        JPanel panelPromptEye = new JPanel();
+        panelPromptEye.setBorder(BorderFactory.createLineBorder(Color.black));
+        panelPromptEye.setBackground(ColorConstants.BACKGROUND_BLUEGRAY);
+        panelPromptEye.add(labelPromptEye);
+        panelBuffer.add(panelPromptEye);
+
+        eyeDropDown = new JComboBox<String>(eyeDropDownValues);
+        eyeDropDown.setVisible(true);
+        eyeDropDown.setBackground(Color.white);
+
+        JPanel panelEye = new JPanel();
+        panelEye.setBackground(ColorConstants.BACKGROUND_BLUEGRAY);
+        panelEye.add(eyeDropDown);
+        panelBuffer.add(panelEye);
+
+        panelBuffer.add(new Panel());
+        panelBuffer.add(new Panel());
+        this.add(panelBuffer);
     }
 }

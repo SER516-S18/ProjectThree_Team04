@@ -24,4 +24,8 @@ public class TextConstants {
 
     public static final String CLIENT_TITLE_VALUE = "EmoCompose";
     public static final String SERVER_TITLE_VALUE = "Emotiv Xavier Control Panel";
+
+    public static final String UPPER_FACE = "Upperface";
+    public static final String DOWN_FACE = "Lowerface";
+    public static final String EYE = "Eye";
 }

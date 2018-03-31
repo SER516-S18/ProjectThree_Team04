@@ -34,7 +34,7 @@ public class ServerView extends JPanel {
 
         // Add the status view (bottom)
         statusView = new ServerStatusView();
-        panelBuffer.add(statusView, BorderLayout.PAGE_END);
+        panelBuffer.add(statusView, BorderLayout.CENTER);
 
 
 
