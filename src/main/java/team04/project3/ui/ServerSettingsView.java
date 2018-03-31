@@ -1,10 +1,10 @@
-package team04.project3.ui;
+package main.java.team04.project3.ui;
 
-import com.sun.tools.javadoc.Start;
-import team04.project3.constants.ColorConstants;
-import team04.project3.constants.TextConstants;
-import team04.project3.model.client.ClientModel;
-import team04.project3.model.server.ServerModel;
+//import com.sun.tools.javadoc.Start;
+import main.java.team04.project3.constants.ColorConstants;
+import main.java.team04.project3.constants.TextConstants;
+import main.java.team04.project3.model.client.ClientModel;
+import main.java.team04.project3.model.server.ServerModel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -45,7 +45,7 @@ public class ServerSettingsView extends JPanel {
         panelBuffer.add(panelPromptMaximum);
 
         // Maximum - Input
-        JSpinner spinnerInputMaximum = new JSpinner( new SpinnerNumberModel(0.25, -65536, 65536, 0.25) );
+        JSpinner spinnerInputMaximum = new JSpinner( new SpinnerNumberModel(0.25, 0, 65536, 0.25) );
         spinnerInputMaximum.setVisible(true);
         spinnerInputMaximum.setBorder(null);
         spinnerInputMaximum.getEditor().getComponent(0).setBackground(ColorConstants.BACKGROUND_PINK);
@@ -58,6 +58,7 @@ public class ServerSettingsView extends JPanel {
         panelBuffer.add(panelInputMaximum);
 
         JCheckBox autoResetCheckBox = new JCheckBox("Auto Reset");
+        autoResetCheckBox.setBackground(Color.LIGHT_GRAY);
         panelBuffer.add(autoResetCheckBox);
 
         JButton sendButton = new JButton(buttonState);
