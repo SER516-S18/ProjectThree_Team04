@@ -1,6 +1,7 @@
 package team04.project3.ui;
 
 import team04.project3.constants.ColorConstants;
+import team04.project3.constants.TextConstants;
 import team04.project3.util.Log;
 
 import javax.swing.*;
@@ -63,15 +64,20 @@ public class AppView extends JFrame {
      */
     public void init() {
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setTitle("SER516 Project Two: Team 4");
 
-        this.setMinimumSize(new Dimension(800, 600));
+        if (_type == TYPE_SERVER) {
+            // Add top toolbar component
+            viewToolbar = new AppToolbarView();
+            this.add(viewToolbar, BorderLayout.PAGE_START);
+            this.setTitle(TextConstants.SERVER_TITLE_VALUE);
+            this.setMinimumSize(new Dimension(600, 800));
+        } else {
+            this.setTitle(TextConstants.CLIENT_TITLE_VALUE);
+            this.setMinimumSize(new Dimension(800, 600));
+        }
+
         this.setLayout(new BorderLayout(8, 8));
         this.setBackground(ColorConstants.BACKGROUND_BLUE);
-
-        // Add top toolbar component
-        viewToolbar = new AppToolbarView();
-        this.add(viewToolbar, BorderLayout.PAGE_START);
 
         // Add respective Client or Server panel to the center
         this.updateType();
@@ -103,7 +109,7 @@ public class AppView extends JFrame {
         if(_type == AppView.TYPE_CLIENT) {
             Log.i("Application initializing as a Client", AppView.class);
             viewMenu = new ClientView();
-            this.setTitle("Client - SER516 Project Two: Team 4");
+            this.setTitle(TextConstants.CLIENT_TITLE_VALUE);
 
             if(this.viewToolbar != null)
                 this.viewToolbar.updateType();
@@ -112,7 +118,7 @@ public class AppView extends JFrame {
         else if(_type == AppView.TYPE_SERVER) {
             Log.i("Application initializing as a Server", AppView.class);
             viewMenu = new ServerView();
-            this.setTitle("Server - SER516 Project Two: Team 4");
+            this.setTitle(TextConstants.SERVER_TITLE_VALUE);
 
             if(this.viewToolbar != null)
                 this.viewToolbar.updateType();

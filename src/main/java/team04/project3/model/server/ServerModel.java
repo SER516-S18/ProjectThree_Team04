@@ -35,6 +35,7 @@ public class ServerModel {
 
     private int PORT;
     private long INTERVAL;
+    private boolean isAutoRepeat;
 
     private ArrayList<ServerListener> listeners = new ArrayList<>();
     private ServerEndpoint endpoint;
@@ -192,5 +193,13 @@ public class ServerModel {
      */
     public int getPort() {
         return PORT;
+    }
+
+    public boolean isAutoRepeat() {
+        return isAutoRepeat;
+    }
+
+    public void setAutoRepeat(boolean autoRepeat) {
+        isAutoRepeat = autoRepeat;
     }
 }

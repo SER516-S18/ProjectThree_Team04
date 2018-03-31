@@ -24,17 +24,19 @@ public class ServerView extends JPanel {
         this.setBorder(new EmptyBorder(8, 8, 8, 8));
 
         // Buffer for an opaque border surrounding ServerView, the buffer is the actual visible panel
-        JPanel panelBuffer = new JPanel(new GridLayout(1, 2, 8, 8));
+        JPanel panelBuffer = new JPanel(new BorderLayout(8, 8));
         panelBuffer.setBackground(ColorConstants.BACKGROUND_GRAY);
         panelBuffer.setBorder(BorderFactory.createLineBorder(Color.black));
 
-        // Add the status view (left)
-        statusView = new ServerStatusView();
-        panelBuffer.add(statusView, BorderLayout.LINE_START);
-
-        // Add the settings view (right)
+        // Add the settings view (top)
         settingsView = new ServerSettingsView();
-        panelBuffer.add(settingsView, BorderLayout.LINE_END);
+        panelBuffer.add(settingsView, BorderLayout.PAGE_START);
+
+        // Add the status view (bottom)
+        statusView = new ServerStatusView();
+        panelBuffer.add(statusView, BorderLayout.PAGE_END);
+
+
 
         this.add(panelBuffer, BorderLayout.CENTER);
     }

@@ -1,10 +1,10 @@
 package team04.project3.ui;
 
-import team04.project2.constants.ColorConstants;
-import team04.project2.constants.TextConstants;
-import team04.project2.util.Log;
-import team04.project2.util.LogRecord;
-import team04.project2.util.Terminal;
+import team04.project3.constants.ColorConstants;
+import team04.project3.constants.TextConstants;
+import team04.project3.util.Log;
+import team04.project3.util.LogRecord;
+import team04.project3.util.Terminal;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -105,7 +105,7 @@ public class ConsoleView extends JPanel implements ActionListener{
     	
     	clearLogButton = new JButton("Clear Log");
         clearLogButton.setBackground(Color.BLACK);
-        clearLogButton.setForeground(Color.WHITE);
+        clearLogButton.setForeground(Color.BLUE);
         clearLogButton.addActionListener(this);;
         clearLogButton.setPreferredSize(new Dimension(100,25));
         clearLogButton.setHorizontalAlignment(SwingConstants.CENTER);
