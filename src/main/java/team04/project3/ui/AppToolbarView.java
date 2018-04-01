@@ -43,10 +43,10 @@ public class AppToolbarView extends JToolBar {
         // When client is starting or stopping, update button
         ClientModel.get().addListener(new ClientListener() {
             @Override
-            public void changedValues() {}
+            public void valuesChanged() {}
 
             @Override
-            public void changedChannelCount() {}
+            public void valuesReset() { }
 
             @Override
             public void started() {

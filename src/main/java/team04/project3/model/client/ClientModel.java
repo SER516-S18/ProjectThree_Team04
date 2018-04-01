@@ -152,6 +152,18 @@ public class ClientModel {
         }
     }
 
+    private void notifyValuesChanged() {
+        for(ClientListener listener : listeners) {
+            listener.valuesChanged();
+        }
+    }
+
+    private void notifyValuesReset() {
+        for(ClientListener listener : listeners) {
+            listener.valuesReset();
+        }
+    }
+
     /**
      * Check if the client is running
      * @return boolean if client is running

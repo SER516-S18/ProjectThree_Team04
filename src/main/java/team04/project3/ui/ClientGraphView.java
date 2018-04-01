@@ -30,10 +30,10 @@ public class ClientGraphView extends JPanel {
     public ClientGraphView() {
         ClientModel.get().addListener(new ClientListener() {
             @Override
-            public void changedValues() { }
+            public void valuesChanged() { }
 
             @Override
-            public void changedChannelCount() { }
+            public void valuesReset() { }
 
             @Override
             public void started() {

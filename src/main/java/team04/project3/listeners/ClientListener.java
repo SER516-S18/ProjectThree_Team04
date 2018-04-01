@@ -11,12 +11,9 @@ public interface ClientListener {
     /**
      * Called when values have been added or updated
      */
-    public void changedValues();
+    public void valuesChanged();
 
-    /**
-     * Called when the Client's number of channels changes (added/removed)
-     */
-    public void changedChannelCount();
+    public void valuesReset();
 
     /**
      * Called when the Client is started (and connecting)
