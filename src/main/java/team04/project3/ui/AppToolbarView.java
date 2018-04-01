@@ -38,6 +38,12 @@ public class AppToolbarView extends JToolBar {
                 if(AppView.get().isServer())
                     buttonToggle.setText("Start");
             }
+
+            @Override
+            public void packetSent() { }
+
+            @Override
+            public void packetRepeatingToggled(boolean repeating) { }
         });
 
         // When client is starting or stopping, update button

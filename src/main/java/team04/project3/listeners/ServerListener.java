@@ -18,4 +18,15 @@ public interface ServerListener {
      * Called when the server is stopped (and connections are closed)
      */
     public void shutdown();
+
+    /**
+     * Called when a packet it sent
+     */
+    public void packetSent();
+
+    /**
+     * Called when the model is set to start or stop repeatedly send packets
+     * @param repeating if the is set to start or stop repeatedly send packets
+     */
+    public void packetRepeatingToggled(boolean repeating);
 }

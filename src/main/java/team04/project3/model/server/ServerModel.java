@@ -57,7 +57,7 @@ public class ServerModel {
         this.setPacket(EmostatePacketBuilder.getZeroedEmostatePacket());
 
         output = () -> {
-            while(this.isRunning() && this.isPacketAutoRepeatMode() && this.isRepeatingPackets()) {
+            while(this.isRunning() && this.isPacketRepeatMode() && this.isRepeatingPackets()) {
                 try {
                     ServerModel.this.sendPacket();
                     Thread.sleep(INTERVAL);
@@ -156,6 +156,18 @@ public class ServerModel {
         }
     }
 
+    private void notifyPacketSent() {
+        for(ServerListener listener : listeners) {
+            listener.packetSent();
+        }
+    }
+
+    private void notifyPacketRepeatingToggled() {
+        for(ServerListener listener : listeners) {
+            listener.packetRepeatingToggled(repeating);
+        }
+    }
+
     /**
      * Send the packet to send
      * @param packet The packet to send to the client each tick
@@ -221,7 +233,7 @@ public class ServerModel {
      * Gets if the packets are set to auto-repeat, if on
      * @return If the packets auto-repeat, if on
      */
-    public boolean isPacketAutoRepeatMode() {
+    public boolean isPacketRepeatMode() {
         return REPEAT;
     }
 
@@ -229,7 +241,7 @@ public class ServerModel {
      * Sets the model to auto-repeat mode
      * @param repeat If the model should auto-repeat
      */
-    public void setPacketAutoRepeatMode(boolean repeat) {
+    public void setPacketRepeatMode(boolean repeat) {
         if(REPEAT == repeat)
             return;
 
@@ -237,6 +249,7 @@ public class ServerModel {
             throw new IllegalStateException("Cannot turn off auto-repeating while repeater is running");
 
         REPEAT = repeat;
+
     }
 
     /**
@@ -251,7 +264,7 @@ public class ServerModel {
      * Method to start or stop sending packets (in auto-repeat mode)
      */
     public void sendPacketsToggle() {
-        if(!this.isPacketAutoRepeatMode())
+        if(!this.isPacketRepeatMode())
             throw new IllegalStateException("Cannot send repeating packets while model is not set to auto-repeat");
         if(!this.isRunning())
             throw new IllegalStateException("Cannot send packets while the model's websocket server is not running");
@@ -262,13 +275,15 @@ public class ServerModel {
             repeating = true;
             executors.submit(output);
         }
+
+        this.notifyPacketRepeatingToggled();
     }
 
     /**
      * Method to send an individual packet (if not in auto-repeat mode)
      */
     public void sendPacketIndividual() {
-        if(this.isPacketAutoRepeatMode())
+        if(this.isPacketRepeatMode())
             throw new IllegalStateException("Cannot send individual packet while the model is set to auto-repeat");
         if(!this.isRunning())
             throw new IllegalStateException("Cannot send packets while the model's websocket server is not running");
@@ -282,5 +297,6 @@ public class ServerModel {
     private void sendPacket() {
         endpoint.send(packet.setTick(tick).build());
         tick += (INTERVAL / 1000f);
+        this.notifyPacketSent();
     }
 }
