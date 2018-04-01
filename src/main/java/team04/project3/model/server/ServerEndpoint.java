@@ -17,7 +17,14 @@ import java.util.Set;
     decoders = MessageDecoder.class,
     encoders = MessageEncoder.class
 )
+
 public class ServerEndpoint {
+    private ServerModel model;
+
+    public ServerEndpoint(ServerModel model) {
+        this.model = model;
+    }
+
     static Set<Session> sessions = Collections.synchronizedSet(new HashSet<>());
 
     @OnOpen

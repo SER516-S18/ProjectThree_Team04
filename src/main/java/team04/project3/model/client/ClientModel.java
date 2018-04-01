@@ -2,6 +2,7 @@ package team04.project3.model.client;
 
 import org.glassfish.tyrus.client.ClientManager;
 import team04.project3.listeners.ClientListener;
+import team04.project3.model.EmostatePacket;
 import team04.project3.util.Log;
 
 import javax.websocket.DeploymentException;
@@ -12,6 +13,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * The main model for client
@@ -53,8 +57,11 @@ public class ClientModel {
 
     private final ArrayList<ClientListener> listeners = new ArrayList<>();
     private ClientManager client;
+    private ClientEndpoint endpoint;
     private Session session;
     private boolean run = false;
+    private LinkedList<EmostatePacket> packets;
+    private EmostatePacket packetNewest;
 
     /**
      * Default constructor, defaulting to port 1726 and LOCALHOST
@@ -72,6 +79,8 @@ public class ClientModel {
         this.setHost(host);
         this.setPort(port);
 
+        packets = new LinkedList<>();
+
         // Shutdown client on program shutdown
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             if(ClientModel.this.isRunning())
@@ -88,7 +97,8 @@ public class ClientModel {
 
         try {
             client = ClientManager.createClient();
-            session = client.connectToServer(ClientEndpoint.class, new URI("ws://" + HOST.getHostAddress() + ":" + PORT + "/ws"));
+            endpoint = new ClientEndpoint(this);
+            session = client.connectToServer(endpoint, new URI("ws://" + HOST.getHostAddress() + ":" + PORT + "/ws"));
 
             this.run = true;
             this.notifyClientStarted();
@@ -158,10 +168,20 @@ public class ClientModel {
         }
     }
 
+    private void notifyValuesAdded() {
+        for(ClientListener listener : listeners) {
+            listener.valuesAdded();
+        }
+
+        this.notifyValuesChanged();
+    }
+
     private void notifyValuesReset() {
         for(ClientListener listener : listeners) {
             listener.valuesReset();
         }
+
+        this.notifyValuesChanged();
     }
 
     /**
@@ -212,5 +232,36 @@ public class ClientModel {
      */
     public void setHostToLocalhost() {
         this.setHost(LOCALHOST);
+    }
+
+    public void addPacket(EmostatePacket packet) {
+        if(packet == null)
+            throw new IllegalArgumentException("Packet must be non-null");
+
+        // Reset if the server sends a packet earlier in time
+        if(packet.getTick() < packetNewest.getTick())
+            resetPackets();
+
+        packetNewest = packet;
+        packets.add(packet);
+        this.notifyValuesAdded();
+    }
+
+    public void resetPackets() {
+        packetNewest = null;
+        packets.clear();
+        this.notifyValuesReset();
+    }
+
+    public List<EmostatePacket> getPackets() {
+        return Collections.unmodifiableList(packets);
+    }
+
+    public EmostatePacket getNewestPacket() {
+        return packetNewest;
+    }
+
+    public int getPacketsCount() {
+        return packets.size();
     }
 }

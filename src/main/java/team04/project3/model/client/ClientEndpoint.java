@@ -12,8 +12,14 @@ import javax.websocket.OnMessage;
 )
 
 public class ClientEndpoint {
+    private ClientModel model;
+
+    public ClientEndpoint(ClientModel model) {
+        this.model = model;
+    }
+
     @OnMessage
     public void onMessage(EmostatePacket message) {
-        // Message
+        model.addPacket(message);
     }
 }

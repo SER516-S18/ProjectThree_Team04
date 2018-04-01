@@ -37,9 +37,9 @@ public class ServerModel {
 
     // Server - Websocket state
     private ArrayList<ServerListener> listeners = new ArrayList<>();
-    private boolean run = false;
-    private ServerEndpoint endpoint;
     private Server server;
+    private ServerEndpoint endpoint;
+    private boolean run = false;
 
     // Server - Packet state/behavior
     private EmostatePacketBuilder packet;
@@ -88,7 +88,7 @@ public class ServerModel {
 
         try {
             // Start server
-            endpoint = new ServerEndpoint();
+            endpoint = new ServerEndpoint(this);
             server = new Server("localhost", PORT, "/ws", null, ServerEndpoint.class);
             server.start();
 
