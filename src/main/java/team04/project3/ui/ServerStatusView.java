@@ -32,6 +32,7 @@ public class ServerStatusView extends  JPanel {
     private JTextField timeField;
     private JSpinner spinnerUpperFace;
     private JSpinner spinnerDownFace;
+    private JRadioButton activeRadioButton;
     
     
     /**
@@ -166,9 +167,16 @@ public class ServerStatusView extends  JPanel {
             }
         });
 
+        activeRadioButton = new JRadioButton("Active");
+        activeRadioButton.setBackground(Color.LIGHT_GRAY);
+        activeRadioButton.addActionListener(e -> {
+            makeAndSetExpressionPacket();
+        });
+
         JPanel panelEye = new JPanel();
         panelEye.setBackground(ColorConstants.BACKGROUND_BLUEGRAY);
         panelEye.add(eyeDropDown);
+        panelEye.add(activeRadioButton);
         panelBuffer.add(panelEye);
 
 
@@ -244,7 +252,7 @@ public class ServerStatusView extends  JPanel {
         EmostatePacketBuilder emostatePacketBuilder = new EmostatePacketBuilder();
         emostatePacketBuilder.setExpression(Expression.expressionMap.get(upperFaceExpression), upperFaceEmotionValue);
         emostatePacketBuilder.setExpression(Expression.expressionMap.get(downFaceExpression), downFaceEmotionValue);
-        emostatePacketBuilder.setExpression(Expression.expressionMap.get(eyeExpression), true);
+        emostatePacketBuilder.setExpression(Expression.expressionMap.get(eyeExpression), activeRadioButton.isSelected());
 
         ServerModel.get().setPacket(emostatePacketBuilder);
     }
