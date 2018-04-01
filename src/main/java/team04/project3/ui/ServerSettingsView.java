@@ -71,10 +71,10 @@ public class ServerSettingsView extends JPanel {
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange()==ItemEvent.SELECTED) {
                     buttonState = "Start";
-                    ServerModel.get().setAutoRepeat(true);
+                    ServerModel.get().setPacketAutoRepeatMode(true);
                 } else {
                     buttonState = "Send";
-                    ServerModel.get().setAutoRepeat(false);
+                    ServerModel.get().setPacketAutoRepeatMode(false);
                 }
 
                 sendButton.setText(buttonState);

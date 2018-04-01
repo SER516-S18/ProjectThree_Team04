@@ -57,7 +57,7 @@ public class ServerModel {
         this.setPacket(EmostatePacketBuilder.getZeroedEmostatePacket());
 
         output = () -> {
-            while(this.isRunning() && this.doesAutoRepeat() && this.isRepeatingPackets()) {
+            while(this.isRunning() && this.isPacketAutoRepeatMode() && this.isRepeatingPackets()) {
                 try {
                     ServerModel.this.sendPacket();
                     Thread.sleep(INTERVAL);
@@ -221,7 +221,7 @@ public class ServerModel {
      * Gets if the packets are set to auto-repeat, if on
      * @return If the packets auto-repeat, if on
      */
-    public boolean doesAutoRepeat() {
+    public boolean isPacketAutoRepeatMode() {
         return REPEAT;
     }
 
@@ -229,7 +229,7 @@ public class ServerModel {
      * Sets the model to auto-repeat mode
      * @param repeat If the model should auto-repeat
      */
-    public void setAutoRepeat(boolean repeat) {
+    public void setPacketAutoRepeatMode(boolean repeat) {
         if(REPEAT == repeat)
             return;
 
@@ -251,7 +251,7 @@ public class ServerModel {
      * Method to start or stop sending packets (in auto-repeat mode)
      */
     public void sendPacketsToggle() {
-        if(!this.doesAutoRepeat())
+        if(!this.isPacketAutoRepeatMode())
             throw new IllegalStateException("Cannot send repeating packets while model is not set to auto-repeat");
         if(!this.isRunning())
             throw new IllegalStateException("Cannot send packets while the model's websocket server is not running");
@@ -268,7 +268,7 @@ public class ServerModel {
      * Method to send an individual packet (if not in auto-repeat mode)
      */
     public void sendPacketIndividual() {
-        if(this.doesAutoRepeat())
+        if(this.isPacketAutoRepeatMode())
             throw new IllegalStateException("Cannot send individual packet while the model is set to auto-repeat");
         if(!this.isRunning())
             throw new IllegalStateException("Cannot send packets while the model's websocket server is not running");
