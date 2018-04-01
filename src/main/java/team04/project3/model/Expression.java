@@ -2,6 +2,10 @@ package team04.project3.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
+
 public enum Expression {
     @SerializedName("BLINK") BLINK("Blink", false),
     @SerializedName("WINK_RIGHT") WINK_RIGHT("Right wink", false),
@@ -16,13 +20,21 @@ public enum Expression {
     @SerializedName("SMIRK_RIGHT") SMIRK_RIGHT("Right smirk", true),
     @SerializedName("LAUGH") LAUGH("Laugh", true);
 
-    public String name;
-    private boolean floating;
+    public static Map<String, Expression> expressionMap = new HashMap<>();
 
-    private Expression(String name, boolean floating) {
+    static {
+
+        EnumSet.allOf(Expression.class)
+                .forEach(ex -> expressionMap.put(ex.name, ex));
+    }
+
+    Expression(String name, boolean floating) {
         this.name = name;
         this.floating = floating;
     }
+
+    public String name;
+    private boolean floating;
 
     public boolean isFloating() {
         return floating;

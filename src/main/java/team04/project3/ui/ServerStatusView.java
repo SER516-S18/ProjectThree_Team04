@@ -2,11 +2,16 @@ package team04.project3.ui;
 
 import team04.project3.constants.ColorConstants;
 import team04.project3.constants.TextConstants;
+import team04.project3.model.EmostatePacket;
 import team04.project3.model.Expression;
+import team04.project3.model.server.ServerModel;
+import team04.project3.model.websocket.EmostatePacketBuilder;
+import team04.project3.util.Log;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.text.ParseException;
 
 /**
  * The view that contains an
@@ -24,6 +29,9 @@ public class ServerStatusView extends  JPanel {
     private JComboBox<String> eyeDropDown;
 
     private JPanel panelBuffer;
+    private JTextField timeField;
+    private JSpinner spinnerUpperFace;
+    private JSpinner spinnerDownFace;
     
     
     /**
@@ -40,8 +48,7 @@ public class ServerStatusView extends  JPanel {
         panelBuffer.setBorder(new EmptyBorder(15, 15, 15, 15));
         panelBuffer.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 
-        panelBuffer.add(createTimePanel());
-        panelBuffer.add(new JLabel());
+        createTimePanel();
         
         // Maximum - Prompt
         JLabel labelPromptMaximum = new JLabel(TextConstants.UPPER_FACE);
@@ -61,11 +68,20 @@ public class ServerStatusView extends  JPanel {
         upperFaceDropDown.setVisible(true);
         upperFaceDropDown.setBackground(Color.white);
 
-        JSpinner spinnerUpperFace = new JSpinner( new SpinnerNumberModel(0.0, -65536, 65536, 0.10) );
+        spinnerUpperFace = new JSpinner( new SpinnerNumberModel(0.0f, 0.0f, 65536f, 0.10f) );
         spinnerUpperFace.setVisible(true);
         spinnerUpperFace.setBorder(null);
         spinnerUpperFace.getEditor().getComponent(0).setBackground(Color.gray);
         spinnerUpperFace.setFont(TextConstants.LARGE_FONT);
+
+        spinnerUpperFace.addChangeListener(event -> {
+            try {
+                spinnerUpperFace.commitEdit();
+                makeExpressionPacket();
+            } catch (ParseException e) {
+                Log.w("Failed to parse upper face spinner input", ServerStatusView.class);
+            }
+        });
 
         JPanel panelUpperFace = new JPanel(new GridLayout(1,2,0,1));
         panelUpperFace.setBackground(ColorConstants.BACKGROUND_BLUEGRAY);
@@ -88,12 +104,22 @@ public class ServerStatusView extends  JPanel {
         downFaceDropDown = new JComboBox<String>(downFaceDropDownValues);
         downFaceDropDown.setVisible(true);
         downFaceDropDown.setBackground(Color.white);
+        
 
-        JSpinner spinnerDownFace = new JSpinner( new SpinnerNumberModel(0.0, -65536, 65536, 0.10) );
+        spinnerDownFace = new JSpinner( new SpinnerNumberModel(0.0f, 0.0f, 65536f, 0.10f) );
         spinnerDownFace.setVisible(true);
         spinnerDownFace.setBorder(null);
         spinnerDownFace.getEditor().getComponent(0).setBackground(Color.gray);
         spinnerDownFace.setFont(TextConstants.LARGE_FONT);
+
+        spinnerDownFace.addChangeListener(event -> {
+            try {
+                spinnerDownFace.commitEdit();
+                makeExpressionPacket();
+            } catch (ParseException e) {
+                Log.w("Failed to parse down face spinner input", ServerStatusView.class);
+            }
+        });
 
         JPanel panelDown = new JPanel(new GridLayout(1,2,10,1));
         panelDown.setBackground(ColorConstants.BACKGROUND_BLUEGRAY);
@@ -134,11 +160,11 @@ public class ServerStatusView extends  JPanel {
      * 
      * @param constraints to set the positions of labels and textfields.*/
 
-    public JPanel createTimePanel () {
+    public void createTimePanel () {
     	
     	JPanel timePanel = new JPanel();
     	timePanel.setLayout(new GridBagLayout());
-    	timePanel.setBackground(Color.lightGray);
+    	timePanel.setBackground(ColorConstants.BACKGROUND_BLUEGRAY);
         
     	
         GridBagConstraints constraints = new GridBagConstraints();
@@ -152,16 +178,24 @@ public class ServerStatusView extends  JPanel {
         constraints.weightx = 0;
         constraints.gridx = 0;
         constraints.gridy = 1;
-        timePanel.add(timeLabel);
+
+        JPanel panelTime = new JPanel();
+        panelTime.setBorder(BorderFactory.createLineBorder(Color.black));
+        panelTime.setBackground(ColorConstants.BACKGROUND_BLUEGRAY);
+        panelTime.add(timeLabel);
+        panelBuffer.add(panelTime);
         
-        JTextField timeField = new JTextField(11);
-        timeField.setBorder(BorderFactory.createLineBorder(Color.black));
+        timeField = new JTextField(10);
+
         timeField.setVisible(true);
         timeField.setMinimumSize(timeField.getPreferredSize());
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.weightx = 0.1;
         constraints.gridx = 1;
         constraints.gridy = 1;
+        timeField.setBackground(Color.gray);
+        timeField.setText("0");
+        timeField.setEditable(false);
         timePanel.add(timeField);
         
         JLabel secondsLabel = new JLabel(" Seconds");
@@ -171,6 +205,22 @@ public class ServerStatusView extends  JPanel {
         constraints.gridy = 1;
         timePanel.add(secondsLabel);
         
-        return timePanel;
+        panelBuffer.add(timePanel);
+    }
+
+    public void makeExpressionPacket() {
+
+        String upperFaceExpression = upperFaceDropDown.getSelectedItem().toString();
+        float upperFaceEmotionValue =  ((float) spinnerUpperFace.getValue() * 1000f);
+
+        String downFaceExpression = downFaceDropDown.getSelectedItem().toString();
+        float downFaceEmotionValue = ((float) spinnerUpperFace.getValue() * 1000f);
+
+        String eyeExpression = eyeDropDown.getSelectedItem().toString();
+
+        EmostatePacketBuilder emostatePacketBuilder = new EmostatePacketBuilder();
+        emostatePacketBuilder.setExpression(Expression.expressionMap.get(upperFaceExpression), upperFaceEmotionValue);
+        emostatePacketBuilder.setExpression(Expression.expressionMap.get(downFaceExpression), downFaceEmotionValue);
+        emostatePacketBuilder.setExpression(Expression.expressionMap.get(eyeExpression), true);
     }
 }
