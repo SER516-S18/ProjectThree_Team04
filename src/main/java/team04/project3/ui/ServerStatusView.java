@@ -230,7 +230,7 @@ public class ServerStatusView extends  JPanel {
         
         panelBuffer.add(timePanel);
     }
-    
+
     private void makeAndSetExpressionPacket() {
 
         String upperFaceExpression = upperFaceDropDown.getSelectedItem().toString();
