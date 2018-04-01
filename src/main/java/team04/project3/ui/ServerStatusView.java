@@ -68,7 +68,15 @@ public class ServerStatusView extends  JPanel {
         upperFaceDropDown.setVisible(true);
         upperFaceDropDown.setBackground(Color.white);
 
-        spinnerUpperFace = new JSpinner( new SpinnerNumberModel(0.0f, 0.0f, 65536f, 0.10f) );
+        upperFaceDropDown.addActionListener(event -> {
+            try {
+                makeAndSetExpressionPacket();
+            } catch (Exception e) {
+                Log.w("Failed to parse upper face drop down value", ServerStatusView.class);
+            }
+        });
+
+        spinnerUpperFace = new JSpinner( new SpinnerNumberModel(0.0d, 0.0d, 65536d, 0.10d) );
         spinnerUpperFace.setVisible(true);
         spinnerUpperFace.setBorder(null);
         spinnerUpperFace.getEditor().getComponent(0).setBackground(Color.gray);
@@ -77,7 +85,7 @@ public class ServerStatusView extends  JPanel {
         spinnerUpperFace.addChangeListener(event -> {
             try {
                 spinnerUpperFace.commitEdit();
-                makeExpressionPacket();
+                makeAndSetExpressionPacket();
             } catch (ParseException e) {
                 Log.w("Failed to parse upper face spinner input", ServerStatusView.class);
             }
@@ -104,9 +112,16 @@ public class ServerStatusView extends  JPanel {
         downFaceDropDown = new JComboBox<String>(downFaceDropDownValues);
         downFaceDropDown.setVisible(true);
         downFaceDropDown.setBackground(Color.white);
-        
 
-        spinnerDownFace = new JSpinner( new SpinnerNumberModel(0.0f, 0.0f, 65536f, 0.10f) );
+        downFaceDropDown.addActionListener(event -> {
+            try {
+                makeAndSetExpressionPacket();
+            } catch (Exception e) {
+                Log.w("Failed to parse down face drop down value", ServerStatusView.class);
+            }
+        });
+
+        spinnerDownFace = new JSpinner( new SpinnerNumberModel(0.0d, 0.0d, 65536d, 0.10d) );
         spinnerDownFace.setVisible(true);
         spinnerDownFace.setBorder(null);
         spinnerDownFace.getEditor().getComponent(0).setBackground(Color.gray);
@@ -115,7 +130,7 @@ public class ServerStatusView extends  JPanel {
         spinnerDownFace.addChangeListener(event -> {
             try {
                 spinnerDownFace.commitEdit();
-                makeExpressionPacket();
+                makeAndSetExpressionPacket();
             } catch (ParseException e) {
                 Log.w("Failed to parse down face spinner input", ServerStatusView.class);
             }
@@ -142,6 +157,14 @@ public class ServerStatusView extends  JPanel {
         eyeDropDown = new JComboBox<String>(eyeDropDownValues);
         eyeDropDown.setVisible(true);
         eyeDropDown.setBackground(Color.white);
+
+        eyeDropDown.addActionListener(event -> {
+            try {
+                makeAndSetExpressionPacket();
+            } catch (Exception e) {
+                Log.w("Failed to parse eye face drop down value", ServerStatusView.class);
+            }
+        });
 
         JPanel panelEye = new JPanel();
         panelEye.setBackground(ColorConstants.BACKGROUND_BLUEGRAY);
@@ -207,14 +230,14 @@ public class ServerStatusView extends  JPanel {
         
         panelBuffer.add(timePanel);
     }
-
-    public void makeExpressionPacket() {
+    
+    private void makeAndSetExpressionPacket() {
 
         String upperFaceExpression = upperFaceDropDown.getSelectedItem().toString();
-        float upperFaceEmotionValue =  ((float) spinnerUpperFace.getValue() * 1000f);
+        float upperFaceEmotionValue =  (float) ((double) spinnerUpperFace.getValue());
 
         String downFaceExpression = downFaceDropDown.getSelectedItem().toString();
-        float downFaceEmotionValue = ((float) spinnerUpperFace.getValue() * 1000f);
+        float downFaceEmotionValue = (float) ((double) spinnerUpperFace.getValue());
 
         String eyeExpression = eyeDropDown.getSelectedItem().toString();
 
@@ -222,5 +245,7 @@ public class ServerStatusView extends  JPanel {
         emostatePacketBuilder.setExpression(Expression.expressionMap.get(upperFaceExpression), upperFaceEmotionValue);
         emostatePacketBuilder.setExpression(Expression.expressionMap.get(downFaceExpression), downFaceEmotionValue);
         emostatePacketBuilder.setExpression(Expression.expressionMap.get(eyeExpression), true);
+
+        ServerModel.get().setPacket(emostatePacketBuilder);
     }
 }
