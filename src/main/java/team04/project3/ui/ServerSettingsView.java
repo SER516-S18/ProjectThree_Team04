@@ -1,15 +1,15 @@
 package team04.project3.ui;
 
-//import com.sun.tools.javadoc.Start;
 import team04.project3.constants.ColorConstants;
 import team04.project3.constants.TextConstants;
 import team04.project3.model.server.ServerModel;
+import team04.project3.util.Log;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.text.ParseException;
 
 /**
  * The right hand side to change the output min/max/frequency
@@ -44,20 +44,32 @@ public class ServerSettingsView extends JPanel {
         panelBuffer.add(panelPromptMaximum);
 
         // Maximum - Input
-        JSpinner spinnerInputMaximum = new JSpinner( new SpinnerNumberModel(0.25, 0, 65536, 0.25) );
-        spinnerInputMaximum.setVisible(true);
-        spinnerInputMaximum.setBorder(null);
-        spinnerInputMaximum.getEditor().getComponent(0).setBackground(ColorConstants.BACKGROUND_PINK);
-        spinnerInputMaximum.setFont(TextConstants.LARGE_FONT);
+        JSpinner spinnerInputInterval = new JSpinner( new SpinnerNumberModel(0.25d, 0.01d, 65536d, 0.25d) );
+        spinnerInputInterval.setVisible(true);
+        spinnerInputInterval.setBorder(null);
+        spinnerInputInterval.getEditor().getComponent(0).setBackground(ColorConstants.BACKGROUND_PINK);
+        spinnerInputInterval.addChangeListener(event -> {
+            try {
+                spinnerInputInterval.commitEdit();
+                long interval = (long) ((double) spinnerInputInterval.getValue() * 1000d);
+                ServerModel.get().setAutoRepeatInterval(interval);
+            } catch (ParseException e) {
+                Log.w("Failed to parse interval spinner input", ServerSettingsView.class);
+            }
+        });
+        spinnerInputInterval.setFont(TextConstants.LARGE_FONT);
 
-        JPanel panelInputMaximum = new JPanel();
-        panelInputMaximum.setBorder(BorderFactory.createLineBorder(Color.black));
-        panelInputMaximum.setBackground(ColorConstants.BACKGROUND_PINK);
-        panelInputMaximum.add(spinnerInputMaximum);
-        panelBuffer.add(panelInputMaximum);
+        JPanel panelInputInterval = new JPanel();
+        panelInputInterval.setBorder(BorderFactory.createLineBorder(Color.black));
+        panelInputInterval.setBackground(ColorConstants.BACKGROUND_PINK);
+        panelInputInterval.add(spinnerInputInterval);
+        panelBuffer.add(panelInputInterval);
 
         JCheckBox autoResetCheckBox = new JCheckBox("Auto Reset");
         autoResetCheckBox.setBackground(Color.LIGHT_GRAY);
+        autoResetCheckBox.addActionListener(e -> {
+            ServerModel.get().setPacketRepeatMode(autoResetCheckBox.isSelected());
+        });
         panelBuffer.add(autoResetCheckBox);
 
         JButton sendButton = new JButton(buttonState);
@@ -67,28 +79,35 @@ public class ServerSettingsView extends JPanel {
         sendButton.setFocusPainted(false);
         panelBuffer.add(sendButton);
 
-        autoResetCheckBox.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent e) {
-                if (e.getStateChange()==ItemEvent.SELECTED) {
-                    buttonState = "Start";
-                    ServerModel.get().setPacketRepeatMode(true);
-                } else {
-                    buttonState = "Send";
-                    ServerModel.get().setPacketRepeatMode(false);
-                }
-
-                sendButton.setText(buttonState);
+        autoResetCheckBox.addItemListener(e -> {
+            if (e.getStateChange()==ItemEvent.SELECTED) {
+                buttonState = "Start";
+                ServerModel.get().setPacketRepeatMode(true);
+            } else {
+                buttonState = "Send";
+                ServerModel.get().setPacketRepeatMode(false);
             }
+
+            sendButton.setText(buttonState);
         });
 
         sendButton.addActionListener(e -> {
             if (ServerModel.get().isRunning()) {
-                sendButton.setText(buttonState);
-                ServerModel.get().shutdown();
+                if(ServerModel.get().isPacketRepeatMode()) {
+                    // Repeatedly send packets
+                    ServerModel.get().sendPacketsToggle();
+
+                    if(ServerModel.get().isRepeatingPackets())
+                        sendButton.setText("Stop");
+                    else
+                        sendButton.setText("Start");
+                } else {
+                    // Send individual packets
+                    ServerModel.get().sendPacketIndividual();
+                    sendButton.setText(buttonState);
+                }
             } else {
-                ServerModel.get().setAutoRepeatInterval(Long.valueOf(spinnerInputMaximum.getValue().toString()) * 1000);
-                ServerModel.get().start();
-                sendButton.setText("Stop");
+                Log.e("Failed to send because the server model is not running", ServerSettingsView.class);
             }
         });
 
