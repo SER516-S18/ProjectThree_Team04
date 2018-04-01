@@ -3,7 +3,6 @@ package team04.project3.ui;
 //import com.sun.tools.javadoc.Start;
 import team04.project3.constants.ColorConstants;
 import team04.project3.constants.TextConstants;
-import team04.project3.model.client.ClientModel;
 import team04.project3.model.server.ServerModel;
 
 import javax.swing.*;
@@ -87,7 +86,7 @@ public class ServerSettingsView extends JPanel {
                 sendButton.setText(buttonState);
                 ServerModel.get().shutdown();
             } else {
-                ServerModel.get().setInterval(Long.valueOf(spinnerInputMaximum.getValue().toString()) * 1000);
+                ServerModel.get().setAutoRepeatInterval(Long.valueOf(spinnerInputMaximum.getValue().toString()) * 1000);
                 ServerModel.get().start();
                 sendButton.setText("Stop");
             }

@@ -30,17 +30,22 @@ public class ServerModel {
         return _instance;
     }
 
+    // Server - Settings
     private int PORT;
     private long INTERVAL;
-    private boolean isAutoRepeat;
+    private boolean REPEAT;
 
+    // Server - Websocket state
     private ArrayList<ServerListener> listeners = new ArrayList<>();
+    private boolean run = false;
     private ServerEndpoint endpoint;
     private Server server;
-    private Runnable output;
+
+    // Server - Packet state/behavior
     private EmostatePacketBuilder packet;
     private float tick = 0.0f;
-    private boolean run = false;
+    private Runnable output;
+    private boolean repeating = false;
 
     private ServerModel() {
         this(1726, 500);
@@ -48,21 +53,20 @@ public class ServerModel {
 
     private ServerModel(int port, long interval) {
         this.setPort(port);
-        this.setInterval(interval);
+        this.setAutoRepeatInterval(interval);
         this.setPacket(EmostatePacketBuilder.getZeroedEmostatePacket());
 
         output = () -> {
-            while(ServerModel.this.isRunning()) {
+            while(this.isRunning() && this.doesAutoRepeat() && this.isRepeatingPackets()) {
                 try {
-                    endpoint.send(packet.setTick(tick).build());
-                    Thread.sleep(interval);
-                    tick += (interval / 1000f);
+                    ServerModel.this.sendPacket();
+                    Thread.sleep(INTERVAL);
                 } catch(InterruptedException e) {
                     Log.w("Failed to wait interval between packets (" + e.getMessage() + ")", ServerModel.class);
                 } catch (Exception e) {
                     if(ServerModel.this.isRunning()) {
                         Log.e("Model failed to send a packet, shutting down (" + e.getMessage() + ")", ServerModel.class);
-                        this.shutdown();
+                        ServerModel.this.shutdown();
                     }
                 }
             }
@@ -75,6 +79,9 @@ public class ServerModel {
         }));
     }
 
+    /**
+     * Starts the server (note: this only opens the WebSocket server and does not send packets)
+     */
     public void start() {
         if(run)
             throw new IllegalArgumentException("Server is already running");
@@ -85,9 +92,6 @@ public class ServerModel {
             server = new Server("localhost", PORT, "/ws", null, ServerEndpoint.class);
             server.start();
 
-            // Start output
-            executors.submit(output);
-
             this.run = true;
             this.notifyServerStarted();
         } catch(DeploymentException e) {
@@ -95,6 +99,10 @@ public class ServerModel {
         }
     }
 
+    /**
+     * Stops the server (note: this shuts down the WebSocket server and
+     * is not the method to stop repeatedly sending packets)
+     */
     public void shutdown() {
         if(!run)
             throw new IllegalArgumentException("Server is already stopped");
@@ -148,6 +156,10 @@ public class ServerModel {
         }
     }
 
+    /**
+     * Send the packet to send
+     * @param packet The packet to send to the client each tick
+     */
     public void setPacket(EmostatePacketBuilder packet) {
         if(packet == null)
             throw new IllegalArgumentException("Packet must be non-null");
@@ -155,17 +167,10 @@ public class ServerModel {
             this.packet = packet;
     }
 
-    public void setInterval(long interval) {
-        if(interval < 0L)
-            throw new IllegalArgumentException("Interval must be greater than zero");
-        else
-            INTERVAL = interval;
-    }
-
-    public long getInterval() {
-        return INTERVAL;
-    }
-
+    /**
+     * Sets which tick for the next packet sent (in seconds)
+     * @param tick Tick in seconds for the next packet to start at
+     */
     public void setTick(float tick) {
         if(tick < 0.0f)
             throw new IllegalArgumentException("Tick must be greater than zero");
@@ -192,11 +197,90 @@ public class ServerModel {
         return PORT;
     }
 
-    public boolean isAutoRepeat() {
-        return isAutoRepeat;
+
+    /**
+     * Sets the interval for the auto-repeat
+     * @param interval The interval in ms between packet transmissions
+     */
+    public void setAutoRepeatInterval(long interval) {
+        if(interval < 0L)
+            throw new IllegalArgumentException("Interval must be greater than zero");
+        else
+            INTERVAL = interval;
     }
 
-    public void setAutoRepeat(boolean autoRepeat) {
-        isAutoRepeat = autoRepeat;
+    /**
+     * Gets the interval for the auto-repeat
+     * @return The interval in ms between packet transmissions
+     */
+    public long getAutoRepeatInterval() {
+        return INTERVAL;
+    }
+
+    /**
+     * Gets if the packets are set to auto-repeat, if on
+     * @return If the packets auto-repeat, if on
+     */
+    public boolean doesAutoRepeat() {
+        return REPEAT;
+    }
+
+    /**
+     * Sets the model to auto-repeat mode
+     * @param repeat If the model should auto-repeat
+     */
+    public void setAutoRepeat(boolean repeat) {
+        if(REPEAT == repeat)
+            return;
+
+        if(repeating)
+            throw new IllegalStateException("Cannot turn off auto-repeating while repeater is running");
+
+        REPEAT = repeat;
+    }
+
+    /**
+     * Gets if the model is currently sending packets repeatedly
+     * @return If the model is currently sending packets repeatedly
+     */
+    public boolean isRepeatingPackets() {
+        return repeating;
+    }
+
+    /**
+     * Method to start or stop sending packets (in auto-repeat mode)
+     */
+    public void sendPacketsToggle() {
+        if(!this.doesAutoRepeat())
+            throw new IllegalStateException("Cannot send repeating packets while model is not set to auto-repeat");
+        if(!this.isRunning())
+            throw new IllegalStateException("Cannot send packets while the model's websocket server is not running");
+
+        if(this.isRepeatingPackets()) {
+            repeating = false;
+        } else {
+            repeating = true;
+            executors.submit(output);
+        }
+    }
+
+    /**
+     * Method to send an individual packet (if not in auto-repeat mode)
+     */
+    public void sendPacketIndividual() {
+        if(this.doesAutoRepeat())
+            throw new IllegalStateException("Cannot send individual packet while the model is set to auto-repeat");
+        if(!this.isRunning())
+            throw new IllegalStateException("Cannot send packets while the model's websocket server is not running");
+
+        this.sendPacket();
+    }
+
+    /**
+     * Called to send a packet to the endpoint
+     */
+    private void sendPacket() {
+        endpoint.send(packet.setTick(tick).build());
+        tick += (INTERVAL / 1000f);
     }
 }
