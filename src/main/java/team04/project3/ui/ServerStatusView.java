@@ -23,10 +23,9 @@ public class ServerStatusView extends  JPanel {
     private JComboBox<String> downFaceDropDown;
     private JComboBox<String> eyeDropDown;
 
-    private JLabel timeLabel;
-    private JTextField timeField;
     private JPanel panelBuffer;
-
+    
+    
     /**
      * The view that
      */
@@ -41,6 +40,9 @@ public class ServerStatusView extends  JPanel {
         panelBuffer.setBorder(new EmptyBorder(15, 15, 15, 15));
         panelBuffer.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 
+        panelBuffer.add(createTimePanel());
+        panelBuffer.add(new JLabel());
+        
         // Maximum - Prompt
         JLabel labelPromptMaximum = new JLabel(TextConstants.UPPER_FACE);
         labelPromptMaximum.setFont(TextConstants.DEFAULT_FONT);
@@ -120,58 +122,55 @@ public class ServerStatusView extends  JPanel {
         panelEye.add(eyeDropDown);
         panelBuffer.add(panelEye);
 
-        //panelBuffer.add(new Panel());
-        //panelBuffer.add(new Panel());
+
         this.add(panelBuffer);
 
         
         // Put the main view in a "buffer", this creates a transparent border around the buffer's content
-        /*panelBuffer = new JPanel(new GridBagLayout());
-        panelBuffer.setBackground(Color.LIGHT_GRAY);
-        panelBuffer.setBorder(new EmptyBorder (8,8,8,8));
-        panelBuffer.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-        
-        //setting grid bag constraints for emostate label at the top of panel.
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.fill = GridBagConstraints.BOTH;
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        
-        panelBuffer.add(new JLabel("EMOSTATE",JLabel.LEFT),constraints);
-        createTimeArea(constraints);    
-        
-        this.add(panelBuffer, BorderLayout.CENTER);*/
     }
     
     /**
      * method that creates the time area and add to the "emostate" panel.
      * 
-     * @param constraints to set the positions of labels and textfields.
+     * @param constraints to set the positions of labels and textfields.*/
 
-    public void createTimeArea (GridBagConstraints constraints) {
+    public JPanel createTimePanel () {
     	
-    	timeLabel = new JLabel ("Time:",JLabel.LEFT);
+    	JPanel timePanel = new JPanel();
+    	timePanel.setLayout(new GridBagLayout());
+    	timePanel.setBackground(Color.lightGray);
+        
+    	
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        
+        JLabel timeLabel = new JLabel ("Time:",JLabel.LEFT);
         timeLabel.setBorder(new EmptyBorder(10,10,10,10));
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.weightx = 0;
         constraints.gridx = 0;
         constraints.gridy = 1;
-        panelBuffer.add(timeLabel,constraints);
+        timePanel.add(timeLabel);
         
-        timeField = new JTextField(6);
+        JTextField timeField = new JTextField(11);
         timeField.setBorder(BorderFactory.createLineBorder(Color.black));
         timeField.setVisible(true);
-        constraints.weightx = 0.1;
+        timeField.setMinimumSize(timeField.getPreferredSize());
         constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.weightx = 0.1;
         constraints.gridx = 1;
         constraints.gridy = 1;
-        panelBuffer.add(timeField,constraints);
+        timePanel.add(timeField);
         
         JLabel secondsLabel = new JLabel(" Seconds");
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.weightx = 0.5;
         constraints.gridx = 2;
         constraints.gridy = 1;
-        panelBuffer.add(secondsLabel,constraints);
-    }*/
+        timePanel.add(secondsLabel);
+        
+        return timePanel;
+    }
 }
