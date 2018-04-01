@@ -36,6 +36,9 @@ public class ClientGraphView extends JPanel {
             public void valuesReset() { }
 
             @Override
+            public void valuesAdded() { }
+
+            @Override
             public void started() {
                 // If we're restarting, clear the previous values stored in the dataset
                 for(int i = 0; i < dataset.getSeriesCount(); i++) {

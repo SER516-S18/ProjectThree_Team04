@@ -49,6 +49,9 @@ public class AppToolbarView extends JToolBar {
             public void valuesReset() { }
 
             @Override
+            public void valuesAdded() { }
+
+            @Override
             public void started() {
                 if(AppView.get().isClient())
                     buttonToggle.setText("Stop");
