@@ -19,7 +19,8 @@ public class ServerSettingsView extends JPanel {
 
     private static String buttonState = "Send";
     private static double timeCounter= 0.0;
-    
+    private Runnable updateTimeWhenAutoReset;
+    private Thread addIntervaltoTimeCounter;
     /**
      * The right hand side to change the output min/max/frequency
      */
@@ -82,7 +83,21 @@ public class ServerSettingsView extends JPanel {
         sendButton.setFocusPainted(false);
         panelBuffer.add(sendButton);
 
-        autoResetCheckBox.addItemListener(e -> {
+        updateTimeWhenAutoReset = () -> {
+    		while(autoResetCheckBox.isSelected()) {
+    			long INTERVAL = (long)((double)spinnerInputInterval.getValue()*1000);
+    			timeCounter=timeCounter+(double)spinnerInputInterval.getValue();
+    			try {
+    				Thread.sleep(INTERVAL);
+    			} catch (InterruptedException e1) {
+    				// TODO Auto-generated catch block
+    				e1.printStackTrace();
+    			}
+    		}
+    	};
+    	addIntervaltoTimeCounter = new Thread(updateTimeWhenAutoReset);
+        
+    	autoResetCheckBox.addItemListener(e -> {
             if (e.getStateChange()==ItemEvent.SELECTED) {
                 buttonState = "Start";
                 ServerModel.get().setPacketRepeatMode(true);
@@ -99,12 +114,13 @@ public class ServerSettingsView extends JPanel {
                 if(ServerModel.get().isPacketRepeatMode()) {
                     // Repeatedly send packets
                     ServerModel.get().sendPacketsToggle();
-
+                    
                     if(ServerModel.get().isRepeatingPackets()) {
-                        	sendButton.setText("Stop");
+                    	addIntervaltoTimeCounter.start();	
+                    	sendButton.setText("Stop");
                     } else {
-                        sendButton.setText("Start");
-                    	
+                    	addIntervaltoTimeCounter.interrupt();
+                    	sendButton.setText("Start");
                 }} else {
                     // Send individual packets
                     ServerModel.get().sendPacketIndividual();
@@ -112,16 +128,28 @@ public class ServerSettingsView extends JPanel {
                     timeCounter=timeCounter+(double)spinnerInputInterval.getValue();
                 }
             } else {
-                Log.e("Failed to send because the server model is not running", ServerSettingsView.class);
+            	Log.e("Failed to send because the server model is not running", ServerSettingsView.class);
+            	
+            
             }
         });
 
         this.add(panelBuffer);
     }
     
+    
+    
     /**
+     * setter method for time counter. 
+     * @param timeCounter
+     */
+    public static void setTimeCounter(double timeCounter) {
+		ServerSettingsView.timeCounter = timeCounter;
+	}
+
+	/**
      * getter method for time counter. 
-     * @returns timeCounterS
+     * @returns timeCounter
      */
     public static double getTimeCounter() {
 		return timeCounter;
