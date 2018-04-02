@@ -12,6 +12,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.text.ParseException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * The view that contains an
@@ -33,7 +35,7 @@ public class ServerStatusView extends  JPanel {
     private JSpinner spinnerUpperFace;
     private JSpinner spinnerDownFace;
     private JRadioButton activeRadioButton;
-    
+    private double timeCounter = 0;
     
     /**
      * The view that
@@ -143,7 +145,6 @@ public class ServerStatusView extends  JPanel {
         panelDown.add(spinnerDownFace);
         panelBuffer.add(panelDown);
 
-
         JLabel labelPromptEye = new JLabel(TextConstants.EYE);
         labelPromptEye.setFont(TextConstants.DEFAULT_FONT);
         labelPromptEye.setHorizontalAlignment(JLabel.CENTER);
@@ -179,17 +180,16 @@ public class ServerStatusView extends  JPanel {
         panelEye.add(activeRadioButton);
         panelBuffer.add(panelEye);
 
-
+        trackAndUpdateTimeField();
         this.add(panelBuffer);
-
         
-        // Put the main view in a "buffer", this creates a transparent border around the buffer's content
     }
     
     /**
      * method that creates the time area and add to the "emostate" panel.
      * 
-     * @param constraints to set the positions of labels and textfields.*/
+     * @param constraints to set the positions of labels and textfields.
+     */
 
     public void createTimePanel () {
     	
@@ -197,8 +197,7 @@ public class ServerStatusView extends  JPanel {
     	timePanel.setLayout(new GridBagLayout());
     	timePanel.setBackground(ColorConstants.BACKGROUND_BLUEGRAY);
         
-    	
-        GridBagConstraints constraints = new GridBagConstraints();
+    	GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.BOTH;
         constraints.gridx = 0;
         constraints.gridy = 0;
@@ -217,7 +216,6 @@ public class ServerStatusView extends  JPanel {
         panelBuffer.add(panelTime);
         
         timeField = new JTextField(10);
-
         timeField.setVisible(true);
         timeField.setMinimumSize(timeField.getPreferredSize());
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -237,8 +235,28 @@ public class ServerStatusView extends  JPanel {
         timePanel.add(secondsLabel);
         
         panelBuffer.add(timePanel);
+    
     }
 
+    /**
+     * 	tracks time value and updates in time field when a dataset is sent
+     * 	to client at specified interval.
+     */
+    public void trackAndUpdateTimeField() {
+    	
+    	Timer intervalChecker = new Timer();
+    	intervalChecker.scheduleAtFixedRate(new TimerTask() {
+    		
+    		public void run() {
+    			
+    			if(timeCounter != ServerSettingsView.getTimeCounter()) {
+    				timeCounter = ServerSettingsView.getTimeCounter();
+    				timeField.setText((String.valueOf(ServerSettingsView.getTimeCounter())));
+    			}
+    		}
+    	}, 0, 1);
+    }
+    
     private void makeAndSetExpressionPacket() {
 
         String upperFaceExpression = upperFaceDropDown.getSelectedItem().toString();

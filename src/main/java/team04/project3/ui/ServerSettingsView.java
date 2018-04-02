@@ -18,11 +18,14 @@ import java.text.ParseException;
 public class ServerSettingsView extends JPanel {
 
     private static String buttonState = "Send";
+    private static double timeCounter= 0.0;
+    
     /**
      * The right hand side to change the output min/max/frequency
      */
     public ServerSettingsView() {
-        // Create the settings view with a transparent border encompassing
+        
+    	// Create the settings view with a transparent border encompassing
         this.setLayout(new BorderLayout());
         this.setBorder(new EmptyBorder(8, 8, 8, 8));
         this.setOpaque(false);
@@ -97,14 +100,16 @@ public class ServerSettingsView extends JPanel {
                     // Repeatedly send packets
                     ServerModel.get().sendPacketsToggle();
 
-                    if(ServerModel.get().isRepeatingPackets())
-                        sendButton.setText("Stop");
-                    else
+                    if(ServerModel.get().isRepeatingPackets()) {
+                        	sendButton.setText("Stop");
+                    } else {
                         sendButton.setText("Start");
-                } else {
+                    	
+                }} else {
                     // Send individual packets
                     ServerModel.get().sendPacketIndividual();
                     sendButton.setText(buttonState);
+                    timeCounter=timeCounter+(double)spinnerInputInterval.getValue();
                 }
             } else {
                 Log.e("Failed to send because the server model is not running", ServerSettingsView.class);
@@ -113,4 +118,12 @@ public class ServerSettingsView extends JPanel {
 
         this.add(panelBuffer);
     }
+    
+    /**
+     * getter method for time counter. 
+     * @returns timeCounterS
+     */
+    public static double getTimeCounter() {
+		return timeCounter;
+	}
 }
