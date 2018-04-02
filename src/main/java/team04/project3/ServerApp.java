@@ -20,8 +20,8 @@ public class ServerApp {
     /**
      * Java main for both the Server
      * @param args String arguments
-     */
-    public static void main(final String[] args) {
+         */
+        public static void main(final String[] args) {
         // Show verbose messages in the log
         Log.setConsolePolicy(Log.POLICY.DEBUG);
 
