@@ -14,17 +14,14 @@ public enum Emotion {
     @SerializedName("EXCITEMENT") EXCITEMENT("Excitement"),
     @SerializedName("FOCUS") FOCUS("Focus");
 
-    public static Map<String, Emotion> emotionMap = new HashMap<>();
-
-    static {
-
-        EnumSet.allOf(Emotion.class)
-                .forEach(ex -> emotionMap.put(ex.name, ex));
-    }
-
-    public String name;
+    public String NAME;
 
     private Emotion(String name) {
-        this.name = name;
+        this.NAME = name;
+    }
+
+    @Override
+    public String toString() {
+        return this.NAME;
     }
 }

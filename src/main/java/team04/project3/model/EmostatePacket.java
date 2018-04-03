@@ -25,11 +25,11 @@ public class EmostatePacket {
             else {
                 Float value = expressions.get(expression);
                 if(value == null) {
-                    throw new IllegalArgumentException("Expression \"" + expression.name + "\" value must not be null");
+                    throw new IllegalArgumentException("Expression \"" + expression.NAME + "\" value must not be null");
                 } else if(expression.isFloating() && (value < 0.0f || value > 1.0f)) {
-                    throw new IllegalArgumentException("Expression \"" + expression.name + "\" value must be between 0.0 and 1.0, inclusive");
+                    throw new IllegalArgumentException("Expression \"" + expression.NAME + "\" value must be between 0.0 and 1.0, inclusive");
                 } else if(expression.isBinary() && value != 0.0f && value != 1.0f) {
-                    throw new IllegalArgumentException("Expression \"" + expression.name + "\" value must be exactly 0.0f or 1.0f");
+                    throw new IllegalArgumentException("Expression \"" + expression.NAME + "\" value must be exactly 0.0f or 1.0f");
                 }
             }
         }
@@ -40,9 +40,9 @@ public class EmostatePacket {
             } else {
                 Float value = emotions.get(emotion);
                 if(value == null) {
-                    throw new IllegalArgumentException("Emotion \"" + emotion.name + "\" value must not be null");
+                    throw new IllegalArgumentException("Emotion \"" + emotion.NAME + "\" value must not be null");
                 } else if(value < 0.0f || value > 1.0f) {
-                    throw new IllegalArgumentException("Emotion \"" + emotion.name + "\" value must be between 0.0 and 1.0, inclusive");
+                    throw new IllegalArgumentException("Emotion \"" + emotion.NAME + "\" value must be between 0.0 and 1.0, inclusive");
                 }
             }
         }

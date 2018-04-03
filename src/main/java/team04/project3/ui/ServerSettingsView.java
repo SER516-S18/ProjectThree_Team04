@@ -123,7 +123,8 @@ public class ServerSettingsView extends JPanel {
                     } else {
                     	addIntervaltoTimeCounter.interrupt();
                     	sendButton.setText("Start");
-                }} else {
+                    }
+                } else {
                     // Send individual packets
                     ServerModel.get().sendPacketIndividual();
                     sendButton.setText(buttonState);
@@ -131,8 +132,6 @@ public class ServerSettingsView extends JPanel {
                 }
             } else {
             	Log.e("Failed to send because the server model is not running", ServerSettingsView.class);
-            	
-            
             }
         });
 

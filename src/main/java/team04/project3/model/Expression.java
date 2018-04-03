@@ -20,20 +20,12 @@ public enum Expression {
     @SerializedName("SMIRK_RIGHT") SMIRK_RIGHT("Right smirk", true),
     @SerializedName("LAUGH") LAUGH("Laugh", true);
 
-    public static Map<String, Expression> expressionMap = new HashMap<>();
-
-    static {
-
-        EnumSet.allOf(Expression.class)
-                .forEach(ex -> expressionMap.put(ex.name, ex));
-    }
-
     Expression(String name, boolean floating) {
-        this.name = name;
+        this.NAME = name;
         this.floating = floating;
     }
 
-    public String name;
+    public String NAME;
     private boolean floating;
 
     public boolean isFloating() {
@@ -42,5 +34,10 @@ public enum Expression {
 
     public boolean isBinary() {
         return !floating;
+    }
+
+    @Override
+    public String toString() {
+        return this.NAME;
     }
 }

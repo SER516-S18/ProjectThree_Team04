@@ -2,11 +2,10 @@ package team04.project3.ui;
 
 import team04.project3.constants.ColorConstants;
 import team04.project3.constants.TextConstants;
-import team04.project3.model.EmostatePacket;
 import team04.project3.model.Emotion;
 import team04.project3.model.Expression;
 import team04.project3.model.server.ServerModel;
-import team04.project3.model.websocket.EmostatePacketBuilder;
+import team04.project3.model.EmostatePacketBuilder;
 import team04.project3.util.Log;
 
 import javax.swing.*;
@@ -14,7 +13,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.text.ParseException;
-import java.util.EnumSet;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -24,16 +22,16 @@ import java.util.TimerTask;
  */
 public class ServerStatusView extends  JPanel {
 
-    private String[] eyeDropDownValues = new String[] {Expression.BLINK.name, Expression.WINK_LEFT.name, Expression.WINK_RIGHT.name,
-                                                        Expression.LOOK_LEFT.name, Expression.LOOK_RIGHT.name};
-    private String[] upperFaceDropDownValues = new String[] {Expression.BROW_RAISE.name, Expression.BROW_FURROW.name};
-    private String[] downFaceDropDownValues = new String[] {Expression.SMILE.name, Expression.CLENCH.name, Expression.SMIRK_LEFT.name,
-                                                      Expression.SMIRK_RIGHT.name, Expression.LAUGH.name};
+    private Expression[] eyeDropDownValues = new Expression[] {Expression.BLINK, Expression.WINK_LEFT, Expression.WINK_RIGHT,
+            Expression.LOOK_LEFT, Expression.LOOK_RIGHT};
+    private Expression[] upperFaceDropDownValues = new Expression[] {Expression.BROW_RAISE, Expression.BROW_FURROW};
+    private Expression[] downFaceDropDownValues = new Expression[] {Expression.SMILE, Expression.CLENCH, Expression.SMIRK_LEFT,
+            Expression.SMIRK_RIGHT, Expression.LAUGH};
 
-    private JComboBox<String> upperFaceDropDown;
-    private JComboBox<String> downFaceDropDown;
-    private JComboBox<String> eyeDropDown;
-    private JComboBox<String> performanceMetricDropDown;
+    private JComboBox<Expression> upperFaceDropDown;
+    private JComboBox<Expression> downFaceDropDown;
+    private JComboBox<Expression> eyeDropDown;
+    private JComboBox<Emotion> performanceMetricDropDown;
 
     private JPanel panelBuffer;
     private JTextField timeField;
@@ -82,7 +80,8 @@ public class ServerStatusView extends  JPanel {
         panelPromptMaximum.add(labelPromptMaximum);
         panelBuffer.add(panelPromptMaximum);
 
-        upperFaceDropDown = new JComboBox<String>(upperFaceDropDownValues);
+        upperFaceDropDown = new JComboBox<>();
+        upperFaceDropDown.setModel(new DefaultComboBoxModel<>(upperFaceDropDownValues));
         upperFaceDropDown.setMaximumSize(upperFaceDropDown.getPreferredSize());
         upperFaceDropDown.setVisible(true);
         upperFaceDropDown.setBackground(Color.white);
@@ -131,7 +130,8 @@ public class ServerStatusView extends  JPanel {
         panelPromptDownFace.add(labelPromptDownFace);
         panelBuffer.add(panelPromptDownFace);
 
-        downFaceDropDown = new JComboBox<String>(downFaceDropDownValues);
+        downFaceDropDown = new JComboBox<>();
+        downFaceDropDown.setModel(new DefaultComboBoxModel<>(downFaceDropDownValues));
         downFaceDropDown.setVisible(true);
         downFaceDropDown.setBackground(Color.white);
 
@@ -179,7 +179,8 @@ public class ServerStatusView extends  JPanel {
         panelPromptEye.add(labelPromptEye);
         panelBuffer.add(panelPromptEye);
 
-        eyeDropDown = new JComboBox<String>(eyeDropDownValues);
+        eyeDropDown = new JComboBox<>();
+        eyeDropDown.setModel(new DefaultComboBoxModel<>(eyeDropDownValues));
         eyeDropDown.setVisible(true);
         eyeDropDown.setBackground(Color.white);
 
@@ -217,7 +218,8 @@ public class ServerStatusView extends  JPanel {
         panelPromptPerformance.add(labelPromptPerformance);
         panelBuffer.add(panelPromptPerformance);
 
-        performanceMetricDropDown = new JComboBox<>(EnumSet.allOf(Emotion.class).stream().map(s -> s.name).toArray(String[]::new));
+        performanceMetricDropDown = new JComboBox<>();
+        performanceMetricDropDown.setModel(new DefaultComboBoxModel<>(Emotion.values()));
         performanceMetricDropDown.setVisible(true);
         performanceMetricDropDown.setBackground(Color.white);
 
@@ -251,12 +253,6 @@ public class ServerStatusView extends  JPanel {
         panelBuffer.add(panelDown);
 
     }
-
-    /**
-     * method that creates the time area and add to the "emostate" panel.
-     * 
-     * @param constraints to set the positions of labels and textfields.
-     */
 
     private void createTimePanel () {
     	
@@ -311,22 +307,22 @@ public class ServerStatusView extends  JPanel {
     
     private void makeAndSetExpressionPacket() {
 
-        String upperFaceExpression = upperFaceDropDown.getSelectedItem().toString();
+        Expression upperFaceExpression = (Expression) upperFaceDropDown.getSelectedItem();
         float upperFaceEmotionValue =  (float) ((double) spinnerUpperFace.getValue());
 
-        String downFaceExpression = downFaceDropDown.getSelectedItem().toString();
-        float downFaceEmotionValue = (float) ((double) spinnerUpperFace.getValue());
+        Expression downFaceExpression = (Expression) downFaceDropDown.getSelectedItem();
+        float downFaceEmotionValue = (float) ((double) spinnerDownFace.getValue());
 
-        String eyeExpression = eyeDropDown.getSelectedItem().toString();
+        Expression eyeExpression = (Expression) eyeDropDown.getSelectedItem();
 
-        String performanceMetric = performanceMetricDropDown.getSelectedItem().toString();
+        Emotion performanceMetric = (Emotion) performanceMetricDropDown.getSelectedItem();
         float performanceMetricSpinnerValue = (float) ((double) spinnerPerformanceMetric.getValue());
 
-        EmostatePacketBuilder emostatePacketBuilder = new EmostatePacketBuilder();
-        emostatePacketBuilder.setExpression(Expression.expressionMap.get(upperFaceExpression), upperFaceEmotionValue);
-        emostatePacketBuilder.setExpression(Expression.expressionMap.get(downFaceExpression), downFaceEmotionValue);
-        emostatePacketBuilder.setExpression(Expression.expressionMap.get(eyeExpression), activeRadioButton.isSelected());
-        emostatePacketBuilder.setEmotion(Emotion.emotionMap.get(performanceMetric), performanceMetricSpinnerValue);
+        EmostatePacketBuilder emostatePacketBuilder = EmostatePacketBuilder.getZeroedEmostatePacket();
+        emostatePacketBuilder.setExpression(upperFaceExpression, upperFaceEmotionValue);
+        emostatePacketBuilder.setExpression(downFaceExpression, downFaceEmotionValue);
+        emostatePacketBuilder.setExpression(eyeExpression, activeRadioButton.isSelected());
+        emostatePacketBuilder.setEmotion(performanceMetric, performanceMetricSpinnerValue);
 
         ServerModel.get().setPacket(emostatePacketBuilder);
     }

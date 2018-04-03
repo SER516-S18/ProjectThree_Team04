@@ -2,7 +2,7 @@ package team04.project3.model.server;
 
 import org.glassfish.tyrus.server.Server;
 import team04.project3.listeners.ServerListener;
-import team04.project3.model.websocket.EmostatePacketBuilder;
+import team04.project3.model.EmostatePacketBuilder;
 import team04.project3.util.Log;
 
 import javax.websocket.DeploymentException;

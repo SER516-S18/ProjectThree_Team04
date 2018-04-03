@@ -1,8 +1,4 @@
-package team04.project3.model.websocket;
-
-import team04.project3.model.EmostatePacket;
-import team04.project3.model.Emotion;
-import team04.project3.model.Expression;
+package team04.project3.model;
 
 import java.util.HashMap;
 
@@ -30,9 +26,9 @@ public class EmostatePacketBuilder {
         if(expression == null) {
             throw new IllegalArgumentException("Arguments must not be null");
         } else if(expression.isFloating() && (value < 0.0f || value > 1.0f)) {
-            throw new IllegalArgumentException("Expression \"" + expression.name + "\" value must be between 0.0 and 1.0, inclusive");
+            throw new IllegalArgumentException("Expression \"" + expression.NAME + "\" value must be between 0.0 and 1.0, inclusive");
         } else if(expression.isBinary() && value != 0.0f && value != 1.0f) {
-            throw new IllegalArgumentException("Expression \"" + expression.name + "\" value must be exactly 0.0f or 1.0f");
+            throw new IllegalArgumentException("Expression \"" + expression.NAME + "\" value must be exactly 0.0f or 1.0f");
         }
 
         this.expressions.put(expression, value);
@@ -43,7 +39,7 @@ public class EmostatePacketBuilder {
         if(expression == null) {
             throw new IllegalArgumentException("Arguments must not be null");
         } else if(!expression.isBinary()) {
-            throw new IllegalArgumentException("Expression \"" + expression.name + "\" cannot be set to a binary value");
+            throw new IllegalArgumentException("Expression \"" + expression.NAME + "\" cannot be set to a binary value");
         }
 
         this.expressions.put(expression, value ? 1.0f : 0.0f);
@@ -54,11 +50,42 @@ public class EmostatePacketBuilder {
         if(emotion == null) {
             throw new IllegalArgumentException("Arguments must not be null");
         } else if(value < 0.0f || value > 1.0f) {
-            throw new IllegalArgumentException("Emotion \"" + emotion.name + "\" value must be between 0.0 and 1.0, inclusive");
+            throw new IllegalArgumentException("Emotion \"" + emotion.NAME + "\" value must be between 0.0 and 1.0, inclusive");
         }
 
         this.emotions.put(emotion, value);
         return this;
+    }
+
+    public Float getExpression(Expression expression) {
+        if(expression == null)
+            throw new IllegalArgumentException("Expression must be non-null");
+        else
+            return this.expressions.getOrDefault(expression, null);
+    }
+
+    public Float getExpressionFloating(Expression expression) {
+        return this.getExpression(expression);
+    }
+
+    public Boolean getExpressionBoolean(Expression expression) {
+        if(expression == null)
+            throw new IllegalArgumentException("Expression must be non-null");
+        else if(!expression.isBinary())
+            throw new IllegalArgumentException("Expression must be binary");
+        else {
+            if(this.expressions.containsKey(expression))
+                return this.expressions.get(expression) == 1.0f;
+            else
+                return null;
+        }
+    }
+
+    public Float getEmotion(Emotion emotion) {
+        if(emotion == null)
+            throw new IllegalArgumentException("Emotion must be non-null");
+        else
+            return this.emotions.getOrDefault(emotion, null);
     }
 
     public EmostatePacketBuilder setTick(Float tick) {
