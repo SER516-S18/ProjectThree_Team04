@@ -21,7 +21,7 @@ import java.util.TimerTask;
  * @author  David Henderson (dchende2@asu.edu)
  */
 public class ServerStatusView extends  JPanel {
-
+    private EmostatePacketBuilder emostatePacketBuilder = EmostatePacketBuilder.getZeroedEmostatePacket();
     private Expression[] eyeDropDownValues = new Expression[] {Expression.BLINK, Expression.WINK_LEFT, Expression.WINK_RIGHT,
             Expression.LOOK_LEFT, Expression.LOOK_RIGHT};
     private Expression[] upperFaceDropDownValues = new Expression[] {Expression.BROW_RAISE, Expression.BROW_FURROW};
@@ -38,14 +38,13 @@ public class ServerStatusView extends  JPanel {
     private JSpinner spinnerUpperFace;
     private JSpinner spinnerDownFace;
     private JSpinner spinnerPerformanceMetric;
-    private JRadioButton activeRadioButton;
+    private JCheckBox checkboxEye;
     private double timeCounter = 0;
     
     /**
      * The view that
      */
     public ServerStatusView() {
-
         this.setLayout(new BorderLayout());
         this.setBorder(new EmptyBorder(60, 8, 8, 8));
         this.setOpaque(false);
@@ -68,7 +67,6 @@ public class ServerStatusView extends  JPanel {
     }
 
     private void createUpperFacePanel() {
-
         JLabel labelPromptMaximum = new JLabel(TextConstants.UPPER_FACE);
         labelPromptMaximum.setFont(TextConstants.DEFAULT_FONT);
         labelPromptMaximum.setHorizontalAlignment(JLabel.CENTER);
@@ -85,13 +83,8 @@ public class ServerStatusView extends  JPanel {
         upperFaceDropDown.setMaximumSize(upperFaceDropDown.getPreferredSize());
         upperFaceDropDown.setVisible(true);
         upperFaceDropDown.setBackground(Color.white);
-
         upperFaceDropDown.addActionListener(event -> {
-            try {
-                makeAndSetExpressionPacket();
-            } catch (Exception e) {
-                Log.w("Failed to parse upper face drop down value", ServerStatusView.class);
-            }
+            spinnerUpperFace.setValue(emostatePacketBuilder.getExpression((Expression) upperFaceDropDown.getSelectedItem()).doubleValue());
         });
 
         spinnerUpperFace = new JSpinner( new SpinnerNumberModel(0.0d, 0.0d, 65536d, 0.10d) );
@@ -103,7 +96,7 @@ public class ServerStatusView extends  JPanel {
         spinnerUpperFace.addChangeListener(event -> {
             try {
                 spinnerUpperFace.commitEdit();
-                makeAndSetExpressionPacket();
+                updateExpressionPacket();
             } catch (ParseException e) {
                 Log.w("Failed to parse upper face spinner input", ServerStatusView.class);
             }
@@ -118,7 +111,6 @@ public class ServerStatusView extends  JPanel {
     }
 
     private void createLowerFacePanel() {
-
         JLabel labelPromptDownFace = new JLabel(TextConstants.DOWN_FACE);
         labelPromptDownFace.setFont(TextConstants.DEFAULT_FONT);
         labelPromptDownFace.setHorizontalAlignment(JLabel.CENTER);
@@ -136,11 +128,7 @@ public class ServerStatusView extends  JPanel {
         downFaceDropDown.setBackground(Color.white);
 
         downFaceDropDown.addActionListener(event -> {
-            try {
-                makeAndSetExpressionPacket();
-            } catch (Exception e) {
-                Log.w("Failed to parse down face drop down value", ServerStatusView.class);
-            }
+            spinnerDownFace.setValue(emostatePacketBuilder.getExpression((Expression) downFaceDropDown.getSelectedItem()).doubleValue());
         });
 
         spinnerDownFace = new JSpinner( new SpinnerNumberModel(0.0d, 0.0d, 65536d, 0.10d) );
@@ -152,7 +140,7 @@ public class ServerStatusView extends  JPanel {
         spinnerDownFace.addChangeListener(event -> {
             try {
                 spinnerDownFace.commitEdit();
-                makeAndSetExpressionPacket();
+                updateExpressionPacket();
             } catch (ParseException e) {
                 Log.w("Failed to parse down face spinner input", ServerStatusView.class);
             }
@@ -167,7 +155,6 @@ public class ServerStatusView extends  JPanel {
     }
 
     private void createEyePanel() {
-
         JLabel labelPromptEye = new JLabel(TextConstants.EYE);
         labelPromptEye.setFont(TextConstants.DEFAULT_FONT);
         labelPromptEye.setHorizontalAlignment(JLabel.CENTER);
@@ -185,28 +172,23 @@ public class ServerStatusView extends  JPanel {
         eyeDropDown.setBackground(Color.white);
 
         eyeDropDown.addActionListener(event -> {
-            try {
-                makeAndSetExpressionPacket();
-            } catch (Exception e) {
-                Log.w("Failed to parse eye face drop down value", ServerStatusView.class);
-            }
+            checkboxEye.setSelected(emostatePacketBuilder.getExpressionBoolean((Expression) eyeDropDown.getSelectedItem()));
         });
 
-        activeRadioButton = new JRadioButton("Active");
-        activeRadioButton.setBackground(Color.LIGHT_GRAY);
-        activeRadioButton.addActionListener(e -> {
-            makeAndSetExpressionPacket();
+        checkboxEye = new JCheckBox("Active");
+        checkboxEye.setBackground(Color.LIGHT_GRAY);
+        checkboxEye.addActionListener(e -> {
+            updateExpressionPacket();
         });
 
         JPanel panelEye = new JPanel();
         panelEye.setBackground(ColorConstants.BACKGROUND_BLUEGRAY);
         panelEye.add(eyeDropDown);
-        panelEye.add(activeRadioButton);
+        panelEye.add(checkboxEye);
         panelBuffer.add(panelEye);
     }
 
     private void createPerformanceMetricPanel() {
-
         JLabel labelPromptPerformance = new JLabel(TextConstants.PERFORMANCE_METRICS);
         labelPromptPerformance.setFont(TextConstants.DEFAULT_FONT);
         labelPromptPerformance.setHorizontalAlignment(JLabel.CENTER);
@@ -225,7 +207,7 @@ public class ServerStatusView extends  JPanel {
 
         performanceMetricDropDown.addActionListener(event -> {
             try {
-                makeAndSetExpressionPacket();
+                updateExpressionPacket();
             } catch (Exception e) {
                 Log.w("Failed to parse performance metrics drop down value", ServerStatusView.class);
             }
@@ -240,7 +222,7 @@ public class ServerStatusView extends  JPanel {
         spinnerPerformanceMetric.addChangeListener(event -> {
             try {
                 spinnerPerformanceMetric.commitEdit();
-                makeAndSetExpressionPacket();
+                updateExpressionPacket();
             } catch (ParseException e) {
                 Log.w("Failed to parse performance face spinner input", ServerStatusView.class);
             }
@@ -251,11 +233,9 @@ public class ServerStatusView extends  JPanel {
         panelDown.add(performanceMetricDropDown);
         panelDown.add(spinnerPerformanceMetric);
         panelBuffer.add(panelDown);
-
     }
 
     private void createTimePanel () {
-    	
     	JPanel timePanel = new JPanel();
     	timePanel.setLayout(new GridBagLayout());
     	timePanel.setBackground(ColorConstants.BACKGROUND_BLUEGRAY);
@@ -279,7 +259,7 @@ public class ServerStatusView extends  JPanel {
         timeField.setEditable(false);
         timePanel.add(timeField);
         
-        JLabel secondsLabel = new JLabel(" Seconds");
+        JLabel secondsLabel = new JLabel(" seconds");
         timePanel.add(secondsLabel);
         
         panelBuffer.add(timePanel);
@@ -291,12 +271,9 @@ public class ServerStatusView extends  JPanel {
      * 	to client at specified interval.
      */
     public void trackAndUpdateTimeField() {
-    	
     	Timer intervalChecker = new Timer();
     	intervalChecker.scheduleAtFixedRate(new TimerTask() {
-    		
     		public void run() {
-    			
     			if(timeCounter != ServerSettingsView.getTimeCounter()) {
     				timeCounter = ServerSettingsView.getTimeCounter();
     				timeField.setText((String.valueOf(ServerSettingsView.getTimeCounter())));
@@ -305,8 +282,7 @@ public class ServerStatusView extends  JPanel {
     	}, 0, 1);
     }
     
-    private void makeAndSetExpressionPacket() {
-
+    private void updateExpressionPacket() {
         Expression upperFaceExpression = (Expression) upperFaceDropDown.getSelectedItem();
         float upperFaceEmotionValue =  (float) ((double) spinnerUpperFace.getValue());
 
@@ -318,10 +294,9 @@ public class ServerStatusView extends  JPanel {
         Emotion performanceMetric = (Emotion) performanceMetricDropDown.getSelectedItem();
         float performanceMetricSpinnerValue = (float) ((double) spinnerPerformanceMetric.getValue());
 
-        EmostatePacketBuilder emostatePacketBuilder = EmostatePacketBuilder.getZeroedEmostatePacket();
         emostatePacketBuilder.setExpression(upperFaceExpression, upperFaceEmotionValue);
         emostatePacketBuilder.setExpression(downFaceExpression, downFaceEmotionValue);
-        emostatePacketBuilder.setExpression(eyeExpression, activeRadioButton.isSelected());
+        emostatePacketBuilder.setExpression(eyeExpression, checkboxEye.isSelected());
         emostatePacketBuilder.setEmotion(performanceMetric, performanceMetricSpinnerValue);
 
         ServerModel.get().setPacket(emostatePacketBuilder);
