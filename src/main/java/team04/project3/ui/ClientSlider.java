@@ -11,10 +11,17 @@ import javax.swing.JSlider;
 import javax.swing.border.EmptyBorder;
 import java.awt.Font;
 
+/**
+ * Creates the UI for all the sliders present in the control panel
+ * @author  Drishty Kapoor (dkapoor3@asu.edu)
+ */
 public class ClientSlider extends JFrame {
     
     private JPanel contentPane;
     
+    /**
+     * Creates the frame.
+     */
     public ClientSlider() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 700, 750);
