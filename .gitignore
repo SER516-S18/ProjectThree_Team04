@@ -11,3 +11,4 @@ out/*
 !lib/jfreechart*.jar
 *.zip
 *MANIFEST.MF
+/target/*

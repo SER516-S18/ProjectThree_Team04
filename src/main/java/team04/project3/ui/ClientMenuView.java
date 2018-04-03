@@ -13,7 +13,7 @@ import java.awt.event.MouseListener;
 
 public class ClientMenuView extends JFrame{
 
-    ImageIcon serverIcon = new ImageIcon(getClass().getResource("images/server.gif"));
+    ImageIcon serverIcon = new ImageIcon(getClass().getResource("/team04/project3/images/server.gif"));
     Image serverImage = serverIcon.getImage();
     Image scaledServerImg = serverImage.getScaledInstance(30,30,Image.SCALE_SMOOTH);
     private JMenuItem emotivXavierComposerItem = new JMenuItem("Emotiv Xavier Composer",
@@ -29,13 +29,13 @@ public class ClientMenuView extends JFrame{
 
     private JMenuItem mentalCommandsItem = new JMenuItem("Mental Commands");
 
-    ImageIcon facialExpressionsIcon = new ImageIcon(getClass().getResource("images/facialexpressions.gif"));
+    ImageIcon facialExpressionsIcon = new ImageIcon(getClass().getResource("/team04/project3/images/facialexpressions.gif"));
     Image facialExpressionsImage = facialExpressionsIcon.getImage();
     Image scaledFacialExpressionsImg = facialExpressionsImage.getScaledInstance(30,30,Image.SCALE_SMOOTH);
     private JMenuItem facialExpressionsItem = new JMenuItem("Facial Expressions",
             new ImageIcon(scaledFacialExpressionsImg));
 
-    ImageIcon performanceMetricsIcon = new ImageIcon(getClass().getResource("images/performanceMetrics.gif"));
+    ImageIcon performanceMetricsIcon = new ImageIcon(getClass().getResource("/team04/project3/images/performanceMetrics.gif"));
     Image performanceMetricsImage = performanceMetricsIcon.getImage();
     Image scaledPerformanceMetricsImg = performanceMetricsImage.getScaledInstance(30,30,Image.SCALE_SMOOTH);
     private JMenuItem performanceMetricsItem = new JMenuItem("Performance Metrics",
@@ -47,18 +47,18 @@ public class ClientMenuView extends JFrame{
     private JMenuItem aboutXavierControlPanelItem = new JMenuItem("About Xavier Control Panel");
 
 
-    ImageIcon setupIcon = new ImageIcon(getClass().getResource("images/setup.gif"));
+    ImageIcon setupIcon = new ImageIcon(getClass().getResource("/team04/project3/images/setup.gif"));
     Image setupImage = setupIcon.getImage();
     Image scaledsetupImg = setupImage.getScaledInstance(30,30,Image.SCALE_SMOOTH);
     private JMenuItem setUpItem = new JMenuItem("Setup",new ImageIcon(scaledsetupImg));
 
-    ImageIcon recordingIcon = new ImageIcon(getClass().getResource("images/recording.gif"));
+    ImageIcon recordingIcon = new ImageIcon(getClass().getResource("/team04/project3/images/recording.gif"));
     Image recordingImage = recordingIcon.getImage();
     Image scaledRecordingImg = recordingImage.getScaledInstance(30,30,Image.SCALE_SMOOTH);
     private JMenuItem recordingItem = new JMenuItem("Recording",new ImageIcon(scaledRecordingImg));
 
 
-    ImageIcon reportIcon = new ImageIcon(getClass().getResource("images/report.gif"));
+    ImageIcon reportIcon = new ImageIcon(getClass().getResource("/team04/project3/images/report.gif"));
     Image reportImage = reportIcon.getImage();
     Image scaledReportImg = reportImage.getScaledInstance(30,30,Image.SCALE_SMOOTH);
     private JMenuItem reportsItem = new JMenuItem("Reports",new ImageIcon(scaledReportImg));
@@ -176,7 +176,7 @@ public class ClientMenuView extends JFrame{
         clientMenuBar.add(trainingProfile);
 
         // Adding the clock icon to the menu bar
-        // ImageIcon clockIcon = new ImageIcon(getClass().getResource("images/clock.gif"));
+        // ImageIcon clockIcon = new ImageIcon(getClass().getResource("/team04/project3/images/clock.gif"));
         // Image clockImage = clockIcon.getImage();
         // Image scaledClockImg = clockImage.getScaledInstance(30,30,Image.SCALE_SMOOTH);
         // clientMenuBar.add(new ImageIcon(scaledClockImage));
