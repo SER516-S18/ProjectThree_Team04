@@ -3,6 +3,7 @@ package team04.project3.ui;
 import team04.project3.constants.ColorConstants;
 import team04.project3.constants.TextConstants;
 import team04.project3.model.EmostatePacket;
+import team04.project3.model.Emotion;
 import team04.project3.model.Expression;
 import team04.project3.model.server.ServerModel;
 import team04.project3.model.websocket.EmostatePacketBuilder;
@@ -10,8 +11,10 @@ import team04.project3.util.Log;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.text.ParseException;
+import java.util.EnumSet;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -26,14 +29,17 @@ public class ServerStatusView extends  JPanel {
     private String[] upperFaceDropDownValues = new String[] {Expression.BROW_RAISE.name, Expression.BROW_FURROW.name};
     private String[] downFaceDropDownValues = new String[] {Expression.SMILE.name, Expression.CLENCH.name, Expression.SMIRK_LEFT.name,
                                                       Expression.SMIRK_RIGHT.name, Expression.LAUGH.name};
+
     private JComboBox<String> upperFaceDropDown;
     private JComboBox<String> downFaceDropDown;
     private JComboBox<String> eyeDropDown;
+    private JComboBox<String> performanceMetricDropDown;
 
     private JPanel panelBuffer;
     private JTextField timeField;
     private JSpinner spinnerUpperFace;
     private JSpinner spinnerDownFace;
+    private JSpinner spinnerPerformanceMetric;
     private JRadioButton activeRadioButton;
     private double timeCounter = 0;
     
@@ -46,14 +52,25 @@ public class ServerStatusView extends  JPanel {
         this.setBorder(new EmptyBorder(60, 8, 8, 8));
         this.setOpaque(false);
 
-        panelBuffer = new JPanel(new GridLayout(4, 2, 50, 25));
+        panelBuffer = new JPanel(new GridLayout(5, 2, 50, 20));
         panelBuffer.setBackground(Color.lightGray);
-        panelBuffer.setBorder(new EmptyBorder(15, 15, 15, 15));
+        panelBuffer.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.gray), "Detection", TitledBorder.LEADING,
+                TitledBorder.TOP, TextConstants.DEFAULT_FONT, Color.black));
         panelBuffer.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 
         createTimePanel();
+        createUpperFacePanel();
+        createLowerFacePanel();
+        createEyePanel();
+        createPerformanceMetricPanel();
+
+        trackAndUpdateTimeField();
+        this.add(panelBuffer);
         
-        // Maximum - Prompt
+    }
+
+    private void createUpperFacePanel() {
+
         JLabel labelPromptMaximum = new JLabel(TextConstants.UPPER_FACE);
         labelPromptMaximum.setFont(TextConstants.DEFAULT_FONT);
         labelPromptMaximum.setHorizontalAlignment(JLabel.CENTER);
@@ -65,7 +82,6 @@ public class ServerStatusView extends  JPanel {
         panelPromptMaximum.add(labelPromptMaximum);
         panelBuffer.add(panelPromptMaximum);
 
-        // Maximum - Input
         upperFaceDropDown = new JComboBox<String>(upperFaceDropDownValues);
         upperFaceDropDown.setMaximumSize(upperFaceDropDown.getPreferredSize());
         upperFaceDropDown.setVisible(true);
@@ -100,6 +116,9 @@ public class ServerStatusView extends  JPanel {
         panelUpperFace.add(spinnerUpperFace, BorderLayout.LINE_END);
         panelBuffer.add(panelUpperFace);
 
+    }
+
+    private void createLowerFacePanel() {
 
         JLabel labelPromptDownFace = new JLabel(TextConstants.DOWN_FACE);
         labelPromptDownFace.setFont(TextConstants.DEFAULT_FONT);
@@ -145,6 +164,10 @@ public class ServerStatusView extends  JPanel {
         panelDown.add(spinnerDownFace);
         panelBuffer.add(panelDown);
 
+    }
+
+    private void createEyePanel() {
+
         JLabel labelPromptEye = new JLabel(TextConstants.EYE);
         labelPromptEye.setFont(TextConstants.DEFAULT_FONT);
         labelPromptEye.setHorizontalAlignment(JLabel.CENTER);
@@ -179,35 +202,72 @@ public class ServerStatusView extends  JPanel {
         panelEye.add(eyeDropDown);
         panelEye.add(activeRadioButton);
         panelBuffer.add(panelEye);
-
-        trackAndUpdateTimeField();
-        this.add(panelBuffer);
-        
     }
-    
+
+    private void createPerformanceMetricPanel() {
+
+        JLabel labelPromptPerformance = new JLabel(TextConstants.PERFORMANCE_METRICS);
+        labelPromptPerformance.setFont(TextConstants.DEFAULT_FONT);
+        labelPromptPerformance.setHorizontalAlignment(JLabel.CENTER);
+        labelPromptPerformance.setVerticalAlignment(JLabel.CENTER);
+
+        JPanel panelPromptPerformance = new JPanel();
+        panelPromptPerformance.setBorder(BorderFactory.createLineBorder(Color.black));
+        panelPromptPerformance.setBackground(ColorConstants.BACKGROUND_BLUEGRAY);
+        panelPromptPerformance.add(labelPromptPerformance);
+        panelBuffer.add(panelPromptPerformance);
+
+        performanceMetricDropDown = new JComboBox<>(EnumSet.allOf(Emotion.class).stream().map(s -> s.name).toArray(String[]::new));
+        performanceMetricDropDown.setVisible(true);
+        performanceMetricDropDown.setBackground(Color.white);
+
+        performanceMetricDropDown.addActionListener(event -> {
+            try {
+                makeAndSetExpressionPacket();
+            } catch (Exception e) {
+                Log.w("Failed to parse performance metrics drop down value", ServerStatusView.class);
+            }
+        });
+
+        spinnerPerformanceMetric = new JSpinner( new SpinnerNumberModel(0.0d, 0.0d, 65536d, 0.10d) );
+        spinnerPerformanceMetric.setVisible(true);
+        spinnerPerformanceMetric.setBorder(null);
+        spinnerPerformanceMetric.getEditor().getComponent(0).setBackground(Color.gray);
+        spinnerPerformanceMetric.setFont(TextConstants.LARGE_FONT);
+
+        spinnerPerformanceMetric.addChangeListener(event -> {
+            try {
+                spinnerPerformanceMetric.commitEdit();
+                makeAndSetExpressionPacket();
+            } catch (ParseException e) {
+                Log.w("Failed to parse performance face spinner input", ServerStatusView.class);
+            }
+        });
+
+        JPanel panelDown = new JPanel(new GridLayout(1,2,10,1));
+        panelDown.setBackground(ColorConstants.BACKGROUND_BLUEGRAY);
+        panelDown.add(performanceMetricDropDown);
+        panelDown.add(spinnerPerformanceMetric);
+        panelBuffer.add(panelDown);
+
+    }
+
     /**
      * method that creates the time area and add to the "emostate" panel.
      * 
      * @param constraints to set the positions of labels and textfields.
      */
 
-    public void createTimePanel () {
+    private void createTimePanel () {
     	
     	JPanel timePanel = new JPanel();
     	timePanel.setLayout(new GridBagLayout());
     	timePanel.setBackground(ColorConstants.BACKGROUND_BLUEGRAY);
         
-    	GridBagConstraints constraints = new GridBagConstraints();
-        constraints.fill = GridBagConstraints.BOTH;
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        
-        JLabel timeLabel = new JLabel ("Time:",JLabel.LEFT);
-        timeLabel.setBorder(new EmptyBorder(10,10,10,10));
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.weightx = 0;
-        constraints.gridx = 0;
-        constraints.gridy = 1;
+        JLabel timeLabel = new JLabel ("Time");
+        timeLabel.setFont(TextConstants.DEFAULT_FONT);
+        timeLabel.setHorizontalAlignment(JLabel.CENTER);
+        timeLabel.setVerticalAlignment(JLabel.CENTER);
 
         JPanel panelTime = new JPanel();
         panelTime.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -215,23 +275,15 @@ public class ServerStatusView extends  JPanel {
         panelTime.add(timeLabel);
         panelBuffer.add(panelTime);
         
-        timeField = new JTextField(10);
+        timeField = new JTextField(5);
         timeField.setVisible(true);
-        timeField.setMinimumSize(timeField.getPreferredSize());
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.weightx = 0.1;
-        constraints.gridx = 1;
-        constraints.gridy = 1;
+        timeField.setFont(TextConstants.DEFAULT_FONT);
         timeField.setBackground(Color.gray);
         timeField.setText("0");
         timeField.setEditable(false);
         timePanel.add(timeField);
         
         JLabel secondsLabel = new JLabel(" Seconds");
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.weightx = 0.5;
-        constraints.gridx = 2;
-        constraints.gridy = 1;
         timePanel.add(secondsLabel);
         
         panelBuffer.add(timePanel);
@@ -266,6 +318,9 @@ public class ServerStatusView extends  JPanel {
         float downFaceEmotionValue = (float) ((double) spinnerUpperFace.getValue());
 
         String eyeExpression = eyeDropDown.getSelectedItem().toString();
+
+        String performanceMetric = performanceMetricDropDown.getSelectedItem().toString();
+        float performanceMetricSpinnerValue = (float) ((double) spinnerPerformanceMetric.getValue());
 
         EmostatePacketBuilder emostatePacketBuilder = new EmostatePacketBuilder();
         emostatePacketBuilder.setExpression(Expression.expressionMap.get(upperFaceExpression), upperFaceEmotionValue);

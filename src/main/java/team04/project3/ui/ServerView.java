@@ -25,7 +25,7 @@ public class ServerView extends JPanel {
         this.setBorder(new EmptyBorder(8, 8, 8, 8));
 
         // Buffer for an opaque border surrounding ServerView, the buffer is the actual visible panel
-        JPanel panelBuffer = new JPanel(new BorderLayout(8, 8));
+        JPanel panelBuffer = new JPanel(new BorderLayout(8, 15));
         panelBuffer.setBackground(ColorConstants.BACKGROUND_GRAY);
         panelBuffer.setBorder(BorderFactory.createLineBorder(Color.black));
 

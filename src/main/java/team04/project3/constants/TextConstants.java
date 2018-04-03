@@ -28,4 +28,5 @@ public class TextConstants {
     public static final String UPPER_FACE = "Upperface";
     public static final String DOWN_FACE = "Lowerface";
     public static final String EYE = "Eye";
+    public static final String PERFORMANCE_METRICS = "Performance Metrics";
 }

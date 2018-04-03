@@ -7,6 +7,7 @@ import team04.project3.util.Log;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.text.ParseException;
@@ -28,7 +29,8 @@ public class ServerSettingsView extends JPanel {
         
     	// Create the settings view with a transparent border encompassing
         this.setLayout(new BorderLayout());
-        this.setBorder(new EmptyBorder(8, 8, 8, 8));
+        this.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.gray), "Interactive", TitledBorder.LEADING,
+                TitledBorder.TOP, TextConstants.DEFAULT_FONT, Color.black));
         this.setOpaque(false);
 
         JPanel panelBuffer = new JPanel(new GridLayout(2, 1, 50, 4));
