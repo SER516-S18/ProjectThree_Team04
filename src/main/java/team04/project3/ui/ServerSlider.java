@@ -3,7 +3,6 @@ package team04.project3.ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -15,14 +14,15 @@ import java.awt.Font;
  * Creates the UI for all the sliders present in the Server
  * @author  Drishty Kapoor (dkapoor3@asu.edu)
  */
-public class ServerSlider extends JFrame {
-    
+public class ServerSlider extends JFrame
+{
     private JPanel contentPane;
     
     /**
      * Creates the frame.
      */
-    public ServerSlider() {
+    public ServerSlider()
+    {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 700, 750);
         contentPane = new JPanel();
