@@ -14,18 +14,6 @@ import java.awt.Font;
 public class ClientSlider extends JFrame {
     
     private JPanel contentPane;
-    public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    ClientSlider frame = new ClientSlider();
-                    frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
     
     public ClientSlider() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
