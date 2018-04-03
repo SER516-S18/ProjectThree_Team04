@@ -326,6 +326,7 @@ public class ServerStatusView extends  JPanel {
         emostatePacketBuilder.setExpression(Expression.expressionMap.get(upperFaceExpression), upperFaceEmotionValue);
         emostatePacketBuilder.setExpression(Expression.expressionMap.get(downFaceExpression), downFaceEmotionValue);
         emostatePacketBuilder.setExpression(Expression.expressionMap.get(eyeExpression), activeRadioButton.isSelected());
+        emostatePacketBuilder.setEmotion(Emotion.emotionMap.get(performanceMetric), performanceMetricSpinnerValue);
 
         ServerModel.get().setPacket(emostatePacketBuilder);
     }
