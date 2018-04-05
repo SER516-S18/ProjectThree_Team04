@@ -1,27 +1,22 @@
 package team04.project3.ui;
+import team04.project3.model.server.ServerModel;
+
 import javax.swing.*;
-import java.awt.event.ActionEvent;
+import java.awt.event.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 /**
  * Creates a menu bar for opening the server, facial expressions and performance metrics menu items
  * @author vkasam@asu.edu
  */
 
-public class ClientMenuView extends JFrame{
+public class ClientMenuView extends JMenuBar implements ActionListener {
 
     ImageIcon serverIcon = new ImageIcon(getClass().getResource("/team04/project3/images/server.gif"));
     Image serverImage = serverIcon.getImage();
     Image scaledServerImg = serverImage.getScaledInstance(30,30,Image.SCALE_SMOOTH);
     private JMenuItem emotivXavierComposerItem = new JMenuItem("Emotiv Xavier Composer",
             new ImageIcon(scaledServerImg));
-
-    private JMenuItem emotivXavierEmoKeyItem = new JMenuItem("Emotiv Xavier EmoKey");
-    private JMenuItem saveCurrentScreenshotItem = new JMenuItem("Save Current Screenshot(Ctrl+S)");
-
 
     private JMenuItem connectDriverItem = new JMenuItem("Connect Driver");
     private JMenuItem connectComposerItem = new JMenuItem("Connect Composer");
@@ -65,11 +60,7 @@ public class ClientMenuView extends JFrame{
 
     // Constructor for the view containing the menu bar
     public ClientMenuView(){
-        JFrame menuFrame = new JFrame();
 
-        JMenuBar clientMenuBar = new JMenuBar();
-
-        clientMenuBar.setSize(80,80);
         JMenu clientMenu = new JMenu("|||");
 
         JMenu applicationMenu = new JMenu("Application");//,new ImageIcon(scaledApplicationImg));
@@ -78,13 +69,11 @@ public class ClientMenuView extends JFrame{
         JMenu helpMenu = new JMenu("Help");
 
         // adding the items to the application sub menu
+        emotivXavierComposerItem.addActionListener(this);
         applicationMenu.add(emotivXavierComposerItem);
-        applicationMenu.add(new JSeparator());
-        applicationMenu.add(emotivXavierEmoKeyItem);
-        applicationMenu.add(new JSeparator());
-        applicationMenu.add(saveCurrentScreenshotItem);
 
         //adding the items to the connect sub menu
+        connectComposerItem.addActionListener(this);
         connectMenu.add(connectComposerItem);
         connectMenu.add(new JSeparator());
         connectMenu.add(connectDriverItem);
@@ -121,11 +110,11 @@ public class ClientMenuView extends JFrame{
         clientMenu.add(helpMenu);
 
         // adding the clientMenu to the MenuBar
-        clientMenuBar.add(clientMenu);
+        this.add(clientMenu);
 
         // adding the Home page link for the client
         JLabel emotivClient =  new JLabel("  EMOTIV Xavier Control Panel  ");
-        clientMenuBar.add(emotivClient);
+        this.add(emotivClient);
 
         // adding a clickable EPOC JLabel
         JLabel epoc = new JLabel("  EPOC  ");
@@ -137,7 +126,7 @@ public class ClientMenuView extends JFrame{
 
             }
         });
-        clientMenuBar.add(epoc);
+        this.add(epoc);
 
         // adding a clickable Insight JLabel
         JLabel inSight = new JLabel("  Insight  ");
@@ -149,7 +138,7 @@ public class ClientMenuView extends JFrame{
 
             }
         });
-        clientMenuBar.add(inSight);
+        this.add(inSight);
 
         // adding a clickable Add User JLabel
         JLabel addUser = new JLabel("  Add User  ");
@@ -161,7 +150,7 @@ public class ClientMenuView extends JFrame{
 
             }
         });
-        clientMenuBar.add(addUser);
+        this.add(addUser);
 
         // adding a clickable Training Profile JLabel
         JLabel trainingProfile = new JLabel("  Training Profile  ");
@@ -173,42 +162,32 @@ public class ClientMenuView extends JFrame{
 
             }
         });
-        clientMenuBar.add(trainingProfile);
+        this.add(trainingProfile);
 
         // Adding the clock icon to the menu bar
-        // ImageIcon clockIcon = new ImageIcon(getClass().getResource("/team04/project3/images/clock.gif"));
+        // ImageIcon clockIcon = new ImageIcon(getClass).getResource("/team04/project3/images/clock.gif"));
         // Image clockImage = clockIcon.getImage();
         // Image scaledClockImg = clockImage.getScaledInstance(30,30,Image.SCALE_SMOOTH);
         // clientMenuBar.add(new ImageIcon(scaledClockImage));
 
-        /** setting the action listener for the facial expressions and
-         * opening the server from the client option
-         */
-        //facialExpressionsItem.addActionListener(this);
-        //emotivXavierComposerItem.addActionListener(this);
-        //performanceMetricsItem.addActionListener(this);
-
-        menuFrame.setJMenuBar(clientMenuBar);
-        menuFrame.setSize(500,500);
-        menuFrame.setVisible(true);
 
     }
 
+    @Override
     public void actionPerformed(ActionEvent E){
         if(E.getSource().equals(emotivXavierComposerItem)){
-            // opens the server
-        }
-        if(E.getSource().equals(facialExpressionsItem)){
-            //opens the facial expression panel
-        }
-        if(E.getSource().equals(performanceMetricsItem)){
-            //opens the performance metrics panel
-        }
-    }
 
-    // used for testing
-    public static void main(String args[]) {
-        new ClientMenuView();
+            AppView appView = AppView.get(AppView.TYPE_SERVER);
+            appView.setType(AppView.TYPE_SERVER);
+            appView.init();
+        } else if(E.getSource().equals(facialExpressionsItem)){
+            //opens the facial expression panel
+        } else if(E.getSource().equals(performanceMetricsItem)){
+            //opens the performance metrics panel
+        } else if (E.getSource().equals(connectComposerItem)) {
+            ServerModel.get().start();
+        }
+
     }
 
 }

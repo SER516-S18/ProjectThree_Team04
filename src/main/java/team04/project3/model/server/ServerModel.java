@@ -1,10 +1,12 @@
 package team04.project3.model.server;
 
 import org.glassfish.tyrus.server.Server;
+import team04.project3.constants.TextConstants;
 import team04.project3.listeners.ServerListener;
 import team04.project3.model.EmostatePacketBuilder;
 import team04.project3.util.Log;
 
+import javax.swing.*;
 import javax.websocket.DeploymentException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
@@ -46,6 +48,7 @@ public class ServerModel {
     private float tick = 0.0f;
     private Runnable output;
     private boolean repeating = false;
+    private boolean isServerConsolePresent = false;
 
     private ServerModel() {
         this(1726, 500);
@@ -83,19 +86,27 @@ public class ServerModel {
      * Starts the server (note: this only opens the WebSocket server and does not send packets)
      */
     public void start() {
-        if(run)
-            throw new IllegalArgumentException("Server is already running");
 
-        try {
-            // Start server
-            endpoint = new ServerEndpoint(this);
-            server = new Server("localhost", PORT, "/ws", null, ServerEndpoint.class);
-            server.start();
+        if (!isServerConsolePresent) {
+            JOptionPane.showMessageDialog(null, TextConstants.SERVER_NOT_OPEN_ERROR, null,
+                                            JOptionPane.ERROR_MESSAGE);
 
-            this.run = true;
-            this.notifyServerStarted();
-        } catch(DeploymentException e) {
-            Log.e("Failed to deploy web socket server (" + e.getMessage() + ")", ServerModel.class);
+        } else {
+
+            if (run)
+                throw new IllegalArgumentException("Server is already running");
+
+            try {
+                // Start server
+                endpoint = new ServerEndpoint(this);
+                server = new Server("localhost", PORT, "/ws", null, ServerEndpoint.class);
+                server.start();
+
+                this.run = true;
+                this.notifyServerStarted();
+            } catch (DeploymentException e) {
+                Log.e("Failed to deploy web socket server (" + e.getMessage() + ")", ServerModel.class);
+            }
         }
     }
 
@@ -298,5 +309,13 @@ public class ServerModel {
         endpoint.send(packet.setTick(tick).build());
         tick += (INTERVAL / 1000f);
         this.notifyPacketSent();
+    }
+
+    public boolean isServerConsolePresent() {
+        return isServerConsolePresent;
+    }
+
+    public void setServerConsolePresent(boolean serverConsolePresent) {
+        isServerConsolePresent = serverConsolePresent;
     }
 }
