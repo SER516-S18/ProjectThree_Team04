@@ -53,7 +53,7 @@ public class ClientLineGraphView extends JPanel {
         // Create transparent border around graph
         this.setLayout(new BorderLayout());
         this.setOpaque(false);
-        this.setBorder(new EmptyBorder(8, 8, 8, 8));
+        this.setBorder(new EmptyBorder(1, 1, 1, 1));
 
         initGraph(title);
     }
@@ -63,13 +63,14 @@ public class ClientLineGraphView extends JPanel {
      */
     private void initGraph(String title) {
         panelBuffer = new JPanel(new BorderLayout());
-        panelBuffer.setBackground(ColorConstants.BACKGROUND_GRAY);
+        panelBuffer.setBackground(ColorConstants.BACKGROUND_PINK);
         panelBuffer.setBorder(BorderFactory.createLineBorder(Color.black));
+        panelBuffer.setFont(new java.awt.Font("SansSerif", java.awt.Font.BOLD, 15));
 
         // Create the chart
         dataset = new XYSeriesCollection();
         chart = ChartFactory.createXYLineChart(title, "", "", dataset, PlotOrientation.VERTICAL, false, false, false);
-        chart.setBackgroundPaint(ColorConstants.BACKGROUND_GRAY);
+        chart.setBackgroundPaint(ColorConstants.BACKGROUND_PINK);
         chart.getPlot().setOutlineVisible(false);
         chart.getPlot().setBackgroundAlpha(0);
         ((XYPlot) chart.getPlot()).getDomainAxis().setVisible(false);

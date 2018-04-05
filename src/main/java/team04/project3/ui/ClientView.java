@@ -14,6 +14,7 @@ public class ClientView extends JPanel {
     private ClientGraphView graphView;
     private ClientSettingsView settingsView;
     private ClientMenuView clientMenuView = new ClientMenuView();
+    private ClientGraphsView clientGraphsview;
 
     /**
      * Representing the UI for the client application
@@ -36,8 +37,12 @@ public class ClientView extends JPanel {
         panelBuffer.add(graphView, BorderLayout.LINE_START);
 
         // Add right (input/output) view
-        settingsView = new ClientSettingsView();
-        panelBuffer.add(settingsView, BorderLayout.LINE_END);
+        // settingsView = new ClientSettingsView();
+        // panelBuffer.add(settingsView, BorderLayout.LINE_END);
+
+        // Add right (input/output) view
+        clientGraphsview = new ClientGraphsView();
+        panelBuffer.add(clientGraphsview, BorderLayout.LINE_END);
 
         this.add(panelBuffer, BorderLayout.CENTER);
     }

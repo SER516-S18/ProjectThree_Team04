@@ -88,7 +88,7 @@ public class AppView extends JFrame {
             ServerModel.get().setServerConsolePresent(true);
         } else {
             this.setTitle(TextConstants.CLIENT_TITLE_VALUE);
-            this.setMinimumSize(new Dimension(800, 600));
+            this.setMinimumSize(new Dimension(1000, 800));
         }
 
         this.setLayout(new BorderLayout(8, 8));

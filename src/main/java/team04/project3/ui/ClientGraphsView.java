@@ -41,7 +41,7 @@ public class ClientGraphsView extends JPanel{
         // Create transparent border around view
         this.setLayout(new BorderLayout());
         this.setOpaque(false);
-        this.setBorder(new EmptyBorder(8, 8, 8, 8));
+        this.setBorder(new EmptyBorder(2, 2, 2, 2));
 
         // Buffer for an opaque border surrounding ServerView, the buffer is the actual visible panel
         JPanel panelBuffer = new JPanel(new GridLayout(11, 1, 0, 0));
