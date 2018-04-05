@@ -4,6 +4,7 @@ import org.glassfish.tyrus.server.Server;
 import team04.project3.constants.TextConstants;
 import team04.project3.listeners.ServerListener;
 import team04.project3.model.EmostatePacketBuilder;
+import team04.project3.model.client.ClientModel;
 import team04.project3.util.Log;
 
 import javax.swing.*;
@@ -99,11 +100,14 @@ public class ServerModel {
             try {
                 // Start server
                 endpoint = new ServerEndpoint(this);
-                server = new Server("localhost", PORT, "/ws", null, ServerEndpoint.class);
+                server = new Server("localhost", PORT, "/", null, ServerEndpoint.class);
                 server.start();
 
                 this.run = true;
                 this.notifyServerStarted();
+
+                ClientModel.get().start();
+
             } catch (DeploymentException e) {
                 Log.e("Failed to deploy web socket server (" + e.getMessage() + ")", ServerModel.class);
             }
