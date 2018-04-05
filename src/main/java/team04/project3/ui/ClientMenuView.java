@@ -1,4 +1,6 @@
 package team04.project3.ui;
+import team04.project3.model.server.ServerModel;
+
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
@@ -71,6 +73,7 @@ public class ClientMenuView extends JMenuBar implements ActionListener {
         applicationMenu.add(emotivXavierComposerItem);
 
         //adding the items to the connect sub menu
+        connectComposerItem.addActionListener(this);
         connectMenu.add(connectComposerItem);
         connectMenu.add(new JSeparator());
         connectMenu.add(connectDriverItem);
@@ -167,12 +170,6 @@ public class ClientMenuView extends JMenuBar implements ActionListener {
         // Image scaledClockImg = clockImage.getScaledInstance(30,30,Image.SCALE_SMOOTH);
         // clientMenuBar.add(new ImageIcon(scaledClockImage));
 
-        /** setting the action listener for the facial expressions and
-         * opening the server from the client option
-         */
-        //facialExpressionsItem.addActionListener(this);
-        //emotivXavierComposerItem.addActionListener(this);
-        //performanceMetricsItem.addActionListener(this);
 
     }
 
@@ -183,13 +180,14 @@ public class ClientMenuView extends JMenuBar implements ActionListener {
             AppView appView = AppView.get(AppView.TYPE_SERVER);
             appView.setType(AppView.TYPE_SERVER);
             appView.init();
-        }
-        if(E.getSource().equals(facialExpressionsItem)){
+        } else if(E.getSource().equals(facialExpressionsItem)){
             //opens the facial expression panel
-        }
-        if(E.getSource().equals(performanceMetricsItem)){
+        } else if(E.getSource().equals(performanceMetricsItem)){
             //opens the performance metrics panel
+        } else if (E.getSource().equals(connectComposerItem)) {
+            ServerModel.get().start();
         }
+
     }
 
 }
