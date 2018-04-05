@@ -2,6 +2,7 @@ package team04.project3.ui;
 
 import team04.project3.constants.ColorConstants;
 import team04.project3.constants.TextConstants;
+import team04.project3.model.server.ServerModel;
 import team04.project3.util.Log;
 
 import javax.swing.*;
@@ -84,6 +85,7 @@ public class AppView extends JFrame {
             this.add(viewToolbar, BorderLayout.PAGE_START);
             this.setTitle(TextConstants.SERVER_TITLE_VALUE);
             this.setMinimumSize(new Dimension(600, 800));
+            ServerModel.get().setServerConsolePresent(true);
         } else {
             this.setTitle(TextConstants.CLIENT_TITLE_VALUE);
             this.setMinimumSize(new Dimension(800, 600));

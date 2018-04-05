@@ -29,4 +29,7 @@ public class TextConstants {
     public static final String DOWN_FACE = "Lowerface";
     public static final String EYE = "Eye";
     public static final String PERFORMANCE_METRICS = "Performance Metrics";
+
+    public static final String SERVER_NOT_OPEN_ERROR = "Cannot connect to Composer. Please try again and make sure " +
+                                                        "Composer is open";
 }
