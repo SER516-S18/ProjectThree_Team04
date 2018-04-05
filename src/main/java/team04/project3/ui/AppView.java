@@ -28,10 +28,23 @@ public class AppView extends JFrame {
         return _instance;
     }
 
-    private int _type = TYPE_CLIENT;
+    private static int _type = TYPE_CLIENT;
     private AppToolbarView viewToolbar;
     private JPanel viewMenu;
     private ConsoleView viewConsole;
+
+    public static AppView get(int type) {
+        if(_instance == null)
+            _instance = new AppView();
+
+        else {
+            if (type != _type) {
+                return new AppView();
+            }
+        }
+
+        return _instance;
+    }
 
     /**
      * Private constructor for Singleton pattern

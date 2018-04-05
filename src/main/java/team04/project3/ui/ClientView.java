@@ -13,6 +13,7 @@ import java.awt.*;
 public class ClientView extends JPanel {
     private ClientGraphView graphView;
     private ClientSettingsView settingsView;
+    private ClientMenuView clientMenuView = new ClientMenuView();
 
     /**
      * Representing the UI for the client application
@@ -21,7 +22,9 @@ public class ClientView extends JPanel {
         // Create a transparent border around this view
         this.setLayout(new BorderLayout());
         this.setOpaque(false);
-        this.setBorder(new EmptyBorder(8, 8, 8, 8));
+        this.setBorder(new EmptyBorder(0, 8, 8, 8));
+        this.add(clientMenuView, BorderLayout.NORTH);
+
 
         // Content goes in here (inside the invisible border)
         JPanel panelBuffer = new JPanel(new GridLayout(1, 2, 8, 8));
