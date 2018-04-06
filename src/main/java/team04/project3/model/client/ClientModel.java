@@ -93,12 +93,12 @@ public class ClientModel {
      */
     public void start() {
         if(run)
-            throw new IllegalArgumentException("Server is already running");
+            throw new IllegalArgumentException("Client is already running");
 
         try {
             client = ClientManager.createClient();
             endpoint = new ClientEndpoint(this);
-            session = client.connectToServer(endpoint, new URI("ws://" + HOST.getHostAddress() + ":" + PORT + "/ws"));
+            session = client.connectToServer(endpoint, new URI("ws://localhost:" + PORT + "/emostate"));
 
             this.run = true;
             this.notifyClientStarted();

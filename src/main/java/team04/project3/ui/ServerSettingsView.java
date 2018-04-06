@@ -87,17 +87,20 @@ public class ServerSettingsView extends JPanel {
 
         updateTimeWhenAutoReset = () -> {
     		while(autoResetCheckBox.isSelected()) {
-    			long INTERVAL = (long)((double)spinnerInputInterval.getValue()*1000);
-    			timeCounter=timeCounter+(double)spinnerInputInterval.getValue();
-    			try {
-    				Thread.sleep(INTERVAL);
-    			} catch (InterruptedException e1) {
-    				// TODO Auto-generated catch block
-    				e1.printStackTrace();
-    			}
+
+                if(ServerModel.get().isRepeatingPackets()) {
+                    long INTERVAL = (long) ((double) spinnerInputInterval.getValue() * 1000);
+                    timeCounter = timeCounter + (double) spinnerInputInterval.getValue();
+                    try {
+                        Thread.sleep(INTERVAL);
+                    } catch (InterruptedException e1) {
+                        // TODO Auto-generated catch block
+                        Thread.currentThread().interrupt();
+                        e1.printStackTrace();
+                    }
+                }
     		}
     	};
-    	addIntervaltoTimeCounter = new Thread(updateTimeWhenAutoReset);
         
     	autoResetCheckBox.addItemListener(e -> {
             if (e.getStateChange()==ItemEvent.SELECTED) {
@@ -118,11 +121,15 @@ public class ServerSettingsView extends JPanel {
                     ServerModel.get().sendPacketsToggle();
                     
                     if(ServerModel.get().isRepeatingPackets()) {
-                    	addIntervaltoTimeCounter.start();	
+
+                        addIntervaltoTimeCounter = new Thread(updateTimeWhenAutoReset);
+                        addIntervaltoTimeCounter.start();
                     	sendButton.setText("Stop");
+                        autoResetCheckBox.setEnabled(false);
                     } else {
                     	addIntervaltoTimeCounter.interrupt();
                     	sendButton.setText("Start");
+                        autoResetCheckBox.setEnabled(true);
                     }
                 } else {
                     // Send individual packets

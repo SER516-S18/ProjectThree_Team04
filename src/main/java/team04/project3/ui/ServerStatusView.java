@@ -87,7 +87,7 @@ public class ServerStatusView extends  JPanel {
             spinnerUpperFace.setValue(emostatePacketBuilder.getExpression((Expression) upperFaceDropDown.getSelectedItem()).doubleValue());
         });
 
-        spinnerUpperFace = new JSpinner( new SpinnerNumberModel(0.0d, 0.0d, 65536d, 0.10d) );
+        spinnerUpperFace = new JSpinner( new SpinnerNumberModel(0.0d, 0.0d, 1d, 0.05d) );
         spinnerUpperFace.setVisible(true);
         spinnerUpperFace.setBorder(null);
         spinnerUpperFace.getEditor().getComponent(0).setBackground(Color.gray);
@@ -131,7 +131,7 @@ public class ServerStatusView extends  JPanel {
             spinnerDownFace.setValue(emostatePacketBuilder.getExpression((Expression) downFaceDropDown.getSelectedItem()).doubleValue());
         });
 
-        spinnerDownFace = new JSpinner( new SpinnerNumberModel(0.0d, 0.0d, 65536d, 0.10d) );
+        spinnerDownFace = new JSpinner( new SpinnerNumberModel(0.0d, 0.0d, 1d, 0.05d) );
         spinnerDownFace.setVisible(true);
         spinnerDownFace.setBorder(null);
         spinnerDownFace.getEditor().getComponent(0).setBackground(Color.gray);
@@ -213,7 +213,7 @@ public class ServerStatusView extends  JPanel {
             }
         });
 
-        spinnerPerformanceMetric = new JSpinner( new SpinnerNumberModel(0.0d, 0.0d, 65536d, 0.10d) );
+        spinnerPerformanceMetric = new JSpinner( new SpinnerNumberModel(0.0d, 0.0d, 1d, 0.05d) );
         spinnerPerformanceMetric.setVisible(true);
         spinnerPerformanceMetric.setBorder(null);
         spinnerPerformanceMetric.getEditor().getComponent(0).setBackground(Color.gray);
