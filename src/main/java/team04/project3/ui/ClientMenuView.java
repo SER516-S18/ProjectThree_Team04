@@ -81,13 +81,13 @@ public class ClientMenuView extends JMenuBar implements ActionListener {
         connectMenu.add(reconnectDriverItem);
 
         //adding the items to the detection sub menu
-        detectionMenu.add(mentalCommandsItem);
-        detectionMenu.add(new JSeparator());
+        facialExpressionsItem.addActionListener(this);
         detectionMenu.add(facialExpressionsItem);
         detectionMenu.add(new JSeparator());
+
+        performanceMetricsItem.addActionListener(this);
         detectionMenu.add(performanceMetricsItem);
         detectionMenu.add(new JSeparator());
-        detectionMenu.add(initialSensorsItem);
 
         //adding the items to the help sub menu
         helpMenu.add(emotivOnGithubItem);
@@ -99,15 +99,8 @@ public class ClientMenuView extends JMenuBar implements ActionListener {
         clientMenu.add(new JSeparator());
         clientMenu.add(connectMenu);
         clientMenu.add(new JSeparator());
-        clientMenu.add(setUpItem);
-        clientMenu.add(new JSeparator());
         clientMenu.add(detectionMenu);
         clientMenu.add(new JSeparator());
-        clientMenu.add(recordingItem);
-        clientMenu.add(new JSeparator());
-        clientMenu.add(reportsItem);
-        clientMenu.add(new JSeparator());
-        clientMenu.add(helpMenu);
 
         // adding the clientMenu to the MenuBar
         this.add(clientMenu);
@@ -181,9 +174,12 @@ public class ClientMenuView extends JMenuBar implements ActionListener {
             appView.setType(AppView.TYPE_SERVER);
             appView.init();
         } else if(E.getSource().equals(facialExpressionsItem)){
-            //opens the facial expression panel
+            AppView.get().setClientType(AppView.TYPE_CLIENT_FACE_EXPRESSION);
+            AppView.get().init();
         } else if(E.getSource().equals(performanceMetricsItem)){
             //opens the performance metrics panel
+            AppView.get().setClientType(AppView.TYPE_CLIENT_PERFORMANCE_METRIC);
+            AppView.get().init();
         } else if (E.getSource().equals(connectComposerItem)) {
             ServerModel.get().start();
         }

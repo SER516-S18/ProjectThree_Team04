@@ -5,6 +5,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import team04.project3.constants.ColorConstants;
 import team04.project3.constants.PerformanceMetricConstants;
+import team04.project3.constants.TextConstants;
 import team04.project3.model.client.PerformanceMetricModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -27,13 +28,13 @@ public class PerformanceMetricEmotionalStatesView extends JPanel {
 	
 	public PerformanceMetricEmotionalStatesView() {
 		
-		this.performanceMetricModel = performanceMetricModel;
+		this.performanceMetricModel = new PerformanceMetricModel();
 		
         
-        JPanel panelBuffer = new JPanel(new GridBagLayout());
+		panelBuffer = new JPanel(new GridBagLayout());
         panelBuffer.setBackground(ColorConstants.BACKGROUND_GRAY);
         panelBuffer.setBorder(BorderFactory.createLineBorder(Color.black));
-        Component panel = getEmotionPanel();
+        getEmotionPanel();
 	}
         
 	
@@ -91,7 +92,7 @@ public class PerformanceMetricEmotionalStatesView extends JPanel {
 		emotionButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		emotionButton.setBorder(new LineBorder(Color.black));
 		emotionButton.setHorizontalAlignment(SwingConstants.CENTER);
-		emotionButton.setFont(new java.awt.Font("SansSerif", java.awt.Font.BOLD, 15));
+		emotionButton.setFont(TextConstants.DEFAULT_FONT);
 		return emotionButton;
 	}
 	

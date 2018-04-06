@@ -16,6 +16,9 @@ public class AppView extends JFrame {
     public static final int TYPE_CLIENT = 0;
     public static final int TYPE_SERVER = 1;
 
+    public static final int TYPE_CLIENT_FACE_EXPRESSION = 0;
+    public static final int TYPE_CLIENT_PERFORMANCE_METRIC = 1;
+
     private static AppView _instance = null;
 
     /**
@@ -30,6 +33,7 @@ public class AppView extends JFrame {
     }
 
     private static int _type = TYPE_CLIENT;
+    private static int _client_type = TYPE_CLIENT_FACE_EXPRESSION;
     private AppToolbarView viewToolbar;
     private JPanel viewMenu;
     private ConsoleView viewConsole;
@@ -86,6 +90,10 @@ public class AppView extends JFrame {
             this.setTitle(TextConstants.SERVER_TITLE_VALUE);
             this.setMinimumSize(new Dimension(600, 800));
             ServerModel.get().setServerConsolePresent(true);
+
+            // Add bottom footer console component
+            viewConsole = new ConsoleView();
+            this.add(viewConsole, BorderLayout.PAGE_END);
         } else {
             this.setTitle(TextConstants.CLIENT_TITLE_VALUE);
             this.setMinimumSize(new Dimension(1000, 800));
@@ -96,10 +104,6 @@ public class AppView extends JFrame {
 
         // Add respective Client or Server panel to the center
         this.updateType();
-
-        // Add bottom footer console component
-        viewConsole = new ConsoleView();
-        this.add(viewConsole, BorderLayout.PAGE_END);
 
         // Package, set visible, move to center of screen
         this.getContentPane().setBackground(ColorConstants.BACKGROUND_BLUE);
@@ -123,7 +127,7 @@ public class AppView extends JFrame {
         // Update the AppView with the Client UI for @param type TYPE_CLIENT
         if(_type == AppView.TYPE_CLIENT) {
             Log.i("Application initializing as a Client", AppView.class);
-            viewMenu = new ClientView();
+            viewMenu = new ClientView(_client_type);
             this.setTitle(TextConstants.CLIENT_TITLE_VALUE);
 
             if(this.viewToolbar != null)
@@ -160,5 +164,13 @@ public class AppView extends JFrame {
      */
     public boolean isServer() {
         return  _type == TYPE_SERVER;
+    }
+
+    public int getClientType() {
+        return _client_type;
+    }
+
+    public void setClientType(int _client_type) {
+        AppView._client_type = _client_type;
     }
 }
