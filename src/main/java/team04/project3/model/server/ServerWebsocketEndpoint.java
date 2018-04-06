@@ -43,12 +43,14 @@ public class ServerWebsocketEndpoint {
     public void onClose(Session session) throws IOException {
         // WebSocket connection closes
         sessions.remove(session);
+        Log.v("Client session closed (" + sessions.size() + " remain)", ServerWebsocketEndpoint.class);
     }
 
     @javax.websocket.OnError
     public void onError(Session session, Throwable throwable) {
         // Do error handling here
         sessions.remove(session);
+        Log.v("Client session threw an error (" + throwable.getMessage() + ")", ServerWebsocketEndpoint.class);
     }
 
     public void send(EmostatePacket packet) {

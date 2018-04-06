@@ -1,5 +1,6 @@
 package team04.project3.model.client;
 
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import org.glassfish.tyrus.client.ClientManager;
 import team04.project3.listeners.ClientListener;
 import team04.project3.model.EmostatePacket;
@@ -100,6 +101,18 @@ public class ClientModel {
             client = ClientManager.createClient();
             endpoint = new ClientWebsocketEndpoint(this);
             session = client.connectToServer(ClientWebsocketEndpoint.class, uri);
+
+            long timeout = System.currentTimeMillis() + 1000 * 2;
+            while(!session.isOpen() && System.currentTimeMillis() < timeout) {
+                try {
+                    Thread.sleep(100L);
+                } catch(InterruptedException e) {
+                    Log.w("Failed to sleep waiting for session to open", ClientModel.class);
+                }
+            }
+
+            if(!session.isOpen())
+                throw new IOException("Session failed to open and timed out");
 
             this.run = true;
             this.notifyClientStarted();
