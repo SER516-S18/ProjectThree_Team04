@@ -1,5 +1,6 @@
 package team04.project3;
 
+import team04.project3.model.server.ServerModel;
 import team04.project3.ui.AppView;
 import team04.project3.util.Log;
 import team04.project3.util.Terminal;
@@ -59,6 +60,9 @@ public class ServerApp {
 
         // Start console
         Terminal.get().start();
+
+        // Start model
+        ServerModel.get().start();
 
         // Start UI
         AppView.get().init();

@@ -1,5 +1,6 @@
 package team04.project3;
 
+import team04.project3.model.client.ClientModel;
 import team04.project3.ui.AppView;
 import team04.project3.util.Log;
 import team04.project3.util.Terminal;
@@ -59,6 +60,9 @@ public class ClientApp {
 
         // Start console
         Terminal.get().start();
+
+        // Start model
+        ClientModel.get().start();
 
         // Start UI
         AppView.get().init();
