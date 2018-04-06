@@ -1,9 +1,12 @@
 package team04.project3.model.client;
 
 import team04.project3.model.EmostatePacket;
+import team04.project3.model.server.ServerWebsocketEndpoint;
 import team04.project3.model.websocket.MessageDecoder;
 import team04.project3.model.websocket.MessageEncoder;
 import team04.project3.util.Log;
+
+import javax.websocket.Session;
 
 @javax.websocket.ClientEndpoint(
         encoders = MessageEncoder.class,
@@ -15,6 +18,11 @@ public class ClientWebsocketEndpoint {
 
     public ClientWebsocketEndpoint(ClientModel model) {
         this.model = model;
+    }
+
+    @javax.websocket.OnOpen
+    public void onOpen(Session session) {
+        Log.v("Client opened a new session", ClientWebsocketEndpoint.class);
     }
 
     @javax.websocket.OnMessage

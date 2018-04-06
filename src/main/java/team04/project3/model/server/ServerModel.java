@@ -150,7 +150,7 @@ public class ServerModel {
      * Notifies the server is starting
      */
     private void notifyServerStarted() {
-        Log.i("Server started successfully", ServerModel.class);
+        Log.i("Server started successfully on port " + ServerModel.this.PORT, ServerModel.class);
         for(ServerListener listener : listeners) {
             listener.started();
         }

@@ -101,9 +101,6 @@ public class ClientModel {
             endpoint = new ClientWebsocketEndpoint(this);
             session = client.connectToServer(ClientWebsocketEndpoint.class, uri);
 
-            if(!session.isOpen())
-                throw new IOException("Session did not open successfully");
-
             this.run = true;
             this.notifyClientStarted();
         } catch(URISyntaxException e) {
