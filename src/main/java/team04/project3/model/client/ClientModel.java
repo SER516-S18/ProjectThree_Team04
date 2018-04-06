@@ -100,19 +100,10 @@ public class ClientModel {
             URI uri = new URI("ws://" + HOST.getHostAddress() + ":" + PORT + "/ws/emostate");
             client = ClientManager.createClient();
             endpoint = new ClientWebsocketEndpoint(this);
-            session = client.connectToServer(ClientWebsocketEndpoint.class, uri);
-
-            long timeout = System.currentTimeMillis() + 1000 * 2;
-            while(!session.isOpen() && System.currentTimeMillis() < timeout) {
-                try {
-                    Thread.sleep(100L);
-                } catch(InterruptedException e) {
-                    Log.w("Failed to sleep waiting for session to open", ClientModel.class);
-                }
-            }
+            session = client.connectToServer(endpoint, uri);
 
             if(!session.isOpen())
-                throw new IOException("Session failed to open and timed out");
+                Log.w("Session not open", ClientModel.class);
 
             this.run = true;
             this.notifyClientStarted();

@@ -34,7 +34,7 @@ public class ClientWebsocketEndpoint {
 
     @javax.websocket.OnClose
     public void onClose(Session session, CloseReason closeReason) {
-        Log.v("Client session closed", ClientWebsocketEndpoint.class);
+        Log.v("Client session closed (" + closeReason.toString() + ")", ClientWebsocketEndpoint.class);
     }
 
     @javax.websocket.OnError
