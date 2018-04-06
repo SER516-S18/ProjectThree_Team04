@@ -21,7 +21,8 @@ import java.util.TimerTask;
  * @author  David Henderson (dchende2@asu.edu)
  */
 public class ServerStatusView extends  JPanel {
-    private EmostatePacketBuilder emostatePacketBuilder = EmostatePacketBuilder.getZeroedEmostatePacket();
+    
+	private EmostatePacketBuilder emostatePacketBuilder = EmostatePacketBuilder.getZeroedEmostatePacket();
     private Expression[] eyeDropDownValues = new Expression[] {Expression.BLINK, Expression.WINK_LEFT, Expression.WINK_RIGHT,
             Expression.LOOK_LEFT, Expression.LOOK_RIGHT};
     private Expression[] upperFaceDropDownValues = new Expression[] {Expression.BROW_RAISE, Expression.BROW_FURROW};
@@ -277,6 +278,9 @@ public class ServerStatusView extends  JPanel {
     			if(timeCounter != ServerSettingsView.getTimeCounter()) {
     				timeCounter = ServerSettingsView.getTimeCounter();
     				timeField.setText((String.valueOf(ServerSettingsView.getTimeCounter())));
+    				
+    				//setting tick value on timeCounter change
+    				emostatePacketBuilder.setTick((float)timeCounter);
     			}
     		}
     	}, 0, 1);
