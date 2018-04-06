@@ -157,13 +157,15 @@ public class ClientMenuView extends JMenuBar implements ActionListener {
         });
         this.add(trainingProfile);
 
-        // Adding the clock icon to the menu bar
-        // ImageIcon clockIcon = new ImageIcon(getClass).getResource("/team04/project3/images/clock.gif"));
-        // Image clockImage = clockIcon.getImage();
-        // Image scaledClockImg = clockImage.getScaledInstance(30,30,Image.SCALE_SMOOTH);
-        // clientMenuBar.add(new ImageIcon(scaledClockImage));
-
-
+        // Adding the clock icon to the right side of the menu bar
+        JLabel clock = new JLabel();
+        clock.setText("0.00");
+        ImageIcon clockIcon = new ImageIcon("src/main/resources/team04/project3/images/clock.jpeg");
+        clock.setIcon(clockIcon);
+        clock.setForeground(Color.BLACK);
+        clock.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
+        this.add(Box.createGlue());
+        this.add(clock);
     }
 
     @Override
@@ -185,5 +187,4 @@ public class ClientMenuView extends JMenuBar implements ActionListener {
         }
 
     }
-
 }
