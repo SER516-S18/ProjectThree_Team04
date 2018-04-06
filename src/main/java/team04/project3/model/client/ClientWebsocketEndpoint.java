@@ -5,23 +5,21 @@ import team04.project3.model.websocket.MessageDecoder;
 import team04.project3.model.websocket.MessageEncoder;
 import team04.project3.util.Log;
 
-import javax.websocket.OnMessage;
-
 @javax.websocket.ClientEndpoint(
         encoders = MessageEncoder.class,
         decoders = MessageDecoder.class
 )
 
-public class ClientEndpoint {
+public class ClientWebsocketEndpoint {
     private ClientModel model;
 
-    public ClientEndpoint(ClientModel model) {
+    public ClientWebsocketEndpoint(ClientModel model) {
         this.model = model;
     }
 
-    @OnMessage
+    @javax.websocket.OnMessage
     public void onMessage(EmostatePacket message) {
-        Log.v("Message received", ClientEndpoint.class);
+        Log.v("Message received", ClientWebsocketEndpoint.class);
         model.addPacket(message);
     }
 }

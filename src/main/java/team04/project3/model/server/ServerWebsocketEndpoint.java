@@ -1,6 +1,5 @@
 package team04.project3.model.server;
 
-import org.glassfish.tyrus.server.Server;
 import team04.project3.model.EmostatePacket;
 import team04.project3.model.websocket.MessageDecoder;
 import team04.project3.model.websocket.MessageEncoder;
@@ -19,34 +18,34 @@ import java.util.Set;
     encoders = MessageEncoder.class
 )
 
-public class ServerEndpoint {
+public class ServerWebsocketEndpoint {
     static Set<Session> sessions = Collections.synchronizedSet(new HashSet<>());
 
     private ServerModel model;
 
-    public ServerEndpoint(ServerModel model) {
+    public ServerWebsocketEndpoint(ServerModel model) {
         this.model = model;
     }
 
-    @OnOpen
+    @javax.websocket.OnOpen
     public void onOpen(Session session) throws IOException {
         // Get session and WebSocket connection
         sessions.add(session);
-        Log.v("Client opened a new session", ServerEndpoint.class);
+        Log.v("Client opened a new session (" + sessions.size() + " total)", ServerWebsocketEndpoint.class);
     }
 
-    @OnMessage
+    @javax.websocket.OnMessage
     public void onMessage(Session session, EmostatePacket message) throws IOException, EncodeException {
         // Handle incoming messages
     }
 
-    @OnClose
+    @javax.websocket.OnClose
     public void onClose(Session session) throws IOException {
         // WebSocket connection closes
         sessions.remove(session);
     }
 
-    @OnError
+    @javax.websocket.OnError
     public void onError(Session session, Throwable throwable) {
         // Do error handling here
         sessions.remove(session);
@@ -56,9 +55,9 @@ public class ServerEndpoint {
         for(Session session : sessions) {
             try {
                 session.getBasicRemote().sendObject(packet);
-                Log.v("Packet send to client's session", ServerEndpoint.class);
+                Log.v("Packet send to client's session", ServerWebsocketEndpoint.class);
             } catch(EncodeException | IOException e) {
-                Log.w("Failed to send packet to session (" + e.getMessage() + ")", ServerEndpoint.class);
+                Log.w("Failed to send packet to session (" + e.getMessage() + ")", ServerWebsocketEndpoint.class);
             }
         }
     }
@@ -70,7 +69,7 @@ public class ServerEndpoint {
             try {
                 session.close();
             } catch(IOException e) {
-                Log.w("Failed to gracefully close session", ServerEndpoint.class);
+                Log.w("Failed to gracefully close session", ServerWebsocketEndpoint.class);
             }
             iterator.remove();
         }

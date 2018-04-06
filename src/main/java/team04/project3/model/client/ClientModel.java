@@ -57,7 +57,7 @@ public class ClientModel {
 
     private final ArrayList<ClientListener> listeners = new ArrayList<>();
     private ClientManager client;
-    private ClientEndpoint endpoint;
+    private ClientWebsocketEndpoint endpoint;
     private Session session;
     private boolean run = false;
     private LinkedList<EmostatePacket> packets;
@@ -96,9 +96,13 @@ public class ClientModel {
             throw new IllegalArgumentException("Client is already running");
 
         try {
+            URI uri = new URI("ws://" + HOST.getHostAddress() + ":" + PORT + "/ws/emostate");
             client = ClientManager.createClient();
-            endpoint = new ClientEndpoint(this);
-            session = client.connectToServer(endpoint, new URI("ws://" + HOST.getHostAddress() + ":" + PORT + "/emostate"));
+            endpoint = new ClientWebsocketEndpoint(this);
+            session = client.connectToServer(ClientWebsocketEndpoint.class, uri);
+
+            if(!session.isOpen())
+                throw new IOException("Session did not open successfully");
 
             this.run = true;
             this.notifyClientStarted();
