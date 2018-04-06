@@ -98,7 +98,7 @@ public class ClientModel {
         try {
             client = ClientManager.createClient();
             endpoint = new ClientEndpoint(this);
-            session = client.connectToServer(endpoint, new URI("ws://localhost:" + PORT + "/emostate"));
+            session = client.connectToServer(endpoint, new URI("ws://" + HOST.getHostAddress() + ":" + PORT + "/emostate"));
 
             this.run = true;
             this.notifyClientStarted();

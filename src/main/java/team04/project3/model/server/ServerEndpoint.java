@@ -1,5 +1,6 @@
 package team04.project3.model.server;
 
+import org.glassfish.tyrus.server.Server;
 import team04.project3.model.EmostatePacket;
 import team04.project3.model.websocket.MessageDecoder;
 import team04.project3.model.websocket.MessageEncoder;
@@ -19,18 +20,19 @@ import java.util.Set;
 )
 
 public class ServerEndpoint {
+    static Set<Session> sessions = Collections.synchronizedSet(new HashSet<>());
+
     private ServerModel model;
 
     public ServerEndpoint(ServerModel model) {
         this.model = model;
     }
 
-    static Set<Session> sessions = Collections.synchronizedSet(new HashSet<>());
-
     @OnOpen
     public void onOpen(Session session) throws IOException {
         // Get session and WebSocket connection
         sessions.add(session);
+        Log.v("Client opened a new session", ServerEndpoint.class);
     }
 
     @OnMessage
@@ -54,6 +56,7 @@ public class ServerEndpoint {
         for(Session session : sessions) {
             try {
                 session.getBasicRemote().sendObject(packet);
+                Log.v("Packet send to client's session", ServerEndpoint.class);
             } catch(EncodeException | IOException e) {
                 Log.w("Failed to send packet to session (" + e.getMessage() + ")", ServerEndpoint.class);
             }

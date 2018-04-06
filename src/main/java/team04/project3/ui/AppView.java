@@ -89,7 +89,6 @@ public class AppView extends JFrame {
             this.add(viewToolbar, BorderLayout.PAGE_START);
             this.setTitle(TextConstants.SERVER_TITLE_VALUE);
             this.setMinimumSize(new Dimension(600, 800));
-            ServerModel.get().setServerConsolePresent(true);
 
             // Add bottom footer console component
             viewConsole = new ConsoleView();

@@ -3,6 +3,7 @@ package team04.project3.model.client;
 import team04.project3.model.EmostatePacket;
 import team04.project3.model.websocket.MessageDecoder;
 import team04.project3.model.websocket.MessageEncoder;
+import team04.project3.util.Log;
 
 import javax.websocket.OnMessage;
 
@@ -20,6 +21,7 @@ public class ClientEndpoint {
 
     @OnMessage
     public void onMessage(EmostatePacket message) {
+        Log.v("Message received", ClientEndpoint.class);
         model.addPacket(message);
     }
 }

@@ -50,11 +50,10 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/javax.websocket/javax.websocket-client-api -->
         <dependency>
             <groupId>javax.websocket</groupId>
-            <artifactId>javax.websocket-client-api</artifactId>
-            <version>1.1</version>
+            <artifactId>javax.websocket-api</artifactId>
+            <version>1.0</version>
         </dependency>
 
         <dependency>
@@ -73,14 +72,6 @@
             <groupId>org.glassfish.tyrus</groupId>
             <artifactId>tyrus-container-grizzly-server</artifactId>
             <version>1.13.1</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.glassfish.tyrus/tyrus-container-grizzly -->
-        <dependency>
-            <groupId>org.glassfish.tyrus</groupId>
-            <artifactId>tyrus-container-grizzly</artifactId>
-            <version>1.2.1</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
