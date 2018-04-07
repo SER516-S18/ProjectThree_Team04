@@ -1,5 +1,6 @@
 package team04.project3.model.client;
 
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import org.glassfish.tyrus.client.ClientManager;
 import team04.project3.listeners.ClientListener;
 import team04.project3.model.EmostatePacket;
@@ -57,7 +58,7 @@ public class ClientModel {
 
     private final ArrayList<ClientListener> listeners = new ArrayList<>();
     private ClientManager client;
-    private ClientEndpoint endpoint;
+    private ClientWebsocketEndpoint endpoint;
     private Session session;
     private boolean run = false;
     private LinkedList<EmostatePacket> packets;
@@ -96,9 +97,13 @@ public class ClientModel {
             throw new IllegalArgumentException("Client is already running");
 
         try {
+            URI uri = new URI("ws://" + HOST.getHostAddress() + ":" + PORT + "/ws/emostate");
             client = ClientManager.createClient();
-            endpoint = new ClientEndpoint(this);
-            session = client.connectToServer(endpoint, new URI("ws://" + HOST.getHostAddress() + ":" + PORT + "/emostate"));
+            endpoint = new ClientWebsocketEndpoint(this);
+            session = client.connectToServer(endpoint, uri);
+
+            if(!session.isOpen())
+                Log.w("Session not open", ClientModel.class);
 
             this.run = true;
             this.notifyClientStarted();

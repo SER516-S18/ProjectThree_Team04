@@ -16,7 +16,7 @@ public class MessageDecoder implements Decoder.Text<EmostatePacket> {
 
     @Override
     public boolean willDecode(String s) {
-        return (s != null);
+        return true;
     }
 
     @Override

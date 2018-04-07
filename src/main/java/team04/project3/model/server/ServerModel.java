@@ -38,7 +38,7 @@ public class ServerModel {
     // Server - Websocket state
     private ArrayList<ServerListener> listeners = new ArrayList<>();
     private Server server;
-    private ServerEndpoint endpoint;
+    private ServerWebsocketEndpoint endpoint;
     private boolean run = false;
 
     // Server - Packet state/behavior
@@ -88,8 +88,8 @@ public class ServerModel {
 
         try {
             // Start server
-            endpoint = new ServerEndpoint(this);
-            server = new Server("localhost", PORT, "/", null, ServerEndpoint.class);
+            endpoint = new ServerWebsocketEndpoint(this);
+            server = new Server("localhost", PORT, "/ws", null, ServerWebsocketEndpoint.class);
             server.start();
 
             this.run = true;
@@ -150,7 +150,7 @@ public class ServerModel {
      * Notifies the server is starting
      */
     private void notifyServerStarted() {
-        Log.i("Server started successfully", ServerModel.class);
+        Log.i("Server started successfully on port " + ServerModel.this.PORT, ServerModel.class);
         for(ServerListener listener : listeners) {
             listener.started();
         }
