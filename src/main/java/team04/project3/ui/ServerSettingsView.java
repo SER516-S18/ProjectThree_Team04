@@ -89,7 +89,8 @@ public class ServerSettingsView extends JPanel {
     		while(autoResetCheckBox.isSelected()) {
 
                 if(ServerModel.get().isRepeatingPackets()) {
-                    long INTERVAL = (long) ((double) spinnerInputInterval.getValue() * 1000);
+                    
+                	long INTERVAL = (long) ((double) spinnerInputInterval.getValue() * 1000);
                     timeCounter = timeCounter + (double) spinnerInputInterval.getValue();
                     try {
                         Thread.sleep(INTERVAL);
