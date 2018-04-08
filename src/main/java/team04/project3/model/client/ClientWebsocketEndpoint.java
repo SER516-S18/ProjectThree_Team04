@@ -14,11 +14,6 @@ import javax.websocket.Session;
 )
 
 public class ClientWebsocketEndpoint {
-    private ClientModel model;
-
-    public ClientWebsocketEndpoint(ClientModel model) {
-        this.model = model;
-    }
 
     @javax.websocket.OnOpen
     public void onOpen(Session session) {
@@ -27,8 +22,7 @@ public class ClientWebsocketEndpoint {
 
     @javax.websocket.OnMessage
     public void onMessage(EmostatePacket message) {
-        Log.v("Message received", ClientWebsocketEndpoint.class);
-        model.addPacket(message);
+        ClientModel.get().addPacket(message);
     }
 
     @javax.websocket.OnClose
@@ -39,5 +33,6 @@ public class ClientWebsocketEndpoint {
     @javax.websocket.OnError
     public void onError(Session session, Throwable throwable) {
         Log.v("Client session encountered an error (" + throwable.getMessage() + ")", ClientWebsocketEndpoint.class);
+        throwable.printStackTrace();
     }
 }

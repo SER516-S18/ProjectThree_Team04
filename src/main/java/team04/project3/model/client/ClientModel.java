@@ -215,7 +215,7 @@ public class ClientModel {
             throw new IllegalArgumentException("Packet must be non-null");
 
         // Reset if the server sends a packet earlier in time
-        if(packet.getTick() < packetNewest.getTick())
+        if(packetNewest != null && packet.getTick() < packetNewest.getTick())
             resetPackets();
 
         packetNewest = packet;

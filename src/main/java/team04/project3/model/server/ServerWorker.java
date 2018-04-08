@@ -23,20 +23,16 @@ public class ServerWorker implements Runnable {
         synchronized (this) {
             try {
                 // Start server
-                Log.v("Server worker starting", ServerWorker.class);
-                endpoint = new ServerWebsocketEndpoint(model);
+                endpoint = new ServerWebsocketEndpoint();
                 server = new Server("localhost", model.getPort(), "/ws", null, ServerWebsocketEndpoint.class);
                 server.start();
-                Log.v("Server worker started", ServerWorker.class);
 
                 // Run the server continuously until notify
                 wait();
 
                 // Shut down the server
-                Log.v("Server worker stopping", ServerWorker.class);
                 endpoint.disconnect();
                 server.stop();
-                Log.v("Server worker stopped", ServerWorker.class);
             } catch (DeploymentException e) {
                 Log.e("Failed to deploy web socket server (" + e.getMessage() + ")", ServerWorker.class);
             } catch (InterruptedException e) {

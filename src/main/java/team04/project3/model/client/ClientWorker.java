@@ -27,25 +27,21 @@ public class ClientWorker implements Runnable {
         synchronized (this) {
             try {
                 // Start the client
-                Log.v("Client worker starting", ClientWorker.class);
                 URI uri = new URI("ws://" + model.getHost().getHostAddress() + ":" + model.getPort() + "/ws/emostate");
                 client = ClientManager.createClient();
-                endpoint = new ClientWebsocketEndpoint(model);
+                endpoint = new ClientWebsocketEndpoint();
                 session = client.connectToServer(endpoint, uri);
-                Log.v("Client worker started", ClientWorker.class);
 
                 // Run the client continuously
                 wait();
 
                 // Shutdown the client
-                Log.v("Client worker stopping", ClientWorker.class);
                 try {
                     session.close();
                     client.shutdown();
                 } catch (IOException e) {
                     Log.w("Failed to shut down client gracefully", ClientModel.class);
                 }
-                Log.v("Client worker stopped", ClientWorker.class);
             } catch (URISyntaxException e) {
                 Log.w("Failed to connect to server (Invalid URI: " + e.getMessage() + ")", ClientWorker.class);
             } catch (DeploymentException e) {

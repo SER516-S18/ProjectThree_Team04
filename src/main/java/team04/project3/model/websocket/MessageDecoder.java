@@ -1,13 +1,17 @@
 package team04.project3.model.websocket;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import team04.project3.model.EmostatePacket;
 
 import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
+import java.lang.reflect.Type;
+import java.util.Map;
 
 public class MessageDecoder implements Decoder.Text<EmostatePacket> {
-    private static Gson gson = new Gson();
+    private static Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
 
     @Override
     public EmostatePacket decode(String s) {

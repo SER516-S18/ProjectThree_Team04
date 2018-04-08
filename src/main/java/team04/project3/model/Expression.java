@@ -18,18 +18,20 @@ public enum Expression {
 
     Expression(String name, boolean floating) {
         this.NAME = name;
-        this.floating = floating;
+        this.IS_FLOATING = floating;
     }
 
+    @SerializedName("NAME")
     public String NAME;
-    private boolean floating;
+    @SerializedName("ISFLOATING")
+    private boolean IS_FLOATING;
 
     public boolean isFloating() {
-        return floating;
+        return IS_FLOATING;
     }
 
     public boolean isBinary() {
-        return !floating;
+        return !IS_FLOATING;
     }
 
     @Override

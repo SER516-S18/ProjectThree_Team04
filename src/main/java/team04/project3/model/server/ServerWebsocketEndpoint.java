@@ -22,17 +22,11 @@ import java.util.Set;
 public class ServerWebsocketEndpoint {
     private static Set<Session> sessions = Collections.synchronizedSet(new HashSet<>());
 
-    private ServerModel model;
-
-    public ServerWebsocketEndpoint(ServerModel model) {
-        this.model = model;
-    }
-
     @javax.websocket.OnOpen
     public void onOpen(Session session) throws IOException {
         // Get session and WebSocket connection
         sessions.add(session);
-        Log.v("Client opened a new session (" + sessions.size() + " total)", ServerWebsocketEndpoint.class);
+        Log.v("Client opened a new session (" + sessions.size() + " total open)", ServerWebsocketEndpoint.class);
     }
 
     @javax.websocket.OnMessage
@@ -44,7 +38,7 @@ public class ServerWebsocketEndpoint {
     public void onClose(Session session) throws IOException {
         // WebSocket connection closes
         sessions.remove(session);
-        Log.v("Client session closed (" + sessions.size() + " remain)", ServerWebsocketEndpoint.class);
+        Log.v("Client session closed (" + sessions.size() + " remain open)", ServerWebsocketEndpoint.class);
     }
 
     @javax.websocket.OnError
@@ -52,13 +46,13 @@ public class ServerWebsocketEndpoint {
         // Do error handling here
         sessions.remove(session);
         Log.v("Client session threw an error (" + throwable.getMessage() + ")", ServerWebsocketEndpoint.class);
+        throwable.printStackTrace();
     }
 
     public void send(EmostatePacket packet) {
         for(Session session : sessions) {
             try {
                 session.getBasicRemote().sendObject(packet);
-                Log.v("Packet send to client's session", ServerWebsocketEndpoint.class);
             } catch(EncodeException | IOException e) {
                 Log.w("Failed to send packet to session (" + e.getMessage() + ")", ServerWebsocketEndpoint.class);
             }

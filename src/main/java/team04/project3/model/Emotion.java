@@ -10,6 +10,7 @@ public enum Emotion {
     @SerializedName("EXCITEMENT") EXCITEMENT("Excitement"),
     @SerializedName("FOCUS") FOCUS("Focus");
 
+    @SerializedName("NAME")
     public String NAME;
 
     private Emotion(String name) {
