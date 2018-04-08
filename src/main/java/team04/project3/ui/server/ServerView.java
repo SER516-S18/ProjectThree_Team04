@@ -27,8 +27,6 @@ public class ServerView extends JFrame {
         // Start the server model if it isn't running
         if(!ServerModel.get().isRunning())
             ServerModel.get().start();
-
-        this.init();
     }
 
     public void init() {
@@ -41,11 +39,15 @@ public class ServerView extends JFrame {
         panelToolbar = new ServerToolbarView();
         this.add(panelToolbar, BorderLayout.PAGE_START);
 
+        JPanel panelCenter = new JPanel();
+        panelCenter.setLayout(new BorderLayout());
+        this.add(panelCenter, BorderLayout.CENTER);
+
         panelTransmit = new ServerTransmitView();
-        this.add(panelTransmit, BorderLayout.CENTER);
+        panelCenter.add(panelTransmit, BorderLayout.PAGE_START);
 
         panelValues = new ServerValuesView();
-        this.add(panelValues, BorderLayout.PAGE_END);
+        panelCenter.add(panelValues, BorderLayout.CENTER);
 
         this.setVisible(true);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();

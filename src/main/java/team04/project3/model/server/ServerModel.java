@@ -249,7 +249,6 @@ public class ServerModel {
             throw new IllegalStateException("Cannot turn off auto-repeating while repeater is running");
 
         REPEAT = repeat;
-
     }
 
     /**
