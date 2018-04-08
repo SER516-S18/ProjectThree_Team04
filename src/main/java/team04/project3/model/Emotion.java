@@ -2,10 +2,6 @@ package team04.project3.model;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
-
 public enum Emotion {
     @SerializedName("INTEREST") INTEREST("Interest"),
     @SerializedName("ENGAGEMENT") ENGAGEMENT("Engagement"),

@@ -1,17 +1,10 @@
 package team04.project3.model.client;
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
-import org.glassfish.tyrus.client.ClientManager;
 import team04.project3.listeners.ClientListener;
 import team04.project3.model.EmostatePacket;
 import team04.project3.util.Log;
 
-import javax.websocket.DeploymentException;
-import javax.websocket.Session;
-import java.io.IOException;
 import java.net.InetAddress;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -57,10 +50,7 @@ public class ClientModel {
     private InetAddress HOST;
 
     private final ArrayList<ClientListener> listeners = new ArrayList<>();
-    private ClientManager client;
-    private ClientWebsocketEndpoint endpoint;
-    private Session session;
-    private boolean run = false;
+    private ClientWorker worker;
     private LinkedList<EmostatePacket> packets;
     private EmostatePacket packetNewest;
 
@@ -93,46 +83,23 @@ public class ClientModel {
      * Called to start the client model and connect
      */
     public void start() {
-        if(run)
+        if(this.isRunning())
             throw new IllegalArgumentException("Client is already running");
 
-        try {
-            URI uri = new URI("ws://" + HOST.getHostAddress() + ":" + PORT + "/ws/emostate");
-            client = ClientManager.createClient();
-            endpoint = new ClientWebsocketEndpoint(this);
-            session = client.connectToServer(endpoint, uri);
-
-            if(!session.isOpen())
-                Log.w("Session not open", ClientModel.class);
-
-            this.run = true;
-            this.notifyClientStarted();
-        } catch(URISyntaxException e) {
-            Log.w("Failed to connect to server (Invalid URI: " + e.getMessage() + ")", ClientModel.class);
-        } catch (DeploymentException e) {
-            Log.w("Failed to connect to server (Deployment error: " + e.getMessage() + ")", ClientModel.class);
-        } catch (IOException e) {
-            Log.w("Failed to connect to server (IOException: " + e.getMessage() + ")", ClientModel.class);
-        }
+        worker = new ClientWorker(this);
+        new Thread(worker).start();
+        this.notifyClientStarted();
     }
 
     /**
      * Called to disconnect the client from the server
      */
     public void shutdown() {
-        if(!run)
+        if(worker == null)
             throw new IllegalArgumentException("Server is already stopped");
 
-        try {
-            session.close();
-            client.shutdown();
-        } catch(IOException e) {
-            Log.w("Failed to shut down client gracefully", ClientModel.class);
-        }
-
-        session = null;
-        client = null;
-        run = false;
+        worker.shutdown();
+        worker = null;
         this.notifyClientShutdown();
     }
 
@@ -194,7 +161,7 @@ public class ClientModel {
      * @return boolean if client is running
      */
     public boolean isRunning() {
-        return run;
+        return worker != null && worker.isRunning();
     }
 
     /**
@@ -237,6 +204,10 @@ public class ClientModel {
      */
     public void setHostToLocalhost() {
         this.setHost(LOCALHOST);
+    }
+
+    public InetAddress getHost() {
+        return HOST;
     }
 
     public void addPacket(EmostatePacket packet) {

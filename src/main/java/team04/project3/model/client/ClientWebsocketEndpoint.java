@@ -1,7 +1,6 @@
 package team04.project3.model.client;
 
 import team04.project3.model.EmostatePacket;
-import team04.project3.model.server.ServerWebsocketEndpoint;
 import team04.project3.model.websocket.MessageDecoder;
 import team04.project3.model.websocket.MessageEncoder;
 import team04.project3.util.Log;

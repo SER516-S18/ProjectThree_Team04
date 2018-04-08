@@ -5,7 +5,8 @@ import team04.project3.model.websocket.MessageDecoder;
 import team04.project3.model.websocket.MessageEncoder;
 import team04.project3.util.Log;
 
-import javax.websocket.*;
+import javax.websocket.EncodeException;
+import javax.websocket.Session;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
@@ -19,7 +20,7 @@ import java.util.Set;
 )
 
 public class ServerWebsocketEndpoint {
-    static Set<Session> sessions = Collections.synchronizedSet(new HashSet<>());
+    private static Set<Session> sessions = Collections.synchronizedSet(new HashSet<>());
 
     private ServerModel model;
 

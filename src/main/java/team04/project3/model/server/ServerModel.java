@@ -1,11 +1,9 @@
 package team04.project3.model.server;
 
-import org.glassfish.tyrus.server.Server;
 import team04.project3.listeners.ServerListener;
 import team04.project3.model.EmostatePacketBuilder;
 import team04.project3.util.Log;
 
-import javax.websocket.DeploymentException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -37,9 +35,7 @@ public class ServerModel {
 
     // Server - Websocket state
     private ArrayList<ServerListener> listeners = new ArrayList<>();
-    private Server server;
-    private ServerWebsocketEndpoint endpoint;
-    private boolean run = false;
+    private ServerWorker worker;
 
     // Server - Packet state/behavior
     private EmostatePacketBuilder packet;
@@ -83,20 +79,12 @@ public class ServerModel {
      * Starts the server (note: this only opens the WebSocket server and does not send packets)
      */
     public void start() {
-        if(run)
+        if(this.isRunning())
             throw new IllegalArgumentException("Server is already running");
 
-        try {
-            // Start server
-            endpoint = new ServerWebsocketEndpoint(this);
-            server = new Server("localhost", PORT, "/ws", null, ServerWebsocketEndpoint.class);
-            server.start();
-
-            this.run = true;
-            this.notifyServerStarted();
-        } catch(DeploymentException e) {
-            Log.e("Failed to deploy web socket server (" + e.getMessage() + ")", ServerModel.class);
-        }
+        worker = new ServerWorker(this);
+        new Thread(worker).start();
+        this.notifyServerStarted();
     }
 
     /**
@@ -104,16 +92,12 @@ public class ServerModel {
      * is not the method to stop repeatedly sending packets)
      */
     public void shutdown() {
-        if(!run)
+        if(worker == null)
             throw new IllegalArgumentException("Server is already stopped");
 
-        endpoint.disconnect();
-        server.stop();
-
+        worker.shutdown();
+        worker = null;
         tick = 0.0f;
-        endpoint = null;
-        server = null;
-        run = false;
         this.notifyServerShutdown();
     }
 
@@ -122,7 +106,7 @@ public class ServerModel {
      * @return run - If server is running
      */
     public boolean isRunning() {
-        return run;
+        return worker != null && worker.isRunning();
     }
 
     /**
@@ -295,7 +279,7 @@ public class ServerModel {
      * Called to send a packet to the endpoint
      */
     private void sendPacket() {
-        endpoint.send(packet.setTick(tick).build());
+        worker.send(packet.setTick(tick).build());
         tick += (INTERVAL / 1000f);
         this.notifyPacketSent();
     }
