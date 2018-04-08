@@ -1,11 +1,13 @@
 package team04.project3.ui.server;
 
+import team04.project3.constants.ColorConstants;
 import team04.project3.constants.TextConstants;
 import team04.project3.listeners.ServerListener;
 import team04.project3.model.server.ServerModel;
 import team04.project3.util.Log;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -43,8 +45,9 @@ public class ServerTransmitView extends JPanel {
     }
 
     private void init() {
-        System.out.println("init");
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+        this.setBorder(new EmptyBorder(8, 8, 8, 8));
+        this.setBackground(ColorConstants.BACKGROUND_BLUE);
 
         buttonSend = new JButton("Invalid");
         buttonSend.setFont(TextConstants.LARGE_FONT);
@@ -63,6 +66,7 @@ public class ServerTransmitView extends JPanel {
 
         checkboxRepeat = new JCheckBox("Repeat");
         checkboxRepeat.setFont(TextConstants.LARGE_FONT);
+        checkboxRepeat.setOpaque(false);
         checkboxRepeat.addActionListener(e -> {
             if(!ServerModel.get().isRepeatingPackets()) {
                 // If not already repeating, just change the mode
@@ -73,13 +77,13 @@ public class ServerTransmitView extends JPanel {
                 ServerModel.get().setPacketRepeatMode(false);
             }
             updateSendButtonText();
-            updatedDisabledState();
         });
         this.add(checkboxRepeat);
 
         this.add(Box.createHorizontalStrut(16));
 
-        spinnerInterval = new JSpinner( new SpinnerNumberModel(0.25d, 0.01d, 1440d, 0.25d) );
+        double start = ServerModel.get().getAutoRepeatInterval() / 1000d;
+        spinnerInterval = new JSpinner( new SpinnerNumberModel(start, 0.01d, 1440d, 0.25d) );
         spinnerInterval.setVisible(true);
         spinnerInterval.setBorder(null);
         spinnerInterval.setMaximumSize(new Dimension(128, 128));
@@ -95,7 +99,12 @@ public class ServerTransmitView extends JPanel {
         spinnerInterval.setFont(TextConstants.LARGE_FONT);
         this.add(spinnerInterval);
 
-        updatedDisabledState();
+        this.add(Box.createHorizontalStrut(8));
+
+        JLabel promptIntervalSeconds = new JLabel("sec");
+        promptIntervalSeconds.setFont(TextConstants.LARGE_FONT);
+        this.add(promptIntervalSeconds);
+
         updateSendButtonText();
     }
 
@@ -115,16 +124,5 @@ public class ServerTransmitView extends JPanel {
 
         this.validate();
         this.repaint();
-    }
-
-    private void updatedDisabledState() {
-        if(checkboxRepeat == null || spinnerInterval == null)
-            return;
-
-        if(checkboxRepeat.isSelected()) {
-            spinnerInterval.setEnabled(true);
-        } else {
-            spinnerInterval.setEnabled(false);
-        }
     }
 }

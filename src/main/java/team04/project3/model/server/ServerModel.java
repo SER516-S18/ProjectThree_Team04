@@ -191,6 +191,10 @@ public class ServerModel {
             this.tick = tick;
     }
 
+    public float getTick() {
+        return tick;
+    }
+
     /**
      * Setter for server's port
      * @param port Port to connect to
