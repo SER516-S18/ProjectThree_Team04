@@ -63,9 +63,9 @@ public class ClientView extends JPanel {
         PerformanceMetricEmotionalStatesView emotionalStateView;
 
         graphView = new PerformanceMetricGraphView ();
-        panelBuffer.add(graphView, BorderLayout.LINE_START);
+        panelBuffer.add(graphView, BorderLayout.CENTER);
 
         emotionalStateView = new PerformanceMetricEmotionalStatesView();
-        panelBuffer.add(emotionalStateView, BorderLayout.LINE_END);
+        panelBuffer.add(emotionalStateView, BorderLayout.EAST);
     }
 }

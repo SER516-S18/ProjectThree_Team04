@@ -8,6 +8,7 @@ import team04.project3.constants.PerformanceMetricConstants;
 import team04.project3.constants.TextConstants;
 import team04.project3.model.client.PerformanceMetricModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyListener;
@@ -27,61 +28,104 @@ public class PerformanceMetricEmotionalStatesView extends JPanel {
 	private JPanel panelBuffer;
 	
 	public PerformanceMetricEmotionalStatesView() {
-		
+
+		this.setLayout(new BorderLayout());
+		this.setBorder(new EmptyBorder(8, 8, 8, 8));
+		this.setOpaque(false);
 		this.performanceMetricModel = new PerformanceMetricModel();
-		
-        
-		panelBuffer = new JPanel(new GridBagLayout());
-        panelBuffer.setBackground(ColorConstants.BACKGROUND_GRAY);
+
+		panelBuffer = new JPanel(new GridLayout(6, 2, 8, 8));
+        panelBuffer.setBackground(ColorConstants.BACKGROUND_PINK);
         panelBuffer.setBorder(BorderFactory.createLineBorder(Color.black));
         getEmotionPanel();
+
+        add(panelBuffer);
 	}
         
 	
-	private Component getEmotionPanel() {
-		
-		GridBagConstraints gridBagConstraints = new GridBagConstraints();
-		gridBagConstraints.ipadx = 50;
-		gridBagConstraints.ipady = 50;
-		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-		gridBagConstraints.insets = new Insets(10, 10, 10, 10);
+	private void getEmotionPanel() {
 
-		gridBagConstraints.gridx = 1;
-		gridBagConstraints.gridy = 1;
 		interestButton = getEmotionButton(PerformanceMetricConstants.INTEREST, performanceMetricModel.getInterestColor());
-		panelBuffer.add(interestButton, gridBagConstraints);
-		
-		gridBagConstraints.gridx = 2;
-		gridBagConstraints.gridy = 1;
+		interestButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Color newColor = JColorChooser.showDialog(null, "Choose a color", null);
+				interestButton.setBackground(newColor);
+
+			}
+		});
+		panelBuffer.add(interestButton);
+
         engagementButton = getEmotionButton(PerformanceMetricConstants.ENGAGEMENT,performanceMetricModel.getEngagementColor());
-        panelBuffer.add(engagementButton, gridBagConstraints);
-        
-        gridBagConstraints.gridx = 3;
-		gridBagConstraints.gridy = 1;
+		engagementButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Color newColor = JColorChooser.showDialog(null, "Choose a color", null);
+				engagementButton.setBackground(newColor);
+
+			}
+		});
+        panelBuffer.add(engagementButton);
+
         stressButton = getEmotionButton(PerformanceMetricConstants.STRESS,performanceMetricModel.getStressColor());
-        panelBuffer.add(stressButton, gridBagConstraints);
-        
-        gridBagConstraints.gridx = 1;
-		gridBagConstraints.gridy = 2;
+		stressButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Color newColor = JColorChooser.showDialog(null, "Choose a color", null);
+				stressButton.setBackground(newColor);
+
+			}
+		});
+        panelBuffer.add(stressButton);
+
         relaxationButton = getEmotionButton(PerformanceMetricConstants.RELAXATION,performanceMetricModel.getRelaxationColor());
-        panelBuffer.add(relaxationButton, gridBagConstraints);
-        
-        gridBagConstraints.gridx = 2;
-		gridBagConstraints.gridy = 2;
+		relaxationButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Color newColor = JColorChooser.showDialog(null, "Choose a color", null);
+				relaxationButton.setBackground(newColor);
+
+			}
+		});
+        panelBuffer.add(relaxationButton);
+
         excitementButton = getEmotionButton(PerformanceMetricConstants.EXCITEMENT,performanceMetricModel.getExcitementColor());
-        panelBuffer.add(excitementButton, gridBagConstraints);
-        
-        gridBagConstraints.gridx = 3;
-		gridBagConstraints.gridy = 2;
+		excitementButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Color newColor = JColorChooser.showDialog(null, "Choose a color", null);
+				excitementButton.setBackground(newColor);
+
+			}
+		});
+        panelBuffer.add(excitementButton);
+
         focusButton = getEmotionButton(PerformanceMetricConstants.FOCUS,performanceMetricModel.getFocusColor());
-        panelBuffer.add(focusButton, gridBagConstraints);
-        
-        
-        this.add(panelBuffer, BorderLayout.CENTER);
-        
-        return panelBuffer;
-        
-	
+		focusButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Color newColor = JColorChooser.showDialog(null, "Choose a color", null);
+				focusButton.setBackground(newColor);
+
+			}
+		});
+        panelBuffer.add(focusButton);
+
+		JPanel displayPanel = new JPanel(new GridBagLayout());
+		displayPanel.setBackground(ColorConstants.BACKGROUND_PINK);
+		displayPanel.setBorder(new LineBorder(Color.black));
+		displayPanel.setBackground(new Color(220,220,220));
+		JLabel DisplayLength = new JLabel("Display Length  ");
+		DisplayLength.setFont(TextConstants.DEFAULT_FONT);
+		displayPanel.add(DisplayLength);
+
+		panelBuffer.add(displayPanel);
+		panelBuffer.add(new JTextField(10));
+
+		panelBuffer.add(new Panel());
+		panelBuffer.add(new Panel());
+		panelBuffer.add(new Panel());
+		panelBuffer.add(new Panel());
 	}
 	
 	private JButton getEmotionButton(String emotion, Color color)
