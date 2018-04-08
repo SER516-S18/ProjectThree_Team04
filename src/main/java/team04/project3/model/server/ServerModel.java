@@ -165,7 +165,13 @@ public class ServerModel {
 
     private void notifyPacketRepeatingToggled() {
         for(ServerListener listener : listeners) {
-            listener.packetRepeatingToggled(repeating);
+            listener.packetRepeatingToggled();
+        }
+    }
+
+    public void notifyPacketRepeatModeChanged() {
+        for(ServerListener listener : listeners) {
+            listener.packetRepeatingModeChanged();
         }
     }
 
@@ -253,6 +259,7 @@ public class ServerModel {
             throw new IllegalStateException("Cannot turn off auto-repeating while repeater is running");
 
         REPEAT = repeat;
+        notifyPacketRepeatModeChanged();
     }
 
     /**

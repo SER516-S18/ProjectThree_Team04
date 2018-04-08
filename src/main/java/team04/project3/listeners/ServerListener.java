@@ -30,7 +30,8 @@ public interface ServerListener {
 
     /**
      * Called when the model is set to start or stop repeatedly send packets
-     * @param repeating if the is set to start or stop repeatedly send packets
      */
-    public void packetRepeatingToggled(boolean repeating);
+    public void packetRepeatingToggled();
+
+    public void packetRepeatingModeChanged();
 }

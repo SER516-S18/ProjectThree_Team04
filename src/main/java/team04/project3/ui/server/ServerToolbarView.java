@@ -46,7 +46,10 @@ public class ServerToolbarView extends JMenuBar {
             public void packetSent() { }
 
             @Override
-            public void packetRepeatingToggled(boolean repeating) { }
+            public void packetRepeatingToggled() { }
+
+            @Override
+            public void packetRepeatingModeChanged() { }
         });
 
         JMenuItem menuItem;

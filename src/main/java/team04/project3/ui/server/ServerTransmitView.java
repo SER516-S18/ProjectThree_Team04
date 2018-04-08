@@ -38,9 +38,12 @@ public class ServerTransmitView extends JPanel {
             public void packetSent() { }
 
             @Override
-            public void packetRepeatingToggled(boolean repeating) {
+            public void packetRepeatingToggled() {
                 updateSendButtonText();
             }
+
+            @Override
+            public void packetRepeatingModeChanged() { }
         });
     }
 
