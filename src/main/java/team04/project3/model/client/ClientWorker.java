@@ -12,6 +12,7 @@ import java.net.URISyntaxException;
 public class ClientWorker implements Runnable {
     private ClientModel model;
     private ClientManager client;
+    private ClientWebsocketEndpoint endpoint;
     private Session session;
     private boolean run = false;
 
@@ -26,20 +27,25 @@ public class ClientWorker implements Runnable {
         synchronized (this) {
             try {
                 // Start the client
+                Log.v("Client worker starting", ClientWorker.class);
                 URI uri = new URI("ws://" + model.getHost().getHostAddress() + ":" + model.getPort() + "/ws/emostate");
                 client = ClientManager.createClient();
-                session = client.connectToServer(ClientWebsocketEndpoint.class, uri);
+                endpoint = new ClientWebsocketEndpoint(model);
+                session = client.connectToServer(endpoint, uri);
+                Log.v("Client worker started", ClientWorker.class);
 
                 // Run the client continuously
                 wait();
 
                 // Shutdown the client
+                Log.v("Client worker stopping", ClientWorker.class);
                 try {
                     session.close();
                     client.shutdown();
                 } catch (IOException e) {
                     Log.w("Failed to shut down client gracefully", ClientModel.class);
                 }
+                Log.v("Client worker stopped", ClientWorker.class);
             } catch (URISyntaxException e) {
                 Log.w("Failed to connect to server (Invalid URI: " + e.getMessage() + ")", ClientWorker.class);
             } catch (DeploymentException e) {
