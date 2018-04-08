@@ -1,4 +1,4 @@
-package team04.project3.ui;
+package team04.project3.ui.client;
 import team04.project3.model.server.ServerModel;
 
 import javax.swing.*;
@@ -10,8 +10,7 @@ import java.awt.*;
  * @author vkasam@asu.edu
  */
 
-public class ClientMenuView extends JMenuBar implements ActionListener {
-
+public class ClientMenuView extends JMenuBar {
     ImageIcon serverIcon = new ImageIcon(getClass().getResource("/team04/project3/images/server.gif"));
     Image serverImage = serverIcon.getImage();
     Image scaledServerImg = serverImage.getScaledInstance(30,30,Image.SCALE_SMOOTH);
@@ -69,11 +68,9 @@ public class ClientMenuView extends JMenuBar implements ActionListener {
         JMenu helpMenu = new JMenu("Help");
 
         // adding the items to the application sub menu
-        emotivXavierComposerItem.addActionListener(this);
         applicationMenu.add(emotivXavierComposerItem);
 
         //adding the items to the connect sub menu
-        connectComposerItem.addActionListener(this);
         connectMenu.add(connectComposerItem);
         connectMenu.add(new JSeparator());
         connectMenu.add(connectDriverItem);
@@ -81,11 +78,9 @@ public class ClientMenuView extends JMenuBar implements ActionListener {
         connectMenu.add(reconnectDriverItem);
 
         //adding the items to the detection sub menu
-        facialExpressionsItem.addActionListener(this);
         detectionMenu.add(facialExpressionsItem);
         detectionMenu.add(new JSeparator());
 
-        performanceMetricsItem.addActionListener(this);
         detectionMenu.add(performanceMetricsItem);
         detectionMenu.add(new JSeparator());
 
@@ -166,25 +161,5 @@ public class ClientMenuView extends JMenuBar implements ActionListener {
         clock.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
         this.add(Box.createGlue());
         this.add(clock);
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent E){
-        if(E.getSource().equals(emotivXavierComposerItem)){
-
-            AppView appView = AppView.get(AppView.TYPE_SERVER);
-            appView.setType(AppView.TYPE_SERVER);
-            appView.init();
-        } else if(E.getSource().equals(facialExpressionsItem)){
-            AppView.get().setClientType(AppView.TYPE_CLIENT_FACE_EXPRESSION);
-            AppView.get().init();
-        } else if(E.getSource().equals(performanceMetricsItem)){
-            //opens the performance metrics panel
-            AppView.get().setClientType(AppView.TYPE_CLIENT_PERFORMANCE_METRIC);
-            AppView.get().init();
-        } else if (E.getSource().equals(connectComposerItem)) {
-            ServerModel.get().start();
-        }
-
     }
 }

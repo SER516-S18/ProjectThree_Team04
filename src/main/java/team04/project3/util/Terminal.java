@@ -1,7 +1,6 @@
 package team04.project3.util;
 
 import team04.project3.model.client.ClientModel;
-import team04.project3.ui.AppView;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -71,47 +70,24 @@ public class Terminal {
         String[] words = line.split(" ");
         if(line.equalsIgnoreCase("help")) {
             Log.i("Valid commands include:" +
-                    "\n\t- \"init ('client' | 'server')\" to initialize the app as a client or server" +
-                    "\n\t- \"timestamps ('true' | 'false')\" to turn console timestamps on or off" +
                     "\n\t- \"port <#>\" to set the communication port number" +
                     "\n\t- \"host ('localhost' | <hostname or ip>)\" to set host to connect to as a client" +
                     "\n\t- \"help\" to view this help list.", Terminal.class);
-        } else if (line.toLowerCase().startsWith("init") && words.length == 2) {
-            if(words[1].equalsIgnoreCase("server"))
-                AppView.get().setType(AppView.TYPE_SERVER);
-            else if(words[1].equalsIgnoreCase("client"))
-                AppView.get().setType(AppView.TYPE_CLIENT);
         } else if (line.toLowerCase().startsWith("port") && words.length == 2 && Util.isInteger(words[1])) {
             int port = Integer.parseInt(words[1]);
             ClientModel.get().setPort(port);
             Log.i("Port set to " + port, Terminal.class);
-        } else if (line.toLowerCase().startsWith("timestamps") && words.length == 2) {
-            if(words[1].equalsIgnoreCase("true")) {
-                AppView.get().showConsoleTimestamps(true);
-                Log.i("Console messages will now show timestamps", Terminal.class);
-            }
-            else if(words[1].equalsIgnoreCase("false")) {
-                AppView.get().showConsoleTimestamps(false);
-                Log.i("Console messages will no longer show timestamps", Terminal.class);
-            }
-            else {
-                Log.i("Failed to set timestamps (must be 'true' or 'false')", Terminal.class);
-            }
         } else if(line.toLowerCase().startsWith("host") && words.length == 2) {
-            if(AppView.get().isClient()) {
-                if (words[1].equalsIgnoreCase("localhost")) {
-                    ClientModel.get().setHostToLocalhost();
-                    Log.i("Host set to localhost", Terminal.class);
-                } else {
-                    try {
-                        ClientModel.get().setHost(InetAddress.getByName(words[1]));
-                        Log.i("Host set to " + words[1], Terminal.class);
-                    } catch (UnknownHostException e) {
-                        Log.i("Failed set host (Host is invalid or unavailable)", Terminal.class);
-                    }
-                }
+            if (words[1].equalsIgnoreCase("localhost")) {
+                ClientModel.get().setHostToLocalhost();
+                Log.i("Host set to localhost", Terminal.class);
             } else {
-                Log.i("Failed to set host (Application must be set as client)", Terminal.class);
+                try {
+                    ClientModel.get().setHost(InetAddress.getByName(words[1]));
+                    Log.i("Host set to " + words[1], Terminal.class);
+                } catch (UnknownHostException e) {
+                    Log.i("Failed set host (Host is invalid or unavailable)", Terminal.class);
+                }
             }
         } else {
             Log.i("Invalid command, type \"help\" for list of all commands", Terminal.class);

@@ -1,4 +1,4 @@
-package team04.project3.ui;
+package team04.project3.ui.client;
 
 import team04.project3.constants.ColorConstants;
 
@@ -33,12 +33,6 @@ public class ClientView extends JPanel {
         panelBuffer = new JPanel(new GridLayout(1, 2, 8, 8));
         panelBuffer.setBackground(ColorConstants.BACKGROUND_GRAY);
         panelBuffer.setBorder(BorderFactory.createLineBorder(Color.black));
-
-        if (type == AppView.TYPE_CLIENT_FACE_EXPRESSION) {
-            getFaceExpressionView();
-        } else {
-            getPerformanceMetricView();
-        }
 
         this.add(panelBuffer, BorderLayout.CENTER);
     }

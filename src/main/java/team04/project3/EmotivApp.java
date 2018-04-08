@@ -1,11 +1,6 @@
 package team04.project3;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import team04.project3.model.EmostatePacket;
-import team04.project3.model.EmostatePacketBuilder;
 import team04.project3.model.client.ClientModel;
-import team04.project3.ui.AppView;
 import team04.project3.util.Log;
 import team04.project3.util.Terminal;
 
@@ -16,11 +11,11 @@ import team04.project3.util.Terminal;
  * @version 1.0
  * @since   2018-02-22
  */
-public class ClientApp {
+public class EmotivApp {
     /**
      * Private constructor as the Class is mainly a wrapper for the Java main
      */
-    private ClientApp() {}
+    private EmotivApp() {}
 
     /**
      * Java main for the Client
@@ -29,9 +24,6 @@ public class ClientApp {
     public static void main(final String[] args) {
         // Show verbose messages in the log
         Log.setConsolePolicy(Log.POLICY.DEBUG);
-
-        // Set the application type to Client
-        AppView.get().setType(AppView.TYPE_CLIENT);
 
         // Argument processing (to console)
         if (args.length > 0) {
@@ -53,7 +45,7 @@ public class ClientApp {
 
                         if ((argj.startsWith("-") || j == args.length - 1) && line.length() > 0) {
                             String temp = arg.substring(1) + line;
-                            Log.i("Passing program argument \"" + temp + "\" to console", ClientApp.class);
+                            Log.i("Passing program argument \"" + temp + "\" to console", EmotivApp.class);
                             Terminal.handle(temp);
                             break;
                         }
@@ -62,13 +54,6 @@ public class ClientApp {
             }
         }
 
-        // Start console
-        Terminal.get().start();
-
-        // Start model
-        ClientModel.get().start();
-
-        // Start UI
-        AppView.get().init();
+        
     }
 }

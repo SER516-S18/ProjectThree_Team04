@@ -1,4 +1,4 @@
-package team04.project3.ui;
+package team04.project3.ui.client;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -15,10 +15,10 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 /**
- * The line graph for an expression in the client view
- * @author  Nagarjuna Kalluri (nkalluri@asu.edu)
+ * The left hand JPanel containing the graph in the client view
+ * @author  David Henderson (dchende2@asu.edu)
  */
-public class ClientLineGraphView extends JPanel {
+public class ClientGraphView extends JPanel {
     private XYSeriesCollection dataset;
     private JFreeChart chart;
     private ChartPanel panelChart;
@@ -27,7 +27,7 @@ public class ClientLineGraphView extends JPanel {
     /**
      * The left hand side of the client view, containing the graph
      */
-    public ClientLineGraphView(String title) {
+    public ClientGraphView() {
         ClientModel.get().addListener(new ClientListener() {
             @Override
             public void valuesChanged() { }
@@ -53,23 +53,22 @@ public class ClientLineGraphView extends JPanel {
         // Create transparent border around graph
         this.setLayout(new BorderLayout());
         this.setOpaque(false);
-        this.setBorder(new EmptyBorder(1, 1, 1, 1));
+        this.setBorder(new EmptyBorder(8, 8, 8, 8));
 
-        initGraph(title);
+        initGraph();
     }
 
     /**
      * Creates and adds the graph to the panel
      */
-    private void initGraph(String title) {
+    private void initGraph() {
         panelBuffer = new JPanel(new BorderLayout());
         panelBuffer.setBackground(ColorConstants.BACKGROUND_PINK);
         panelBuffer.setBorder(BorderFactory.createLineBorder(Color.black));
-        panelBuffer.setFont(new java.awt.Font("SansSerif", java.awt.Font.BOLD, 15));
 
         // Create the chart
         dataset = new XYSeriesCollection();
-        chart = ChartFactory.createXYLineChart(title, "", "", dataset, PlotOrientation.VERTICAL, false, false, false);
+        chart = ChartFactory.createXYLineChart("", "", "", dataset, PlotOrientation.VERTICAL, false, false, false);
         chart.setBackgroundPaint(ColorConstants.BACKGROUND_PINK);
         chart.getPlot().setOutlineVisible(false);
         chart.getPlot().setBackgroundAlpha(0);

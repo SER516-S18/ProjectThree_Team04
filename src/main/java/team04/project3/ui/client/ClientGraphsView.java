@@ -1,18 +1,9 @@
-package team04.project3.ui;
+package team04.project3.ui.client;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.data.xy.XYSeriesCollection;
-
 import team04.project3.constants.ColorConstants;
-import team04.project3.listeners.ClientListener;
-import team04.project3.model.client.ClientModel;
 
 import java.awt.*;
 

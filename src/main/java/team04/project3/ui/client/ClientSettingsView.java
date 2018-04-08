@@ -1,4 +1,4 @@
-package team04.project3.ui;
+package team04.project3.ui.client;
 
 import team04.project3.constants.ColorConstants;
 import team04.project3.constants.TextConstants;
