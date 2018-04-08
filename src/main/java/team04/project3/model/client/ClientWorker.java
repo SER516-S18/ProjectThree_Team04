@@ -23,30 +23,32 @@ public class ClientWorker implements Runnable {
     public void run() {
         run = true;
 
-        try {
-            // Start the client
-            URI uri = new URI("ws://" + model.getHost().getHostAddress() + ":" + model.getPort() + "/ws/emostate");
-            client = ClientManager.createClient();
-            session = client.connectToServer(ClientWebsocketEndpoint.class, uri);
-
-            // Run the client continuously
-            wait();
-
-            // Shutdown the client
+        synchronized (this) {
             try {
-                session.close();
-                client.shutdown();
-            } catch(IOException e) {
-                Log.w("Failed to shut down client gracefully", ClientModel.class);
+                // Start the client
+                URI uri = new URI("ws://" + model.getHost().getHostAddress() + ":" + model.getPort() + "/ws/emostate");
+                client = ClientManager.createClient();
+                session = client.connectToServer(ClientWebsocketEndpoint.class, uri);
+
+                // Run the client continuously
+                wait();
+
+                // Shutdown the client
+                try {
+                    session.close();
+                    client.shutdown();
+                } catch (IOException e) {
+                    Log.w("Failed to shut down client gracefully", ClientModel.class);
+                }
+            } catch (URISyntaxException e) {
+                Log.w("Failed to connect to server (Invalid URI: " + e.getMessage() + ")", ClientWorker.class);
+            } catch (DeploymentException e) {
+                Log.w("Failed to connect to server (Deployment error: " + e.getMessage() + ")", ClientWorker.class);
+            } catch (InterruptedException e) {
+                Log.w("Failed to wait due to interruption (" + e.getMessage() + ")", ClientWorker.class);
+            } catch (IOException e) {
+                Log.w("Failed to connect to server (IOException: " + e.getMessage() + ")", ClientWorker.class);
             }
-        } catch(URISyntaxException e) {
-            Log.w("Failed to connect to server (Invalid URI: " + e.getMessage() + ")", ClientWorker.class);
-        } catch (DeploymentException e) {
-            Log.w("Failed to connect to server (Deployment error: " + e.getMessage() + ")", ClientWorker.class);
-        } catch(InterruptedException e) {
-            Log.w("Failed to wait due to interruption (" + e.getMessage() + ")", ClientWorker.class);
-        } catch (IOException e) {
-            Log.w("Failed to connect to server (IOException: " + e.getMessage() + ")", ClientWorker.class);
         }
 
         run = false;
