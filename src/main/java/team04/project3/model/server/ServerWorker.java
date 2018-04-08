@@ -34,7 +34,8 @@ public class ServerWorker implements Runnable {
                 endpoint.disconnect();
                 server.stop();
             } catch (DeploymentException e) {
-                Log.e("Failed to deploy web socket server (" + e.getMessage() + ")", ServerWorker.class);
+                Log.e("Failed to deploy web socket server, shutting down (" + e.getMessage() + ")", ServerWorker.class);
+                ServerModel.get().shutdown();
             } catch (InterruptedException e) {
                 Log.e("Failed to wait due to interruption (" + e.getMessage() + ")", ServerWorker.class);
             }
@@ -61,5 +62,9 @@ public class ServerWorker implements Runnable {
         synchronized (this) {
             this.notify();
         }
+    }
+
+    public int getClientsCount() {
+        return (endpoint == null ? 0 : endpoint.getClientsCount());
     }
 }

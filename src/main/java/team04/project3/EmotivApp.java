@@ -1,6 +1,8 @@
 package team04.project3;
 
 import team04.project3.model.client.ClientModel;
+import team04.project3.ui.server.ServerValuesView;
+import team04.project3.ui.server.ServerView;
 import team04.project3.util.Log;
 import team04.project3.util.Terminal;
 
@@ -54,6 +56,6 @@ public class EmotivApp {
             }
         }
 
-        
+        ServerView.getInstance().init();
     }
 }

@@ -26,6 +26,7 @@ public class ServerWebsocketEndpoint {
     public void onOpen(Session session) throws IOException {
         // Get session and WebSocket connection
         sessions.add(session);
+        ServerModel.get().notifyClientConnected();
         Log.v("Client opened a new session (" + sessions.size() + " total open)", ServerWebsocketEndpoint.class);
     }
 
@@ -38,6 +39,7 @@ public class ServerWebsocketEndpoint {
     public void onClose(Session session) throws IOException {
         // WebSocket connection closes
         sessions.remove(session);
+        ServerModel.get().notifyClientDisconnected();
         Log.v("Client session closed (" + sessions.size() + " remain open)", ServerWebsocketEndpoint.class);
     }
 
@@ -70,5 +72,9 @@ public class ServerWebsocketEndpoint {
             }
             iterator.remove();
         }
+    }
+
+    public int getClientsCount() {
+        return sessions.size();
     }
 }

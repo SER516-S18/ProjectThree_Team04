@@ -19,6 +19,10 @@ public interface ServerListener {
      */
     public void shutdown();
 
+    public void clientConnected();
+
+    public void clientDisconnected();
+
     /**
      * Called when a packet it sent
      */

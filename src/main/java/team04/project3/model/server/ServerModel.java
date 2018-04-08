@@ -22,10 +22,15 @@ public class ServerModel {
      * @return ServerModel instance
      */
     public static ServerModel get() {
-        if(_instance == null)
-            _instance = new ServerModel();
-
-        return _instance;
+        ServerModel result = _instance;
+        if(result == null){
+            synchronized (ServerModel.class) {
+                result = _instance;
+                if (result == null)
+                    _instance = result = new ServerModel();
+            }
+        }
+        return result;
     }
 
     // Server - Settings
@@ -140,6 +145,18 @@ public class ServerModel {
         }
     }
 
+    public void notifyClientConnected() {
+        for(ServerListener listener : listeners) {
+            listener.clientConnected();
+        }
+    }
+
+    public void notifyClientDisconnected() {
+        for(ServerListener listener : listeners) {
+            listener.clientDisconnected();
+        }
+    }
+
     private void notifyPacketSent() {
         for(ServerListener listener : listeners) {
             listener.packetSent();
@@ -192,7 +209,6 @@ public class ServerModel {
     public int getPort() {
         return PORT;
     }
-
 
     /**
      * Sets the interval for the auto-repeat
@@ -282,5 +298,9 @@ public class ServerModel {
         worker.send(packet.setTick(tick).build());
         tick += (INTERVAL / 1000f);
         this.notifyPacketSent();
+    }
+
+    public int getClientsCount() {
+        return (worker == null ? 0 : worker.getClientsCount());
     }
 }
