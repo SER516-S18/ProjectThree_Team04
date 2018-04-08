@@ -1,4 +1,6 @@
 package team04.project3.ui;
+import team04.project3.listeners.ClientListener;
+import team04.project3.model.client.ClientModel;
 import team04.project3.model.server.ServerModel;
 
 import javax.swing.*;
@@ -166,6 +168,33 @@ public class ClientMenuView extends JMenuBar implements ActionListener {
         clock.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
         this.add(Box.createGlue());
         this.add(clock);
+
+        ClientModel.get().addListener(new ClientListener() {
+            @Override
+            public void valuesChanged() {
+                clock.setText(ClientModel.get().getNewestPacket().getTick().toString());
+            }
+
+            @Override
+            public void valuesReset() {
+                clock.setText("0.00");
+            }
+
+            @Override
+            public void valuesAdded() {
+                clock.setText(ClientModel.get().getNewestPacket().getTick().toString());
+            }
+
+            @Override
+            public void started() {
+                clock.setText(ClientModel.get().getNewestPacket().getTick().toString());
+            }
+
+            @Override
+            public void shutdown() {
+                clock.setText("0.00");
+            }
+        });
     }
 
     @Override
