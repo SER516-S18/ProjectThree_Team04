@@ -19,21 +19,10 @@
 
 
 ## Running Project Three - Team 04 Client and Server
-(Do note that Windows Java uses ";" and macOS/Linux use ":" as separators, replace as necessary)
 
-Compile all classes (and packages) with the two jar dependencies with:
+Run the JAR by double-clicking the file or by running the following command in the same directory:
 ```
-javac -cp ".;./lib/jcommon-1.0.23.jar;./lib/jfreechart-1.0.19.jar" src/team04/project3/*.java src/team04/project3/constants/*.java src/team04/project3/listeners/*.java src/team04/project3/util/*.java src/team04/project3/ui/*.java src/team04/project3/model/*.java src/team04/project3/model/client/*.java src/team04/project3/model/server/*.java
-```
-
-After compiling, run the Client with:
-```
-java -cp ".;./src/;./lib/jcommon-1.0.23.jar;./lib/jfreechart-1.0.19.jar" team04.project3.ClientApp
+java -jar team04-projectthree.jar
 ```
 
-After compiling, run the Server with:
-```
-java -cp ".;./src/;./lib/jcommon-1.0.23.jar;./lib/jfreechart-1.0.19.jar" team04.project3.ServerApp
-```
-
-Note: One can switch between the Client and Server application without rebooting by typing "init server" or "init client" in the console's input field.
+Compiling can be done easily through any IDE (natively IntelliJ 2017.3.2), as a Maven project.
