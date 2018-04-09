@@ -1,7 +1,10 @@
 package team04.project3.model.client;
 
 import team04.project3.listeners.ClientListener;
-import team04.project3.model.*;
+import team04.project3.model.EmostatePacket;
+import team04.project3.model.Emotion;
+import team04.project3.model.Expression;
+import team04.project3.model.ValueTuple;
 import team04.project3.util.Log;
 
 import java.net.InetAddress;

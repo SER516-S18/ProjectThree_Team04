@@ -1,6 +1,5 @@
 package team04.project3.model.server;
 
-import com.google.gson.Gson;
 import org.glassfish.tyrus.server.Server;
 import team04.project3.model.EmostatePacket;
 import team04.project3.util.Log;
