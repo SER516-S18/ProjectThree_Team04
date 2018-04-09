@@ -16,3 +16,4 @@ out/*
 .classpath
 .project
 /target/
+/doc/*
