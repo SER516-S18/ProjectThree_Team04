@@ -114,8 +114,13 @@ public class ClientExpressionGraphView extends JPanel {
         if(packets.size() > 0) {
             ValueTuple tuple = packets.get(packets.size() - 1);
             XYSeries series = dataset.getSeries(0);
-            if (tuple != null)
+            if (tuple != null) {
+                // Put a point immediately after the previous one for a vertical line for binary values
+                if(expression.isBinary() && packets.size() > 1)
+                    series.add(packets.get(packets.size() - 2).TICK + 0.0001, tuple.VALUE);
+
                 series.add(tuple.TICK, tuple.VALUE);
+            }
         } else {
             dataset.getSeries(0).clear();
         }
