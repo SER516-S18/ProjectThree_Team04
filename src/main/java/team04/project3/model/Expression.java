@@ -31,9 +31,9 @@ public enum Expression {
     }
 
     @SerializedName("NAME")
-    public String NAME;
+    public final String NAME;
     @SerializedName("ISFLOATING")
-    private boolean IS_FLOATING;
+    private final boolean IS_FLOATING;
 
     /**
      * Gets if the expression is a floating value

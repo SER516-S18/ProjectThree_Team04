@@ -12,7 +12,7 @@ import javax.websocket.EndpointConfig;
  * @author  David Henderson (dchende2@asu.edu)
  */
 public class MessageDecoder implements Decoder.Text<EmostatePacket> {
-    private static Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
+    private static final Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
 
     @Override
     public EmostatePacket decode(String s) {

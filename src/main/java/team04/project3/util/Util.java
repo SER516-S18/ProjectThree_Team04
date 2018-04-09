@@ -34,20 +34,4 @@ public class Util {
         }
         return true;
     }
-
-    /**
-     * Rounds a double to a number of decimal places
-     * @param value Double to round
-     * @param places Number of places to round to
-     * @return Rounded double
-     */
-    public static double round(double value, int places) {
-        if (places < 0)
-            throw new IllegalArgumentException();
-
-        long factor = (long) Math.pow(10, places);
-        value = value * factor;
-        long tmp = Math.round(value);
-        return (double) tmp / factor;
-    }
 }

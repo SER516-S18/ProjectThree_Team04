@@ -7,8 +7,8 @@ import java.util.HashMap;
  * @author  David Henderson (dchende2@asu.edu)
  */
 public class EmostatePacketBuilder {
-    private HashMap<Expression, Float> expressions = new HashMap<>();
-    private HashMap<Emotion, Float> emotions = new HashMap<>();
+    private final HashMap<Expression, Float> expressions = new HashMap<>();
+    private final HashMap<Emotion, Float> emotions = new HashMap<>();
     private Float tick = null;
 
     /**

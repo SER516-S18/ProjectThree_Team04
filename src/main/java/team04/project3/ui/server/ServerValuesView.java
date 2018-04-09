@@ -27,16 +27,16 @@ public class ServerValuesView extends JPanel {
     private JTextField textfieldTime;
     private Float textfieldSelected = null;
     private EmostatePacketBuilder emostatePacketBuilder;
-    private Expression[] expressionEyeValues = new Expression[] {
+    private final Expression[] expressionEyeValues = new Expression[] {
             Expression.BLINK, Expression.WINK_LEFT, Expression.WINK_RIGHT, Expression.LOOK_LEFT, Expression.LOOK_RIGHT
     };
-    private Expression[] expressionFaceUpperValues = new Expression[] {
+    private final Expression[] expressionFaceUpperValues = new Expression[] {
             Expression.BROW_RAISE, Expression.BROW_FURROW
     };
-    private Expression[] expressionFaceLowerValues = new Expression[] {
+    private final Expression[] expressionFaceLowerValues = new Expression[] {
             Expression.SMILE, Expression.CLENCH, Expression.SMIRK_LEFT, Expression.SMIRK_RIGHT, Expression.LAUGH
     };
-    private Emotion[] emotionValues = Emotion.values();
+    private final Emotion[] emotionValues = Emotion.values();
     private JComboBox<Expression> comboExpressionFaceEyes;
     private JComboBox<Expression> comboExpressionFaceUpper;
     private JComboBox<Expression> comboExpressionFaceLower;

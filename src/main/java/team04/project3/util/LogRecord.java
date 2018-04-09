@@ -5,11 +5,11 @@ package team04.project3.util;
  * @author  David Henderson (dchende2@asu.edu)
  */
 public class LogRecord {
-    private String _formattedMessage;
-    private String _message;
-    private Log.POLICY _policy;
-    private Class _class;
-    private long _timestamp;
+    private final String _formattedMessage;
+    private final String _message;
+    private final Log.POLICY _policy;
+    private final Class _class;
+    private final long _timestamp;
 
     /**
      * Creates a record of a log message

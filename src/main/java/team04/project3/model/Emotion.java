@@ -15,7 +15,7 @@ public enum Emotion {
     @SerializedName("FOCUS") FOCUS("Focus");
 
     @SerializedName("NAME")
-    public String NAME;
+    public final String NAME;
 
     /**
      * Enumeration constructor for Emotion

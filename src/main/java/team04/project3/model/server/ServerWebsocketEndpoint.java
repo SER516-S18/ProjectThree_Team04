@@ -24,7 +24,7 @@ import java.util.Set;
  * @author  David Henderson (dchende2@asu.edu)
  */
 public class ServerWebsocketEndpoint {
-    private static Set<Session> sessions = Collections.synchronizedSet(new HashSet<>());
+    private static final Set<Session> sessions = Collections.synchronizedSet(new HashSet<>());
 
     /**
      * Called when a client connects
