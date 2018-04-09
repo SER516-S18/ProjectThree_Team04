@@ -1,7 +1,6 @@
 package team04.project3.ui.client;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import team04.project3.constants.ColorConstants;
 import team04.project3.constants.PerformanceMetricConstants;
@@ -9,9 +8,6 @@ import team04.project3.constants.TextConstants;
 import team04.project3.model.client.PerformanceMetricModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyListener;
-
 
 public class PerformanceMetricEmotionalStatesView extends JPanel {
 	
@@ -116,7 +112,4 @@ public class PerformanceMetricEmotionalStatesView extends JPanel {
 		focusButton.setBackground(this.performanceMetricModel.getFocusColor());
 		
 	}
-	
-
 }
-
