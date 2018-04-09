@@ -9,6 +9,8 @@ import team04.project3.util.Terminal;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -21,6 +23,7 @@ public class ServerConsoleView extends JPanel {
     private JLabel labelHeader;
     private JScrollPane scrollpaneLog;
     private JTextArea textareaLog;
+    private JButton buttonClear;
     private JTextField textfieldInput;
     public boolean timestamp = false;
 
@@ -51,6 +54,25 @@ public class ServerConsoleView extends JPanel {
         textareaLog.setWrapStyleWord(true);
         panelBuffer.add(textareaLog, BorderLayout.CENTER);
 
+        JPanel panelConsoleInput = new JPanel();
+        panelConsoleInput.setLayout(new BoxLayout(panelConsoleInput, BoxLayout.X_AXIS));
+        panelConsoleInput.setOpaque(false);
+        panelBuffer.add(panelConsoleInput, BorderLayout.PAGE_END);
+
+        buttonClear = new JButton("Clear");
+        buttonClear.setMinimumSize(new Dimension(16, 32));
+        buttonClear.setPreferredSize(new Dimension(64, 32));
+        buttonClear.setBorder(null);
+        buttonClear.setBackground(ColorConstants.BACKGROUND_BLUE);
+        buttonClear.setFocusPainted(false);
+        buttonClear.addActionListener(e -> {
+            textareaLog.setText("");
+            textfieldInput.setText("");
+        });
+        panelConsoleInput.add(buttonClear);
+
+        panelConsoleInput.add(Box.createHorizontalStrut(8));
+
         textfieldInput = new JTextField();
         textfieldInput.setOpaque(false);
         textfieldInput.setBorder(null);
@@ -69,7 +91,7 @@ public class ServerConsoleView extends JPanel {
             textareaLog.setCaretPosition(textareaLog.getText().length());
             textfieldInput.setText("");
         });
-        panelBuffer.add(textfieldInput, BorderLayout.PAGE_END);
+        panelConsoleInput.add(textfieldInput);
 
         scrollpaneLog = new JScrollPane(textareaLog);
         scrollpaneLog.setOpaque(false);
