@@ -44,6 +44,8 @@ public class ClientToolbarView extends JMenuBar {
 
         JMenuItem menuItem;
 
+        this.add(Box.createHorizontalStrut(8));
+
         menu = new JMenu(Character.toString((char) 0x2630));
         menu.setFont(TextConstants.LARGE_FONT);
         this.add(menu);

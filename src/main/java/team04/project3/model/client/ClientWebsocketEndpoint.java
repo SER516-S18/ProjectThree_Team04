@@ -28,11 +28,14 @@ public class ClientWebsocketEndpoint {
     @javax.websocket.OnClose
     public void onClose(Session session, CloseReason closeReason) {
         Log.v("Client session closed (" + closeReason.toString() + ")", ClientWebsocketEndpoint.class);
+        if(ClientModel.get().isConnected())
+            ClientModel.get().disconnect();
     }
 
     @javax.websocket.OnError
     public void onError(Session session, Throwable throwable) {
         Log.v("Client session encountered an error (" + throwable.getMessage() + ")", ClientWebsocketEndpoint.class);
-        throwable.printStackTrace();
+        if(ClientModel.get().isConnected())
+            ClientModel.get().disconnect();
     }
 }

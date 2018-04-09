@@ -137,7 +137,7 @@ public class ClientModel {
      * Method called when ClientModel is started up
      */
     private void notifyClientStarted() {
-        Log.i("Client started and connected to server at " + HOST.getCanonicalHostName() + " port " + PORT, ClientModel.class);
+        Log.i("Client started and is attempting to connect to server at " + HOST.getCanonicalHostName() + " port " + PORT, ClientModel.class);
         for(ClientListener listener : listeners) {
             listener.started();
         }
