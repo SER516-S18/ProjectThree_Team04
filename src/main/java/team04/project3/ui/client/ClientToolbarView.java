@@ -22,7 +22,7 @@ public class ClientToolbarView extends JMenuBar {
         ClientModel.get().addListener(new ClientListener() {
             @Override
             public void valuesChanged() {
-                textTime.setText(" " + Double.toString(ClientModel.get().getPacketAverageInterval()));
+                textTime.setText(" " + (ClientModel.get().getNewestPacket() == null ? "0.0" : Float.toString(ClientModel.get().getNewestPacket().getTick())));
             }
 
             @Override
@@ -101,7 +101,7 @@ public class ClientToolbarView extends JMenuBar {
 
         this.add(Box.createHorizontalStrut(32));
 
-        textTime = new JLabel(" " + Double.toString(ClientModel.get().getPacketAverageInterval()));
+        textTime = new JLabel(" " + (ClientModel.get().getNewestPacket() == null ? "0.0" : Float.toString(ClientModel.get().getNewestPacket().getTick())));
         textTime.setIcon(new ImageIcon("src/main/resources/team04/project3/images/clock.jpeg"));
         textTime.setForeground(Color.BLACK);
         textTime.setFont(TextConstants.LARGE_FONT);
