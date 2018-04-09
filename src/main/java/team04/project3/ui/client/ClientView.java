@@ -12,7 +12,7 @@ import java.awt.event.KeyEvent;
  * @author  David Henderson (dchende2@asu.edu)
  */
 public class ClientView extends JFrame {
-    public static final Dimension WINDOW_SIZE = new Dimension(800, 768);
+    public static final Dimension WINDOW_SIZE = new Dimension(1024, 768);
     private static ClientView instance;
 
     public static ClientView getInstance() {
