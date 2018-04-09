@@ -13,11 +13,13 @@ import team04.project3.listeners.ClientListener;
 import team04.project3.model.Emotion;
 import team04.project3.model.ValueTuple;
 import team04.project3.model.client.ClientModel;
+import team04.project3.util.Log;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,6 +31,7 @@ public class ClientPerformanceMetricsView extends JPanel {
     private XYSeriesCollection dataset;
     private JFreeChart chart;
     private ChartPanel panelChart;
+    private float range = 30;
 
     public ClientPerformanceMetricsView() {
         availableColors.add(Color.RED);
@@ -118,8 +121,19 @@ public class ClientPerformanceMetricsView extends JPanel {
 
         panelTime.add(Box.createHorizontalStrut(8));
 
-        JSpinner spinnerTime = new JSpinner(new SpinnerNumberModel(30, 1, 1440, 1));
+        JSpinner spinnerTime = new JSpinner(new SpinnerNumberModel(range, 1, 1440, 1));
         spinnerTime.setFont(TextConstants.LARGE_FONT);
+        spinnerTime.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent event) {
+                try {
+                    spinnerTime.commitEdit();
+                    range = (float) ((double) spinnerTime.getValue());
+                } catch(ParseException e) {
+                    Log.w("Invalid time entered for graph range (" + e.getMessage() + ")", ClientPerformanceMetricsView.class);
+                }
+            }
+        });
         panelTime.add(spinnerTime);
 
         panelTime.add(Box.createHorizontalStrut(8));
@@ -196,6 +210,8 @@ public class ClientPerformanceMetricsView extends JPanel {
      * Called when new values need to be added to the graph
      */
     public void updateGraphValues() {
+        double tick = 0.0d;
+
         for(int i = 0; i < Emotion.values().length; i++) {
             Emotion emotion = Emotion.values()[i];
 
@@ -205,10 +221,14 @@ public class ClientPerformanceMetricsView extends JPanel {
                 XYSeries series = dataset.getSeries(i);
                 if (tuple != null) {
                     series.add(tuple.TICK, tuple.VALUE);
+                    if(tuple.TICK > tick)
+                        tick = tuple.TICK;
                 }
             } else {
                 dataset.getSeries(0).clear();
             }
         }
+
+        ((XYPlot) chart.getPlot()).getDomainAxis().setRange(Math.max(0, tick - range), Math.max(tick, range));
     }
 }
