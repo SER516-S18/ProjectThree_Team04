@@ -39,8 +39,8 @@ public class ClientView extends JFrame {
      */
     private ClientView() {
         // Start the client model if it isn't running
-        if(!ClientModel.get().isConnected())
-            ClientModel.get().connect();
+        if(!ClientModel.get().isRunning())
+            ClientModel.get().start();
 
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(e -> {
             // If CONTROL + SHIFT + Q, open server

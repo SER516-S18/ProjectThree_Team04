@@ -152,21 +152,21 @@ public class ClientToolbarView extends JMenuBar {
      * Connects to the server or disconnects if connected
      */
     private void handleConnectToServer() {
-        if(ClientModel.get().isConnected()) {
+        if(ClientModel.get().isRunning()) {
             ClientModel.get().disconnect();
             try {
                 long timeout = System.currentTimeMillis() + 1000L;
-                while (ClientModel.get().isConnected() && System.currentTimeMillis() < timeout) {
+                while (ClientModel.get().isRunning() && System.currentTimeMillis() < timeout) {
                     Thread.sleep(100L);
                 }
             } catch(InterruptedException e) {
                 Log.w("Failed to sleep while disconnecting (" + e.getMessage() + ")", ClientToolbarView.class);
             }
         } else {
-            ClientModel.get().connect();
+            ClientModel.get().start();
             try {
                 long timeout = System.currentTimeMillis() + 1000L;
-                while (!ClientModel.get().isConnected() && System.currentTimeMillis() < timeout) {
+                while (!ClientModel.get().isRunning() && System.currentTimeMillis() < timeout) {
                     Thread.sleep(100L);
                 }
             } catch(InterruptedException e) {
@@ -208,8 +208,8 @@ public class ClientToolbarView extends JMenuBar {
                 Log.w("Failed to wait while server starts up (" + e.getMessage() + ")", ClientToolbarView.class);
             }
 
-            if(!ClientModel.get().isConnected())
-                ClientModel.get().connect();
+            if(!ClientModel.get().isRunning())
+                ClientModel.get().start();
         }).start();
     }
 }

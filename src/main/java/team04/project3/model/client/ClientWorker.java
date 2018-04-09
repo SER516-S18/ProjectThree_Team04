@@ -19,6 +19,7 @@ public class ClientWorker implements Runnable {
     private ClientWebsocketEndpoint endpoint;
     private Session session;
     private boolean run = false;
+    private boolean connected = false;
 
     /**
      * Creates a ClientWorker for the ClientModel
@@ -30,6 +31,7 @@ public class ClientWorker implements Runnable {
 
     @Override
     public void run() {
+        connected = false;
         run = true;
 
         synchronized (this) {
@@ -39,6 +41,7 @@ public class ClientWorker implements Runnable {
                 client = ClientManager.createClient();
                 endpoint = new ClientWebsocketEndpoint();
                 session = client.connectToServer(endpoint, uri);
+                connected = true;
 
                 // Run the client continuously
                 wait();
@@ -49,6 +52,8 @@ public class ClientWorker implements Runnable {
                     client.shutdown();
                 } catch (IOException e) {
                     Log.w("Failed to shut down client gracefully", ClientModel.class);
+                } finally {
+                    connected = false;
                 }
             } catch (URISyntaxException e) {
                 Log.w("Failed to connect to server (Invalid URI: " + e.getMessage() + ")", ClientWorker.class);
@@ -70,6 +75,14 @@ public class ClientWorker implements Runnable {
      */
     public boolean isRunning() {
         return run;
+    }
+
+    /**
+     * Returns if client is connected successfully to the server
+     * @return If the client is connected successfully
+     */
+    public boolean isConnected() {
+        return connected;
     }
 
     /**

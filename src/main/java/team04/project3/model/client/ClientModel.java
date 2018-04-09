@@ -94,8 +94,8 @@ public class ClientModel {
     /**
      * Called to connect the client model and connect
      */
-    public void connect() {
-        if(this.isConnected())
+    public void start() {
+        if(this.isRunning())
             throw new IllegalArgumentException("Client is already running");
 
         worker = new ClientWorker(this);
@@ -182,6 +182,14 @@ public class ClientModel {
      * @return boolean if client is running
      */
     public boolean isConnected() {
+        return worker != null && worker.isConnected();
+    }
+
+    /**
+     * Check if the client is running (not necessarily connected)
+     * @return boolean if client is running
+     */
+    public boolean isRunning() {
         return worker != null && worker.isRunning();
     }
 
@@ -212,13 +220,13 @@ public class ClientModel {
         if(host == null)
             throw new IllegalArgumentException("Host must be non-null");
         else {
-            if(this.isConnected()) {
+            if(this.isRunning()) {
                 // Reconnect if running
                 this.disconnect();
 
                 try {
                     long timeout = System.currentTimeMillis() + 1000L;
-                    while (this.isConnected() && System.currentTimeMillis() < timeout) {
+                    while (this.isRunning() && System.currentTimeMillis() < timeout) {
                         Thread.sleep(100L);
                     }
                 } catch(InterruptedException e) {
@@ -227,7 +235,7 @@ public class ClientModel {
 
                 HOST = host;
 
-                this.connect();
+                this.start();
             } else {
                 // Otherwise just set the new host
                 HOST = host;
