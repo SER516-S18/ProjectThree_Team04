@@ -1,6 +1,7 @@
 package team04.project3.util;
 
 import team04.project3.model.client.ClientModel;
+import team04.project3.model.server.ServerModel;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -76,6 +77,7 @@ public class Terminal {
         } else if (line.toLowerCase().startsWith("port") && words.length == 2 && Util.isInteger(words[1])) {
             int port = Integer.parseInt(words[1]);
             ClientModel.get().setPort(port);
+            ServerModel.get().setPort(port);
             Log.i("Port set to " + port, Terminal.class);
         } else if(line.toLowerCase().startsWith("host") && words.length == 2) {
             if (words[1].equalsIgnoreCase("localhost")) {

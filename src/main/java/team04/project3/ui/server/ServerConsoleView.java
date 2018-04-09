@@ -1,4 +1,4 @@
-package team04.project3.ui;
+package team04.project3.ui.server;
 
 import team04.project3.constants.ColorConstants;
 import team04.project3.constants.TextConstants;
@@ -9,44 +9,37 @@ import team04.project3.util.Terminal;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
  * UI element to display system messages through a console
  * @author  David Henderson (dchende2@asu.edu)
- * 			Sai Saran Kandimalla (skandim2@asu.edu) 
  */
-public class ConsoleView extends JPanel implements ActionListener{
-    
-	private static final SimpleDateFormat timestampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+public class ServerConsoleView extends JPanel {
+    private static final SimpleDateFormat timestampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private JLabel labelHeader;
     private JScrollPane scrollpaneLog;
     private JTextArea textareaLog;
     private JTextField textfieldInput;
-    private JButton clearLogButton;
-    
     public boolean timestamp = false;
 
     /**
      * Constructor for the view containing the console
      */
-    public ConsoleView() {
+    public ServerConsoleView() {
         // Create transparent border around class
         this.setLayout(new BorderLayout());
         this.setOpaque(false);
         this.setBorder(new EmptyBorder(8, 8, 8, 8));
-       
+
         // Actual content pane (which the transparent border encompasses)
         JPanel panelBuffer = new JPanel(new BorderLayout());
         panelBuffer.setBackground(ColorConstants.BACKGROUND_GRAY);
         panelBuffer.setBorder(BorderFactory.createLineBorder(Color.black));
-        
-        
+
         labelHeader = new JLabel("Console:");
-        labelHeader.setFont(TextConstants.DEFAULT_FONT);
+        labelHeader.setFont(TextConstants.SMALL_FONT);
         panelBuffer.add(labelHeader, BorderLayout.PAGE_START);
 
         textareaLog = new JTextArea();
@@ -57,8 +50,7 @@ public class ConsoleView extends JPanel implements ActionListener{
         textareaLog.setLineWrap(true);
         textareaLog.setWrapStyleWord(true);
         panelBuffer.add(textareaLog, BorderLayout.CENTER);
-        
-        
+
         textfieldInput = new JTextField();
         textfieldInput.setOpaque(false);
         textfieldInput.setBorder(null);
@@ -84,57 +76,17 @@ public class ConsoleView extends JPanel implements ActionListener{
         scrollpaneLog.getViewport().setOpaque(false);
         scrollpaneLog.setBorder(null);
         panelBuffer.add(scrollpaneLog, BorderLayout.CENTER);
-        
-        
+
         this.add(panelBuffer, BorderLayout.CENTER);
-        this.add(createButtonPanel(),BorderLayout.PAGE_END);
 
         // Subscribe and listen to new records
         Log.addRecordListener(record -> {
-            ConsoleView.this.handleLogRecord(record);
+            ServerConsoleView.this.handleLogRecord(record);
         });
     }
 
     /**
-     * creates a panel that has a button to clear the log text. 
-     * @returns JPanel that has the button created
-     */
-    private JPanel createButtonPanel() {
-    	
-    	JPanel buttonPanel = new JPanel(); 
-    	
-    	clearLogButton = new JButton("Clear Log");
-        clearLogButton.setBackground(Color.BLACK);
-        clearLogButton.setForeground(Color.BLUE);
-        clearLogButton.addActionListener(this);;
-        clearLogButton.setPreferredSize(new Dimension(100,25));
-        clearLogButton.setHorizontalAlignment(SwingConstants.CENTER);
-        
-        buttonPanel.setBackground(ColorConstants.BACKGROUND_BLUE);
-        buttonPanel.add(clearLogButton);
-        
-        return buttonPanel;
-    
-    }
-    
-    /**
-     * clears the log when clicked on clear log button
-     * @param ActionEvent that has the data about the event that triggered the method
-     */
-    public void actionPerformed (ActionEvent event) {
-    	Object source = event.getSource();
-    	
-    	if(source == clearLogButton) {
-    		
-    		textareaLog.setText("");
-    		clearLogButton.repaint();
-    	}
-    	
-    
-    }
-    
-    /**
-     * Adds a new log record to the text area
+     * Adds a new log record to the textarea
      * @param record New record to add
      */
     private void handleLogRecord(LogRecord record) {
@@ -155,6 +107,4 @@ public class ConsoleView extends JPanel implements ActionListener{
         textareaLog.append(msg + "\n");
         textareaLog.setCaretPosition(textareaLog.getText().length());
     }
-    
-    
 }

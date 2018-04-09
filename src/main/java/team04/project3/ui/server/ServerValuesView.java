@@ -1,5 +1,6 @@
 package team04.project3.ui.server;
 
+import team04.project3.constants.ColorConstants;
 import team04.project3.constants.TextConstants;
 import team04.project3.listeners.ServerListener;
 import team04.project3.model.EmostatePacketBuilder;
@@ -90,7 +91,7 @@ public class ServerValuesView extends JPanel {
         // Top - Time input
         JPanel panelTop = new JPanel();
         panelTop.setLayout(new BoxLayout(panelTop, BoxLayout.X_AXIS));
-        panelTop.setBorder(BorderFactory.createEmptyBorder(4,4,4,4));
+        panelTop.setBorder(BorderFactory.createEmptyBorder(4,4,16,4));
         this.add(panelTop, BorderLayout.PAGE_START);
 
         JLabel labelTime = new JLabel("Time:");
@@ -134,8 +135,9 @@ public class ServerValuesView extends JPanel {
 
         // Bottom - Emotiv input
         JPanel panelBottom = new JPanel();
+        panelBottom.setBackground(ColorConstants.BACKGROUND_GRAY);
         panelBottom.setLayout(new BoxLayout(panelBottom, BoxLayout.Y_AXIS));
-        panelBottom.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.BLACK, 2), "Emostate Values",
+        panelBottom.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.BLACK, 1), "Emostate Values",
                 TitledBorder.LEADING, TitledBorder.TOP, TextConstants.DEFAULT_FONT, Color.black));
         this.add(panelBottom, BorderLayout.CENTER);
 

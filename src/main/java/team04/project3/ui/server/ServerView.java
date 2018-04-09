@@ -27,6 +27,7 @@ public class ServerView extends JFrame {
     private ServerToolbarView panelToolbar;
     private ServerTransmitView panelTransmit;
     private ServerValuesView panelValues;
+    private ServerConsoleView panelConsole;
 
     private ServerView() {
         // Start the server model if it isn't running
@@ -53,6 +54,9 @@ public class ServerView extends JFrame {
 
         panelValues = new ServerValuesView();
         panelCenter.add(panelValues, BorderLayout.CENTER);
+
+        panelConsole = new ServerConsoleView();
+        this.add(panelConsole, BorderLayout.PAGE_END);
 
         // Show frame
         this.setVisible(true);
