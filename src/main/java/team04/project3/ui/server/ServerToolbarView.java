@@ -9,12 +9,19 @@ import team04.project3.util.Log;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Toolbar for the ServerView
+ * @author  David Henderson (dchende2@asu.edu)
+ */
 public class ServerToolbarView extends JMenuBar {
     private JMenu menu;
     private JMenuItem menuItemStateChange;
     private JLabel labelSessions;
     private JButton buttonStatus;
 
+    /**
+     * Constructor for ServerToolbarView, the toolbar at the top of the Server UI
+     */
     public ServerToolbarView() {
         ServerModel.get().addListener(new ServerListener() {
             @Override
@@ -106,6 +113,9 @@ public class ServerToolbarView extends JMenuBar {
         timer.start();
     }
 
+    /**
+     * Displays a prompt to change the port to host the server on
+     */
     private void displayChangePortDialog() {
         String input = JOptionPane.showInputDialog(this, "Enter port number", "Change port number", JOptionPane.PLAIN_MESSAGE);
         try {
@@ -128,6 +138,9 @@ public class ServerToolbarView extends JMenuBar {
         }
     }
 
+    /**
+     * Starts up or shuts down the server
+     */
     private void changeServerState() {
         if(ServerModel.get().isRunning()) {
             ServerModel.get().shutdown();

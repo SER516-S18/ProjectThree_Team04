@@ -24,6 +24,10 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * UI for showing the emotion performance metrics
+ * @author  David Henderson (dchende2@asu.edu)
+ */
 public class ClientPerformanceMetricsView extends JPanel {
     private LinkedList<Color> availableColors = new LinkedList<>();
     private HashMap<Emotion, Color> emotionColors = new HashMap<>();
@@ -33,6 +37,9 @@ public class ClientPerformanceMetricsView extends JPanel {
     private ChartPanel panelChart;
     private float range = 30;
 
+    /**
+     * Constructor for the ClientPerformanceMetricsView, showing emotion metrics
+     */
     public ClientPerformanceMetricsView() {
         availableColors.add(Color.RED);
         availableColors.add(Color.ORANGE);
@@ -145,6 +152,7 @@ public class ClientPerformanceMetricsView extends JPanel {
 
     /**
      * Creates and adds the graph to the panel
+     * @return The graph created
      */
     private JPanel buildInitialGraph() {
         JPanel panelGraph = new JPanel(new BorderLayout());
@@ -198,6 +206,9 @@ public class ClientPerformanceMetricsView extends JPanel {
         }
     }
 
+    /**
+     * Updates the graph line colors to correspond with the set emotion color
+     */
     private void updateGraphColors() {
         for(int i = 0; i < Emotion.values().length; i++) {
             Emotion emotion = Emotion.values()[i];

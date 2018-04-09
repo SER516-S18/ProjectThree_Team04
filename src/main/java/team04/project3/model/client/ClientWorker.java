@@ -9,6 +9,10 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+/**
+ * Worker runnable for the ClientModel, keeping the websocket open
+ * @author  David Henderson (dchende2@asu.edu)
+ */
 public class ClientWorker implements Runnable {
     private ClientModel model;
     private ClientManager client;
@@ -16,6 +20,10 @@ public class ClientWorker implements Runnable {
     private Session session;
     private boolean run = false;
 
+    /**
+     * Creates a ClientWorker for the ClientModel
+     * @param model Model (parent) to create for
+     */
     public ClientWorker(ClientModel model) {
         this.model = model;
     }
@@ -56,10 +64,17 @@ public class ClientWorker implements Runnable {
         run = false;
     }
 
+    /**
+     * Returns if the worker is running
+     * @return If the worker is running
+     */
     public boolean isRunning() {
         return run;
     }
 
+    /**
+     * Shuts down the worker
+     */
     public void shutdown() {
         synchronized (this) {
             this.notify();

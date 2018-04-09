@@ -50,10 +50,18 @@ public class ServerModel {
     private Runnable output;
     private boolean repeating = false;
 
+    /**
+     * Private constructor for singleton, defaulting to default port with repeat interval
+     */
     private ServerModel() {
         this(DEFAULT_PORT, 500);
     }
 
+    /**
+     * Full private constructor for singleton
+     * @param port Port to host at
+     * @param interval Interval for repeating packets
+     */
     private ServerModel(int port, long interval) {
         this.setPort(port);
         this.setAutoRepeatInterval(interval);
@@ -147,30 +155,45 @@ public class ServerModel {
         }
     }
 
+    /**
+     * Notifies a client connected
+     */
     public void notifyClientConnected() {
         for(ServerListener listener : listeners) {
             listener.clientConnected();
         }
     }
 
+    /**
+     * Notifies a client disconnected
+     */
     public void notifyClientDisconnected() {
         for(ServerListener listener : listeners) {
             listener.clientDisconnected();
         }
     }
 
+    /**
+     * Notifies a packet has been sent
+     */
     private void notifyPacketSent() {
         for(ServerListener listener : listeners) {
             listener.packetSent();
         }
     }
 
+    /**
+     * Notifies repeating packets have started or stopped
+     */
     private void notifyPacketRepeatingToggled() {
         for(ServerListener listener : listeners) {
             listener.packetRepeatingToggled();
         }
     }
 
+    /**
+     * Notifies the setting to repeat packets or not has changed
+     */
     public void notifyPacketRepeatModeChanged() {
         for(ServerListener listener : listeners) {
             listener.packetRepeatingModeChanged();
@@ -199,6 +222,10 @@ public class ServerModel {
             this.tick = tick;
     }
 
+    /**
+     * Returns the current tick
+     * @return Current time tick
+     */
     public float getTick() {
         return tick;
     }
@@ -312,6 +339,10 @@ public class ServerModel {
         this.notifyPacketSent();
     }
 
+    /**
+     * Gets number of clients connected
+     * @return Number of clients connected
+     */
     public int getClientsCount() {
         return (worker == null ? 0 : worker.getClientsCount());
     }

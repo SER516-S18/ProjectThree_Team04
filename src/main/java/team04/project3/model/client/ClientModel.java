@@ -146,12 +146,18 @@ public class ClientModel {
         }
     }
 
+    /**
+     * Notifies Emostate values were changed (added/modified/deleted)
+     */
     private void notifyValuesChanged() {
         for(ClientListener listener : listeners) {
             listener.valuesChanged();
         }
     }
 
+    /**
+     * Notifies Emostate values were strictly added
+     */
     private void notifyValuesAdded() {
         for(ClientListener listener : listeners) {
             listener.valuesAdded();
@@ -160,6 +166,9 @@ public class ClientModel {
         this.notifyValuesChanged();
     }
 
+    /**
+     * Notifies Emostate value were set
+     */
     private void notifyValuesReset() {
         for(ClientListener listener : listeners) {
             listener.valuesReset();
@@ -233,10 +242,18 @@ public class ClientModel {
         this.setHost(LOCALHOST);
     }
 
+    /**
+     * Returns the host to connect to
+     * @return The host to connect to
+     */
     public InetAddress getHost() {
         return HOST;
     }
 
+    /**
+     * Adds a packet to the model (from the server)
+     * @param packet Packet to add
+     */
     public void addPacket(EmostatePacket packet) {
         if(packet == null)
             throw new IllegalArgumentException("Packet must be non-null");
@@ -257,6 +274,9 @@ public class ClientModel {
         this.notifyValuesAdded();
     }
 
+    /**
+     * Resets and remove/clears all previous packets
+     */
     public void resetPackets() {
         packetNewest = null;
         packets.clear();
@@ -268,22 +288,44 @@ public class ClientModel {
         this.notifyValuesReset();
     }
 
+    /**
+     * Returns an unmodifiable list of all packets
+     * @return Unmodifiable list of all packets
+     */
     public List<EmostatePacket> getPackets() {
         return Collections.unmodifiableList(packets);
     }
 
+    /**
+     * Gets a list of all packet values for a specific expression
+     * @param expression Expression to get
+     * @return Packet values
+     */
     public List<ValueTuple> getExpressionPackets(Expression expression) {
         return Collections.unmodifiableList(expressionPackets.get(expression));
     }
 
+    /**
+     * Gets a list of all packet values for a specific emotion
+     * @param emotion Emotion to get
+     * @return Packet values
+     */
     public List<ValueTuple> getEmotionPackets(Emotion emotion) {
         return Collections.unmodifiableList(emotionPackets.get(emotion));
     }
 
+    /**
+     * Returns the newest received packet, or null if none
+     * @return Newest receieved packet, or null if none
+     */
     public EmostatePacket getNewestPacket() {
         return packetNewest;
     }
 
+    /**
+     * Gets the number of packets received
+     * @return Number of packets received
+     */
     public int getPacketsCount() {
         return packets.size();
     }

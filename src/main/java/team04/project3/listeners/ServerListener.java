@@ -19,8 +19,14 @@ public interface ServerListener {
      */
     public void shutdown();
 
+    /**
+     * Called when a client connects to the server
+     */
     public void clientConnected();
 
+    /**
+     * Called when a client disconnects from the server
+     */
     public void clientDisconnected();
 
     /**
@@ -33,5 +39,8 @@ public interface ServerListener {
      */
     public void packetRepeatingToggled();
 
+    /**
+     * Called when the setting for whether to repeat packets is changed
+     */
     public void packetRepeatingModeChanged();
 }

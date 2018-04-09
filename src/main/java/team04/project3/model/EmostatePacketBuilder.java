@@ -2,11 +2,19 @@ package team04.project3.model;
 
 import java.util.HashMap;
 
+/**
+ * Builder for a EmostatePacket
+ * @author  David Henderson (dchende2@asu.edu)
+ */
 public class EmostatePacketBuilder {
     private HashMap<Expression, Float> expressions = new HashMap<>();
     private HashMap<Emotion, Float> emotions = new HashMap<>();
     private Float tick = null;
 
+    /**
+     * Get an emostate packet builder with all expressions and emotions set to 0
+     * @return EmostatePacketBuilder with all expressions and emotions set to 0
+     */
     public static EmostatePacketBuilder getZeroedEmostatePacket() {
         EmostatePacketBuilder builder = new EmostatePacketBuilder();
         for(Expression expression : Expression.values()) {
@@ -20,8 +28,17 @@ public class EmostatePacketBuilder {
         return builder;
     }
 
-    public EmostatePacketBuilder() { }
+    /**
+     * Default constructor for builder
+     */
+    public EmostatePacketBuilder() {}
 
+    /**
+     * Sets an expression to a value
+     * @param expression Expression to set
+     * @param value Value to set
+     * @return Builder object
+     */
     public EmostatePacketBuilder setExpression(Expression expression, float value) {
         if(expression == null) {
             throw new IllegalArgumentException("Arguments must not be null");
@@ -35,6 +52,12 @@ public class EmostatePacketBuilder {
         return this;
     }
 
+    /**
+     * Sets an expression to a boolean value (converts from true -> 1.0, false -> 0.0)
+     * @param expression Expression to set
+     * @param value Value to set
+     * @return Builder object
+     */
     public EmostatePacketBuilder setExpression(Expression expression, boolean value) {
         if(expression == null) {
             throw new IllegalArgumentException("Arguments must not be null");
@@ -46,6 +69,12 @@ public class EmostatePacketBuilder {
         return this;
     }
 
+    /**
+     * Sets an emotion to a value
+     * @param emotion Emotion to set
+     * @param value Value to set
+     * @return Builder object
+     */
     public EmostatePacketBuilder setEmotion(Emotion emotion, float value) {
         if(emotion == null) {
             throw new IllegalArgumentException("Arguments must not be null");
@@ -57,6 +86,11 @@ public class EmostatePacketBuilder {
         return this;
     }
 
+    /**
+     * Gets the value of an expression
+     * @param expression Expression to get
+     * @return Float from 0.0 -> 1.0 inclusive
+     */
     public Float getExpression(Expression expression) {
         if(expression == null)
             throw new IllegalArgumentException("Expression must be non-null");
@@ -64,10 +98,20 @@ public class EmostatePacketBuilder {
             return this.expressions.getOrDefault(expression, null);
     }
 
+    /**
+     * Gets the floating point value of an expression
+     * @param expression Expression to get
+     * @return Float from 0.0 -> 1.0 inclusive
+     */
     public Float getExpressionFloating(Expression expression) {
         return this.getExpression(expression);
     }
 
+    /**
+     * Gets a boolean value of an expression
+     * @param expression Expression to get
+     * @return True/false from expression
+     */
     public Boolean getExpressionBoolean(Expression expression) {
         if(expression == null)
             throw new IllegalArgumentException("Expression must be non-null");
@@ -81,6 +125,11 @@ public class EmostatePacketBuilder {
         }
     }
 
+    /**
+     * Gets an emotion's value
+     * @param emotion Emotion to get
+     * @return Float from 0.0 -> 1.0 inclusive
+     */
     public Float getEmotion(Emotion emotion) {
         if(emotion == null)
             throw new IllegalArgumentException("Emotion must be non-null");
@@ -88,11 +137,20 @@ public class EmostatePacketBuilder {
             return this.emotions.getOrDefault(emotion, null);
     }
 
+    /**
+     * Sets the tick of the builder to send
+     * @param tick Tick to set
+     * @return Builder object
+     */
     public EmostatePacketBuilder setTick(Float tick) {
         this.tick = tick;
         return this;
     }
 
+    /**
+     * Construction method of the builder object
+     * @return Valid EmostatePacket object
+     */
     public EmostatePacket build() {
         return (tick == null ? new EmostatePacket(expressions, emotions) : new EmostatePacket(expressions, emotions, tick));
     }

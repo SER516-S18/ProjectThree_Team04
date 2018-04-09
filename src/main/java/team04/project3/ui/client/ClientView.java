@@ -15,6 +15,10 @@ public class ClientView extends JFrame {
     public static final Dimension WINDOW_SIZE = new Dimension(1024, 768);
     private static ClientView instance;
 
+    /**
+     * Getter for singleton ClientView
+     * @return ClientView instance
+     */
     public static ClientView getInstance() {
         ClientView result = instance;
         if(result == null){
@@ -49,6 +53,9 @@ public class ClientView extends JFrame {
 
     }
 
+    /**
+     * UI initializer
+     */
     public void init() {
         this.setTitle("Emotiv Control Panel");
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

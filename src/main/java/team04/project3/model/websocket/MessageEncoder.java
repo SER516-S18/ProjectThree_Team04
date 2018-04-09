@@ -7,6 +7,10 @@ import team04.project3.model.EmostatePacket;
 import javax.websocket.Encoder;
 import javax.websocket.EndpointConfig;
 
+/**
+ * Encoder for EmostatePackets to websockets
+ * @author  David Henderson (dchende2@asu.edu)
+ */
 public class MessageEncoder implements Encoder.Text<EmostatePacket> {
     private static Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
 

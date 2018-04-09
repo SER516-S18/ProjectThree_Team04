@@ -2,6 +2,10 @@ package team04.project3.model;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Enumeration representing all the valid expressions
+ * @author  David Henderson (dchende2@asu.edu)
+ */
 public enum Expression {
     @SerializedName("BLINK") BLINK("Blink", false),
     @SerializedName("WINK_RIGHT") WINK_RIGHT("Right wink", false),
@@ -16,6 +20,11 @@ public enum Expression {
     @SerializedName("SMIRK_RIGHT") SMIRK_RIGHT("Right smirk", true),
     @SerializedName("LAUGH") LAUGH("Laugh", true);
 
+    /**
+     * Enumeration constructor for expression
+     * @param name Human-readable name for expression
+     * @param floating Whether the expression is a floating-value
+     */
     Expression(String name, boolean floating) {
         this.NAME = name;
         this.IS_FLOATING = floating;
@@ -26,10 +35,18 @@ public enum Expression {
     @SerializedName("ISFLOATING")
     private boolean IS_FLOATING;
 
+    /**
+     * Gets if the expression is a floating value
+     * @return Boolean if expression is floating
+     */
     public boolean isFloating() {
         return IS_FLOATING;
     }
 
+    /**
+     * Gets if the expression is a binary value
+     * @return Boolean if expression is floating
+     */
     public boolean isBinary() {
         return !IS_FLOATING;
     }

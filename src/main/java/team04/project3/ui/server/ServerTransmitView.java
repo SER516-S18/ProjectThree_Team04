@@ -11,11 +11,18 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.text.ParseException;
 
+/**
+ * UI for setting the packet transmit settings
+ * @author  David Henderson (dchende2@asu.edu)
+ */
 public class ServerTransmitView extends JPanel {
     private JButton buttonSend;
     private JCheckBox checkboxRepeat;
     private JSpinner spinnerInterval;
 
+    /**
+     * Constructor for ServerTransmitView, the input for how to send packets
+     */
     public ServerTransmitView() {
         this.init();
 
@@ -45,6 +52,9 @@ public class ServerTransmitView extends JPanel {
         });
     }
 
+    /**
+     * Initializer for UI
+     */
     private void init() {
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         this.setBorder(new EmptyBorder(8, 8, 8, 8));
@@ -109,6 +119,9 @@ public class ServerTransmitView extends JPanel {
         updateSendButtonText();
     }
 
+    /**
+     * Updates the send text depending on the repeat packet mode
+     */
     private void updateSendButtonText() {
         if(buttonSend == null)
             return;

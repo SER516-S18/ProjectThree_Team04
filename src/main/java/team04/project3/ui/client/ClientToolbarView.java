@@ -13,12 +13,19 @@ import java.awt.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+/**
+ * UI toolbar for the ClientView
+ * @author  David Henderson (dchende2@asu.edu)
+ */
 public class ClientToolbarView extends JMenuBar {
     private JMenu menu;
     private JMenuItem menuItemStateChange;
     private JButton buttonStatus;
     private JLabel textTime;
 
+    /**
+     * Constructor for ClientToolbarView, the toolbar at the top of the ClientView
+     */
     public ClientToolbarView() {
         ClientModel.get().addListener(new ClientListener() {
             @Override
@@ -106,6 +113,9 @@ public class ClientToolbarView extends JMenuBar {
         this.add(textTime);
     }
 
+    /**
+     * Prompts the user to input a new host/port input
+     */
     private void displayChangeHostDialog() {
         JTextField textfieldHost = new JTextField();
         JTextField textfieldPort = new JTextField();
@@ -138,6 +148,9 @@ public class ClientToolbarView extends JMenuBar {
         }
     }
 
+    /**
+     * Connects to the server or disconnects if connected
+     */
     private void handleConnectToServer() {
         if(ClientModel.get().isConnected()) {
             ClientModel.get().disconnect();
@@ -162,6 +175,9 @@ public class ClientToolbarView extends JMenuBar {
         }
     }
 
+    /**
+     * Opens the server composer UI, if not open, otherwise refocuses it. Attempts connection if starting up server.
+     */
     public void openServerPanel() {
         if(ServerView.getInstance().isDisplayable()) {
             ServerView.getInstance().toFront();

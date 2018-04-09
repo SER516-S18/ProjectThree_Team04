@@ -15,6 +15,10 @@ public class ServerView extends JFrame {
     public static final Dimension WINDOW_SIZE = new Dimension(600, 800);
     private static ServerView instance;
 
+    /**
+     * Singleton getter
+     * @return ServerView instance
+     */
     public static ServerView getInstance() {
         ServerView result = instance;
         if(result == null) {
@@ -32,6 +36,9 @@ public class ServerView extends JFrame {
     private ServerValuesView panelValues;
     private ServerConsoleView panelConsole;
 
+    /**
+     * Private constructor for singleton
+     */
     private ServerView() {
         // Start the server model if it isn't running
         if(!ServerModel.get().isRunning())
@@ -47,6 +54,9 @@ public class ServerView extends JFrame {
         });
     }
 
+    /**
+     * Initializes the UI
+     */
     public void init() {
         this.setTitle("Emotiv Composer");
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);

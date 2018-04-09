@@ -19,9 +19,18 @@ import java.util.Set;
     encoders = MessageEncoder.class
 )
 
+/**
+ * Endpoint for the server's websocket
+ * @author  David Henderson (dchende2@asu.edu)
+ */
 public class ServerWebsocketEndpoint {
     private static Set<Session> sessions = Collections.synchronizedSet(new HashSet<>());
 
+    /**
+     * Called when a client connects
+     * @param session Session representing client
+     * @throws IOException Upon IOException while opening
+     */
     @javax.websocket.OnOpen
     public void onOpen(Session session) throws IOException {
         // Get session and WebSocket connection
@@ -30,11 +39,23 @@ public class ServerWebsocketEndpoint {
         Log.v("Client opened a new session (" + sessions.size() + " total open)", ServerWebsocketEndpoint.class);
     }
 
+    /**
+     * Called when a client sends a message
+     * @param session Session representing client
+     * @param message Message from client
+     * @throws IOException Upon receiving message from client
+     * @throws EncodeException Upon failing to decode message
+     */
     @javax.websocket.OnMessage
     public void onMessage(Session session, EmostatePacket message) throws IOException, EncodeException {
         // Handle incoming messages
     }
 
+    /**
+     * Called when a client closes the connection
+     * @param session Session representing client
+     * @throws IOException Upon failing to close gracefully
+     */
     @javax.websocket.OnClose
     public void onClose(Session session) throws IOException {
         // WebSocket connection closes
@@ -43,6 +64,11 @@ public class ServerWebsocketEndpoint {
         Log.v("Client session closed (" + sessions.size() + " remain open)", ServerWebsocketEndpoint.class);
     }
 
+    /**
+     * Called when an error occurs in a session
+     * @param session Session representing client
+     * @param throwable Error encountered
+     */
     @javax.websocket.OnError
     public void onError(Session session, Throwable throwable) {
         // Do error handling here
@@ -51,6 +77,10 @@ public class ServerWebsocketEndpoint {
         throwable.printStackTrace();
     }
 
+    /**
+     * Sends a packet to all clients
+     * @param packet Packet to send
+     */
     public synchronized void send(EmostatePacket packet) {
         for(Session session : sessions) {
             try {
@@ -61,6 +91,9 @@ public class ServerWebsocketEndpoint {
         }
     }
 
+    /**
+     * Disconnects from all clients
+     */
     public synchronized void disconnect() {
         for (Iterator<Session> i = sessions.iterator(); i.hasNext();) {
             Session session = i.next();
@@ -74,6 +107,10 @@ public class ServerWebsocketEndpoint {
         sessions.clear();
     }
 
+    /**
+     * Gets the number of clients connected
+     * @return Number of clients connected
+     */
     public int getClientsCount() {
         return sessions.size();
     }

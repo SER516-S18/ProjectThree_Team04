@@ -2,6 +2,7 @@ package team04.project3.util;
 
 /**
  * A databag with the message and its other attributes
+ * @author  David Henderson (dchende2@asu.edu)
  */
 public class LogRecord {
     private String _formattedMessage;

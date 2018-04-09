@@ -17,6 +17,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * UI for displaying a single expression's name, most recent value, and graph
+ * @author  David Henderson (dchende2@asu.edu)
+ */
 public class ClientExpressionGraphView extends JPanel {
     private final Expression expression;
     private JLabel labelValue;
@@ -25,6 +29,10 @@ public class ClientExpressionGraphView extends JPanel {
     private JFreeChart chart;
     private ChartPanel panelChart;
 
+    /**
+     * Constructor for the ClientExpressionGraphView, showing the name label, graph, and most recent value for an expression
+     * @param expression Expression to display
+     */
     public ClientExpressionGraphView(Expression expression) {
         this.expression = expression;
 
@@ -57,6 +65,7 @@ public class ClientExpressionGraphView extends JPanel {
 
     /**
      * Creates and adds the graph to the panel
+     * @return The graph that is created
      */
     private JPanel buildInitialGraph() {
         JPanel panelGraph = new JPanel(new BorderLayout());
@@ -126,10 +135,18 @@ public class ClientExpressionGraphView extends JPanel {
         }
     }
 
+    /**
+     * Sets the label's text to the expression's value
+     * @param value Value to set
+     */
     public void setValue(float value) {
         labelValue.setText(Float.toString(value));
     }
 
+    /**
+     * Returns which expression the panel represents
+     * @return Expression the panel represents
+     */
     public Expression getExpression() {
         return expression;
     }

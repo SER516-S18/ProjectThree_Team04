@@ -18,6 +18,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.text.ParseException;
 
+/**
+ * UI for setting/inputting the emostate values
+ * @author  David Henderson (dchende2@asu.edu)
+ */
 public class ServerValuesView extends JPanel {
 
     private JTextField textfieldTime;
@@ -43,6 +47,9 @@ public class ServerValuesView extends JPanel {
     private JSpinner spinnerLowerFace;
     private JSpinner spinnerEmotion;
 
+    /**
+     * Constructor for ServerValuesView, the input for the packet settings to send
+     */
     public ServerValuesView() {
         emostatePacketBuilder = EmostatePacketBuilder.getZeroedEmostatePacket();
         ServerModel.get().setPacket(emostatePacketBuilder);
@@ -84,6 +91,9 @@ public class ServerValuesView extends JPanel {
         this.init();
     }
 
+    /**
+     * Initializes the UI
+     */
     private void init() {
         this.setLayout(new BorderLayout());
         this.setBorder(new EmptyBorder(8, 8, 8, 8));
@@ -215,7 +225,7 @@ public class ServerValuesView extends JPanel {
         comboExpressionFaceUpper.setModel(new DefaultComboBoxModel<>(expressionFaceUpperValues));
         comboExpressionFaceUpper.setMaximumSize(new Dimension(128, 128));
         comboExpressionFaceUpper.addActionListener(event -> {
-            spinnerUpperFace.setValue(emostatePacketBuilder.getExpression((Expression) comboExpressionFaceUpper.getSelectedItem()).doubleValue());
+            spinnerUpperFace.setValue(emostatePacketBuilder.getExpressionFloating((Expression) comboExpressionFaceUpper.getSelectedItem()).doubleValue());
         });
         panelInputFaceUpper.add(comboExpressionFaceUpper, BorderLayout.WEST);
 
@@ -300,6 +310,11 @@ public class ServerValuesView extends JPanel {
         panelInputEmotion.add(spinnerEmotion, BorderLayout.EAST);
     }
 
+    /**
+     * Handles combo expression change to save to builder
+     * @param combo Expression to save
+     * @param spinner Value to save
+     */
     private void handleComboExpressionChange(JComboBox combo, JSpinner spinner) {
         try {
             spinner.commitEdit();
@@ -309,6 +324,11 @@ public class ServerValuesView extends JPanel {
         }
     }
 
+    /**
+     * Handles combo emotion change to save to builder
+     * @param combo Emotion to save
+     * @param spinner Value to save
+     */
     private void handleComboEmotionChange(JComboBox combo, JSpinner spinner) {
         try {
             spinner.commitEdit();

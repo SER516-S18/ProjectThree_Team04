@@ -8,9 +8,16 @@ import team04.project3.model.client.ClientModel;
 import javax.swing.*;
 import java.util.ArrayList;
 
+/**
+ * UI for showing all the expression graphs in the ClientView
+ * @author  David Henderson (dchende2@asu.edu)
+ */
 public class ClientExpressionGraphsView extends JPanel {
     private ArrayList<ClientExpressionGraphView> graphs;
 
+    /**
+     * Constructor for the ClientExpressionGraphsView, showing all the graphs for each expression
+     */
     public ClientExpressionGraphsView() {
         ClientModel.get().addListener(new ClientListener() {
             @Override
@@ -49,6 +56,9 @@ public class ClientExpressionGraphsView extends JPanel {
         updateGraphValueLabels();
     }
 
+    /**
+     * Updates the expression's label value to the latest packet
+     */
     private void updateGraphValueLabels() {
         EmostatePacket packet = ClientModel.get().getNewestPacket();
         for(ClientExpressionGraphView graphView : graphs) {
@@ -56,6 +66,9 @@ public class ClientExpressionGraphsView extends JPanel {
         }
     }
 
+    /**
+     * Updates the graphs for each expression
+     */
     private void updateGraphs() {
         for(ClientExpressionGraphView graphView : graphs) {
             graphView.updateGraphs();
