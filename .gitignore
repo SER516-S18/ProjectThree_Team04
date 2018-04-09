@@ -7,8 +7,7 @@ out/*
 *.jar
 *.ipr
 *.iws
-!lib/jcommon*.jar
-!lib/jfreechart*.jar
+!/team04-projectthree.jar
 *.zip
 *MANIFEST.MF
 /target/*
