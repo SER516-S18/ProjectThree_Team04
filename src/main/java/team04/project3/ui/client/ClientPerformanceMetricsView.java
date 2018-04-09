@@ -225,7 +225,7 @@ public class ClientPerformanceMetricsView extends JPanel {
                         tick = tuple.TICK;
                 }
             } else {
-                dataset.getSeries(0).clear();
+                dataset.getSeries(i).clear();
             }
         }
 
