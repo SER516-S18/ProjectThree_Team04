@@ -4,6 +4,7 @@ import team04.project3.constants.ColorConstants;
 import team04.project3.constants.TextConstants;
 import team04.project3.listeners.ClientListener;
 import team04.project3.model.client.ClientModel;
+import team04.project3.model.server.ServerModel;
 import team04.project3.ui.server.ServerView;
 import team04.project3.util.Log;
 
@@ -62,12 +63,7 @@ public class ClientToolbarView extends JMenuBar {
 
         menuItem = new JMenuItem("Open composer (server)");
         menuItem.addActionListener(e -> {
-            if(ServerView.getInstance().isDisplayable()) {
-                ServerView.getInstance().toFront();
-                ServerView.getInstance().repaint();
-            } else {
-                ServerView.getInstance().init();
-            }
+            openServerPanel();
         });
         menu.add(menuItem);
 
@@ -164,5 +160,40 @@ public class ClientToolbarView extends JMenuBar {
                 Log.w("Failed to sleep while connecting (" + e.getMessage() + ")", ClientToolbarView.class);
             }
         }
+    }
+
+    public void openServerPanel() {
+        if(ServerView.getInstance().isDisplayable()) {
+            ServerView.getInstance().toFront();
+            ServerView.getInstance().repaint();
+        } else {
+            ServerView.getInstance().init();
+            int x = ClientView.getInstance().getX() - (ClientView.getInstance().getWidth() / 2) - (ServerView.getInstance().getWidth() / 2);
+            if (x < ServerView.getInstance().getWidth() / 2) {
+                x = ClientView.getInstance().getX() + (ClientView.getInstance().getWidth() / 2) + (ServerView.getInstance().getWidth() / 2);
+            }
+            if(x > Toolkit.getDefaultToolkit().getScreenSize().width - ServerView.getInstance().getWidth() / 2) {
+                x = ClientView.getInstance().getX();
+            }
+
+            ServerView.getInstance().setLocation(
+                    x, ClientView.getInstance().getLocation().getLocation().y
+            );
+        }
+
+        // Try to connect the client in a moment
+        new Thread(() -> {
+            try {
+                long timeout = System.currentTimeMillis() + 2000L;
+                while(System.currentTimeMillis() < timeout && !ServerModel.get().isRunning()) {
+                    Thread.sleep(100L);
+                }
+            } catch(InterruptedException e) {
+                Log.w("Failed to wait while server starts up (" + e.getMessage() + ")", ClientToolbarView.class);
+            }
+
+            if(!ClientModel.get().isConnected())
+                ClientModel.get().connect();
+        }).start();
     }
 }

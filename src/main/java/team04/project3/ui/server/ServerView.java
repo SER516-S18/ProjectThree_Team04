@@ -4,12 +4,15 @@ import team04.project3.model.server.ServerModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 /**
  * The main UI for the server application
  * @author  David Henderson (dchende2@asu.edu)
  */
 public class ServerView extends JFrame {
+    public static final Dimension WINDOW_SIZE = new Dimension(600, 800);
     private static ServerView instance;
 
     public static ServerView getInstance() {
@@ -33,12 +36,21 @@ public class ServerView extends JFrame {
         // Start the server model if it isn't running
         if(!ServerModel.get().isRunning())
             ServerModel.get().start();
+
+        // Shut down the server if the window is closed
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent windowEvent) {
+                if(ServerModel.get().isRunning())
+                    ServerModel.get().shutdown();
+            }
+        });
     }
 
     public void init() {
         this.setTitle("Emotiv Composer");
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        this.setMinimumSize(new Dimension(600, 800));
+        this.setMinimumSize(WINDOW_SIZE);
 
         this.setLayout(new BorderLayout());
 

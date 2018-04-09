@@ -6,7 +6,7 @@ package team04.project3.util;
  */
 
 public class Util {
-    public static final int DEFAULT_PORT = 1800;
+    public static final int DEFAULT_PORT = 1726;
 
     /**
      * Returns if a String s is a valid integer

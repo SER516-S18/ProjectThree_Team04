@@ -5,12 +5,14 @@ import team04.project3.model.client.ClientModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
 /**
  * Main UI for the client application
  * @author  David Henderson (dchende2@asu.edu)
  */
 public class ClientView extends JFrame {
+    public static final Dimension WINDOW_SIZE = new Dimension(800, 768);
     private static ClientView instance;
 
     public static ClientView getInstance() {
@@ -35,12 +37,22 @@ public class ClientView extends JFrame {
         // Start the client model if it isn't running
         if(!ClientModel.get().isConnected())
             ClientModel.get().connect();
+
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(e -> {
+            // If CONTROL + SHIFT + Q, open server
+            if (e.isShiftDown() && e.getKeyCode() == 81 && e.getID() == KeyEvent.KEY_RELEASED) {
+                panelToolbar.openServerPanel();
+                return true;
+            }
+            return false;
+        });
+
     }
 
     public void init() {
         this.setTitle("Emotiv Control Panel");
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setMinimumSize(new Dimension(1024, 768));
+        this.setMinimumSize(WINDOW_SIZE);
 
         this.setLayout(new BorderLayout());
 
