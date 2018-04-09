@@ -2,11 +2,8 @@ package team04.project3.ui.client;
 
 import team04.project3.constants.TextConstants;
 import team04.project3.model.client.ClientModel;
-import team04.project3.model.server.ServerModel;
-import team04.project3.ui.server.ServerToolbarView;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 /**
@@ -42,7 +39,7 @@ public class ClientView extends JFrame {
 
     public void init() {
         this.setTitle("Emotiv Control Panel");
-        this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setMinimumSize(new Dimension(1024, 768));
 
         this.setLayout(new BorderLayout());

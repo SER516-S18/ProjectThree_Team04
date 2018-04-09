@@ -1,16 +1,12 @@
 package team04.project3.model.client;
 
 import team04.project3.listeners.ClientListener;
-import team04.project3.model.EmostatePacket;
+import team04.project3.model.*;
 import team04.project3.util.Log;
-import team04.project3.util.Util;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static team04.project3.util.Util.DEFAULT_PORT;
 
@@ -55,8 +51,9 @@ public class ClientModel {
     private final ArrayList<ClientListener> listeners = new ArrayList<>();
     private ClientWorker worker;
     private LinkedList<EmostatePacket> packets;
+    private HashMap<Expression, LinkedList<ValueTuple>> expressionPackets;
+    private HashMap<Emotion, LinkedList<ValueTuple>> emotionPackets;
     private EmostatePacket packetNewest;
-    private ArrayList<Double> packetIntervals;
 
     /**
      * Default constructor, defaulting to port 1726 and LOCALHOST
@@ -75,7 +72,14 @@ public class ClientModel {
         this.setPort(port);
 
         packets = new LinkedList<>();
-        packetIntervals = new ArrayList<>();
+        expressionPackets = new HashMap<>();
+        for(Expression expression : Expression.values()) {
+            expressionPackets.put(expression, new LinkedList<>());
+        }
+        emotionPackets = new HashMap<>();
+        for(Emotion emotion : Emotion.values()) {
+            emotionPackets.put(emotion, new LinkedList<>());
+        }
 
         // Shutdown client on program disconnect
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -240,10 +244,11 @@ public class ClientModel {
 
         packetNewest = packet;
         packets.add(packet);
-
-        // Average interval
-        if(packets.size() > 1) {
-            packetIntervals.add( (double) packets.get(packets.size() - 1).getTick() - packets.get(packets.size() - 2).getTick() );
+        for(Expression expression : Expression.values()) {
+            expressionPackets.get(expression).add(new ValueTuple(packet.getExpression(expression), packet.getTick()));
+        }
+        for(Emotion emotion : Emotion.values()) {
+            emotionPackets.get(emotion).add(new ValueTuple(packet.getEmotion(emotion), packet.getTick()));
         }
 
         this.notifyValuesAdded();
@@ -252,12 +257,24 @@ public class ClientModel {
     public void resetPackets() {
         packetNewest = null;
         packets.clear();
-        packetIntervals.clear();
+        for(Expression expression : Expression.values())
+            expressionPackets.get(expression).clear();
+        for(Emotion emotion : Emotion.values())
+            emotionPackets.get(emotion).clear();
+
         this.notifyValuesReset();
     }
 
     public List<EmostatePacket> getPackets() {
         return Collections.unmodifiableList(packets);
+    }
+
+    public List<ValueTuple> getExpressionPackets(Expression expression) {
+        return Collections.unmodifiableList(expressionPackets.get(expression));
+    }
+
+    public List<ValueTuple> getEmotionPackets(Emotion emotion) {
+        return Collections.unmodifiableList(emotionPackets.get(emotion));
     }
 
     public EmostatePacket getNewestPacket() {
@@ -266,17 +283,5 @@ public class ClientModel {
 
     public int getPacketsCount() {
         return packets.size();
-    }
-
-    public double getPacketAverageInterval() {
-        if(packetIntervals.size() == 0)
-            return 0.0d;
-
-        double average = 0.0d;
-        for(Double d : packetIntervals) {
-            average += d;
-        }
-
-        return Util.round(average / packetIntervals.size(), 2);
     }
 }
