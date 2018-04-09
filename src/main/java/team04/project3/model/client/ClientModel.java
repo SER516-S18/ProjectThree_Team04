@@ -3,6 +3,7 @@ package team04.project3.model.client;
 import team04.project3.listeners.ClientListener;
 import team04.project3.model.EmostatePacket;
 import team04.project3.util.Log;
+import team04.project3.util.Util;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -53,6 +54,7 @@ public class ClientModel {
     private ClientWorker worker;
     private LinkedList<EmostatePacket> packets;
     private EmostatePacket packetNewest;
+    private ArrayList<Double> packetIntervals;
 
     /**
      * Default constructor, defaulting to port 1726 and LOCALHOST
@@ -71,6 +73,7 @@ public class ClientModel {
         this.setPort(port);
 
         packets = new LinkedList<>();
+        packetIntervals = new ArrayList<>();
 
         // Shutdown client on program disconnect
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -235,12 +238,19 @@ public class ClientModel {
 
         packetNewest = packet;
         packets.add(packet);
+
+        // Average interval
+        if(packets.size() > 1) {
+            packetIntervals.add( (double) packets.get(packets.size() - 1).getTick() - packets.get(packets.size() - 2).getTick() );
+        }
+
         this.notifyValuesAdded();
     }
 
     public void resetPackets() {
         packetNewest = null;
         packets.clear();
+        packetIntervals.clear();
         this.notifyValuesReset();
     }
 
@@ -254,5 +264,17 @@ public class ClientModel {
 
     public int getPacketsCount() {
         return packets.size();
+    }
+
+    public double getPacketAverageInterval() {
+        if(packetIntervals.size() == 0)
+            return 0.0d;
+
+        double average = 0.0d;
+        for(Double d : packetIntervals) {
+            average += d;
+        }
+
+        return Util.round(average / packetIntervals.size(), 2);
     }
 }

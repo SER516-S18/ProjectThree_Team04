@@ -4,14 +4,11 @@ import team04.project3.constants.ColorConstants;
 import team04.project3.constants.TextConstants;
 import team04.project3.listeners.ClientListener;
 import team04.project3.model.client.ClientModel;
-import team04.project3.model.server.ServerModel;
 import team04.project3.ui.server.ServerView;
 import team04.project3.util.Log;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -19,11 +16,14 @@ public class ClientToolbarView extends JMenuBar {
     private JMenu menu;
     private JMenuItem menuItemStateChange;
     private JButton buttonStatus;
+    private JLabel textTime;
 
     public ClientToolbarView() {
         ClientModel.get().addListener(new ClientListener() {
             @Override
-            public void valuesChanged() { }
+            public void valuesChanged() {
+                textTime.setText(" " + Double.toString(ClientModel.get().getPacketAverageInterval()));
+            }
 
             @Override
             public void valuesReset() { }
@@ -98,6 +98,14 @@ public class ClientToolbarView extends JMenuBar {
             }
         });
         timer.start();
+
+        this.add(Box.createHorizontalStrut(32));
+
+        textTime = new JLabel(" " + Double.toString(ClientModel.get().getPacketAverageInterval()));
+        textTime.setIcon(new ImageIcon("src/main/resources/team04/project3/images/clock.jpeg"));
+        textTime.setForeground(Color.BLACK);
+        textTime.setFont(TextConstants.LARGE_FONT);
+        this.add(textTime);
     }
 
     private void displayChangeHostDialog() {

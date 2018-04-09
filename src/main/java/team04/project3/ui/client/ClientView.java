@@ -1,5 +1,6 @@
 package team04.project3.ui.client;
 
+import team04.project3.constants.TextConstants;
 import team04.project3.model.client.ClientModel;
 import team04.project3.model.server.ServerModel;
 import team04.project3.ui.server.ServerToolbarView;
@@ -28,6 +29,7 @@ public class ClientView extends JFrame {
     }
 
     private ClientToolbarView panelToolbar;
+    private JTabbedPane tabbedPane;
 
     /**
      * Representing the UI for the client application
@@ -41,46 +43,28 @@ public class ClientView extends JFrame {
     public void init() {
         this.setTitle("Emotiv Control Panel");
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        this.setMinimumSize(new Dimension(600, 800));
+        this.setMinimumSize(new Dimension(1024, 768));
 
         this.setLayout(new BorderLayout());
 
+        // Add toolbar
         panelToolbar = new ClientToolbarView();
         this.add(panelToolbar, BorderLayout.PAGE_START);
 
-        // Create a transparent border around this view
-        ClientMenuView clientMenuView = new ClientMenuView();
-        this.add(clientMenuView, BorderLayout.NORTH);
+        // Add tabs
+        tabbedPane = new JTabbedPane();
+        tabbedPane.setFont(TextConstants.LARGE_FONT);
+        this.add(tabbedPane, BorderLayout.CENTER);
+
+        ClientExpressionView expressionView = new ClientExpressionView();
+        tabbedPane.addTab("Face Expressions", expressionView);
+
+        ClientPerformanceMetricsView metricsView = new ClientPerformanceMetricsView();
+        tabbedPane.addTab("Performance Metrics", metricsView);
 
         // Show frame
         this.setVisible(true);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
-    }
-
-    private void getFaceExpressionView() {
-
-        ClientGraphView graphView;
-        ClientGraphsView clientGraphsview;
-        // Add left (graphical) view
-        graphView = new ClientGraphView();
-        this.add(graphView, BorderLayout.LINE_START);
-
-
-        // Add right (input/output) view
-        clientGraphsview = new ClientGraphsView();
-        this.add(clientGraphsview, BorderLayout.LINE_END);
-    }
-
-    private void getPerformanceMetricView() {
-
-        PerformanceMetricGraphView graphView;
-        PerformanceMetricEmotionalStatesView emotionalStateView;
-
-        graphView = new PerformanceMetricGraphView ();
-        this.add(graphView, BorderLayout.LINE_START);
-
-        emotionalStateView = new PerformanceMetricEmotionalStatesView();
-        this.add(emotionalStateView, BorderLayout.LINE_END);
     }
 }
