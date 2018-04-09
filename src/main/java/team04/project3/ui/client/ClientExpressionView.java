@@ -7,15 +7,10 @@ public class ClientExpressionView extends JPanel {
     public ClientExpressionView() {
         this.setLayout(new BorderLayout());
 
-        ClientGraphView graphView;
-        ClientGraphsView clientGraphsview;
-        // Add left (graphical) view
-        graphView = new ClientGraphView();
-        this.add(graphView, BorderLayout.LINE_START);
+        ClientExpressionFaceView faceView = new ClientExpressionFaceView();
+        this.add(faceView, BorderLayout.EAST);
 
-
-        // Add right (input/output) view
-        clientGraphsview = new ClientGraphsView();
-        this.add(clientGraphsview, BorderLayout.LINE_END);
+        ClientExpressionGraphsView graphsView = new ClientExpressionGraphsView();
+        this.add(graphsView, BorderLayout.EAST);
     }
 }

@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static team04.project3.util.Util.DEFAULT_PORT;
+
 /**
  * The center model for the server
  * @author  David Henderson (dchende2@asu.edu)
@@ -49,7 +51,7 @@ public class ServerModel {
     private boolean repeating = false;
 
     private ServerModel() {
-        this(1726, 500);
+        this(DEFAULT_PORT, 500);
     }
 
     private ServerModel(int port, long interval) {

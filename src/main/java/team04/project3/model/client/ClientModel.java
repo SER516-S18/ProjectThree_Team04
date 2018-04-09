@@ -12,6 +12,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import static team04.project3.util.Util.DEFAULT_PORT;
+
 /**
  * The main model for client
  * @author  David Henderson (dchende2@asu.edu)
@@ -60,7 +62,7 @@ public class ClientModel {
      * Default constructor, defaulting to port 1726 and LOCALHOST
      */
     private ClientModel() {
-        this(1726, LOCALHOST);
+        this(DEFAULT_PORT, LOCALHOST);
     }
 
     /**
