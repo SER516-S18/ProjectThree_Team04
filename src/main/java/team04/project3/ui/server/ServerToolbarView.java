@@ -1,5 +1,6 @@
 package team04.project3.ui.server;
 
+import team04.project3.constants.ColorConstants;
 import team04.project3.constants.TextConstants;
 import team04.project3.listeners.ServerListener;
 import team04.project3.model.server.ServerModel;
@@ -9,10 +10,6 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ServerToolbarView extends JMenuBar {
-    private final Color COLOR_OFF = Color.DARK_GRAY;
-    private final Color COLOR_ON_DIM = new Color(197, 224, 179);
-    private final Color COLOR_ON_BRIGHT = new Color(168,208,141);
-
     private JMenu menu;
     private JMenuItem menuItemStateChange;
     private JLabel labelSessions;
@@ -23,13 +20,13 @@ public class ServerToolbarView extends JMenuBar {
             @Override
             public void started() {
                 menuItemStateChange.setText("Stop server");
-                buttonStatus.setForeground(COLOR_ON_BRIGHT);
+                buttonStatus.setForeground(ColorConstants.INDICATOR_ON_BRIGHT);
             }
 
             @Override
             public void shutdown() {
                 menuItemStateChange.setText("Start server");
-                buttonStatus.setForeground(COLOR_OFF);
+                buttonStatus.setForeground(ColorConstants.INDICATOR_OFF);
             }
 
             @Override
@@ -88,20 +85,20 @@ public class ServerToolbarView extends JMenuBar {
         buttonStatus.setContentAreaFilled(false);
         buttonStatus.setBorderPainted(false);
         buttonStatus.setFocusPainted(false);
-        buttonStatus.setForeground(COLOR_OFF);
+        buttonStatus.setForeground(ColorConstants.INDICATOR_OFF);
         buttonStatus.addActionListener(e -> changeServerState());
         this.add(buttonStatus);
 
         // Create a timer to blink if on or off
         Timer timer = new Timer(1000, e2 -> {
             if(ServerModel.get().isRunning()) {
-                if(buttonStatus.getForeground() == COLOR_ON_DIM) {
-                    buttonStatus.setForeground(COLOR_ON_BRIGHT);
+                if(buttonStatus.getForeground() == ColorConstants.INDICATOR_ON_DIM) {
+                    buttonStatus.setForeground(ColorConstants.INDICATOR_ON_BRIGHT);
                 } else {
-                    buttonStatus.setForeground(COLOR_ON_DIM);
+                    buttonStatus.setForeground(ColorConstants.INDICATOR_ON_DIM);
                 }
             } else {
-                buttonStatus.setForeground(COLOR_OFF);
+                buttonStatus.setForeground(ColorConstants.INDICATOR_OFF);
             }
         });
         timer.start();

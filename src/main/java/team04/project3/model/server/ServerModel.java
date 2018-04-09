@@ -14,7 +14,7 @@ import java.util.concurrent.Executors;
  */
 
 public class ServerModel {
-    private static ServerModel _instance = null;
+    private static ServerModel instance = null;
     private static final ExecutorService executors = Executors.newCachedThreadPool();
 
     /**
@@ -22,12 +22,12 @@ public class ServerModel {
      * @return ServerModel instance
      */
     public static ServerModel get() {
-        ServerModel result = _instance;
+        ServerModel result = instance;
         if(result == null){
             synchronized (ServerModel.class) {
-                result = _instance;
+                result = instance;
                 if (result == null)
-                    _instance = result = new ServerModel();
+                    instance = result = new ServerModel();
             }
         }
         return result;
@@ -73,7 +73,7 @@ public class ServerModel {
             }
         };
 
-        // Shutdown server on program shutdown
+        // Shutdown server on program disconnect
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             if(ServerModel.this.isRunning())
                 ServerModel.this.shutdown();
@@ -129,7 +129,7 @@ public class ServerModel {
      * Notifies that the server is shutting down
      */
     private void notifyServerShutdown() {
-        Log.i("Server shutdown successfully", ServerModel.class);
+        Log.i("Server disconnect successfully", ServerModel.class);
         for(ServerListener listener : listeners) {
             listener.shutdown();
         }
@@ -188,7 +188,7 @@ public class ServerModel {
 
     /**
      * Sets which tick for the next packet sent (in seconds)
-     * @param tick Tick in seconds for the next packet to start at
+     * @param tick Tick in seconds for the next packet to connect at
      */
     public void setTick(float tick) {
         if(tick < 0.0f)
@@ -271,7 +271,7 @@ public class ServerModel {
     }
 
     /**
-     * Method to start or stop sending packets (in auto-repeat mode)
+     * Method to connect or stop sending packets (in auto-repeat mode)
      */
     public void sendPacketsToggle() {
         if(!this.isPacketRepeatMode())

@@ -12,11 +12,16 @@ import java.awt.*;
 public class ServerView extends JFrame {
     private static ServerView instance;
 
-    public static synchronized ServerView getInstance() {
-        if(instance == null)
-            instance = new ServerView();
-
-        return instance;
+    public static ServerView getInstance() {
+        ServerView result = instance;
+        if(result == null) {
+            synchronized (ServerView.class) {
+                result = instance;
+                if (result == null)
+                    instance = result = new ServerView();
+            }
+        }
+        return result;
     }
 
     private ServerToolbarView panelToolbar;
@@ -49,6 +54,7 @@ public class ServerView extends JFrame {
         panelValues = new ServerValuesView();
         panelCenter.add(panelValues, BorderLayout.CENTER);
 
+        // Show frame
         this.setVisible(true);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);

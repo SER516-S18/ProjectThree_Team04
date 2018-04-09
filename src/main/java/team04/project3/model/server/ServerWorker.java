@@ -33,6 +33,10 @@ public class ServerWorker implements Runnable {
 
                 // Shut down the server
                 endpoint.disconnect();
+                long timeout = System.currentTimeMillis() + 1000L;
+                while(endpoint.getClientsCount() > 0 && System.currentTimeMillis() < timeout) {
+                    Thread.sleep(100L);
+                }
                 server.stop();
             } catch (DeploymentException e) {
                 Log.e("Failed to deploy web socket server, shutting down (" + e.getMessage() + ")", ServerWorker.class);

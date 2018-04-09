@@ -30,7 +30,7 @@ public class Terminal {
     private boolean run;
 
     /**
-     * Creates the terminal, and allows shutting down when triggered through a shutdown hook
+     * Creates the terminal, and allows shutting down when triggered through a disconnect hook
      */
     private Terminal() {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> _instance.run = false));

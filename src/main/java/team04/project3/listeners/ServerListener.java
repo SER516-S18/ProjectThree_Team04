@@ -29,7 +29,7 @@ public interface ServerListener {
     public void packetSent();
 
     /**
-     * Called when the model is set to start or stop repeatedly send packets
+     * Called when the model is set to connect or stop repeatedly send packets
      */
     public void packetRepeatingToggled();
 

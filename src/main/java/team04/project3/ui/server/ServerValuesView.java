@@ -198,6 +198,8 @@ public class ServerValuesView extends JPanel {
         });
         panelInputEyes.add(buttonEye);
 
+        panelBottom.add(Box.createVerticalStrut(16));
+
         // Upperface
         JPanel panelInputFaceUpper = new JPanel();
         panelInputFaceUpper.setOpaque(false);
@@ -229,6 +231,8 @@ public class ServerValuesView extends JPanel {
         });
         panelInputFaceUpper.add(spinnerUpperFace, BorderLayout.EAST);
 
+        panelBottom.add(Box.createVerticalStrut(16));
+
         // Lowerface
         JPanel panelInputFaceLower = new JPanel();
         panelInputFaceLower.setOpaque(false);
@@ -259,6 +263,8 @@ public class ServerValuesView extends JPanel {
             }
         });
         panelInputFaceLower.add(spinnerLowerFace, BorderLayout.EAST);
+
+        panelBottom.add(Box.createVerticalStrut(16));
 
         // Emotion
         JPanel panelInputEmotion = new JPanel();

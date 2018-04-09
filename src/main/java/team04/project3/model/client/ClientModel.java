@@ -18,7 +18,7 @@ import java.util.List;
 
 public class ClientModel {
     private static InetAddress LOCALHOST;
-    private static volatile ClientModel _instance;
+    private static volatile ClientModel instance;
 
     static {
         // Helper function to save the localhost as a default
@@ -35,12 +35,12 @@ public class ClientModel {
      * @return ClientModel instance
      */
     public static ClientModel get() {
-        ClientModel result = _instance;
+        ClientModel result = instance;
         if(result == null){
             synchronized (ClientModel.class) {
-                result = _instance;
+                result = instance;
                 if (result == null)
-                    _instance = result = new ClientModel();
+                    instance = result = new ClientModel();
             }
         }
         return result;
@@ -72,18 +72,18 @@ public class ClientModel {
 
         packets = new LinkedList<>();
 
-        // Shutdown client on program shutdown
+        // Shutdown client on program disconnect
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            if(ClientModel.this.isRunning())
-                ClientModel.this.shutdown();
+            if(ClientModel.this.isConnected())
+                ClientModel.this.disconnect();
         }));
     }
 
     /**
-     * Called to start the client model and connect
+     * Called to connect the client model and connect
      */
-    public void start() {
-        if(this.isRunning())
+    public void connect() {
+        if(this.isConnected())
             throw new IllegalArgumentException("Client is already running");
 
         worker = new ClientWorker(this);
@@ -94,9 +94,9 @@ public class ClientModel {
     /**
      * Called to disconnect the client from the server
      */
-    public void shutdown() {
+    public void disconnect() {
         if(worker == null)
-            throw new IllegalArgumentException("Server is already stopped");
+            throw new IllegalArgumentException("Client is already stopped");
 
         worker.shutdown();
         worker = null;
@@ -118,7 +118,7 @@ public class ClientModel {
      * Method called when ClientModel is shut down
      */
     private void notifyClientShutdown() {
-        Log.i("Client shutdown successfully", ClientModel.class);
+        Log.i("Client disconnect successfully", ClientModel.class);
         for(ClientListener listener : listeners) {
             listener.shutdown();
         }
@@ -160,13 +160,13 @@ public class ClientModel {
      * Check if the client is running
      * @return boolean if client is running
      */
-    public boolean isRunning() {
+    public boolean isConnected() {
         return worker != null && worker.isRunning();
     }
 
     /**
-     * Setter for server's port
-     * @param port Server's port
+     * Setter for server's port to connect to
+     * @param port Server's port to connect to
      */
     public void setPort(int port) {
         if(port < 0)
@@ -176,26 +176,41 @@ public class ClientModel {
     }
 
     /**
-     * Getter for server's port
-     * @return port Server's port
+     * Getter for server's port to connect to
+     * @return port Server's port to connect to
      */
     public int getPort() {
         return PORT;
     }
 
     /**
-     * Changes the host (WILL shutdown if Client is running)
+     * Changes the host (WILL disconnect if Client is running)
      * @param host The host to connect to
      */
     public void setHost(InetAddress host) {
         if(host == null)
             throw new IllegalArgumentException("Host must be non-null");
         else {
-            // Shutdown if running
-            if(this.isRunning())
-                this.shutdown();
+            if(this.isConnected()) {
+                // Reconnect if running
+                this.disconnect();
 
-            HOST = host;
+                try {
+                    long timeout = System.currentTimeMillis() + 1000L;
+                    while (this.isConnected() && System.currentTimeMillis() < timeout) {
+                        Thread.sleep(100L);
+                    }
+                } catch(InterruptedException e) {
+                    Log.w("Failed to wait while disconnecting to change host (" + e.getMessage() + ")", ClientModel.class);
+                }
+
+                HOST = host;
+
+                this.connect();
+            } else {
+                // Otherwise just set the new host
+                HOST = host;
+            }
         }
     }
 

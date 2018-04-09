@@ -51,7 +51,7 @@ public class ServerWebsocketEndpoint {
         throwable.printStackTrace();
     }
 
-    public void send(EmostatePacket packet) {
+    public synchronized void send(EmostatePacket packet) {
         for(Session session : sessions) {
             try {
                 session.getBasicRemote().sendObject(packet);
@@ -61,17 +61,17 @@ public class ServerWebsocketEndpoint {
         }
     }
 
-    public void disconnect() {
-        Iterator<Session> iterator = sessions.iterator();
+    public synchronized void disconnect() {
         for (Iterator<Session> i = sessions.iterator(); i.hasNext();) {
-            Session session = iterator.next();
+            Session session = i.next();
             try {
                 session.close();
             } catch(IOException e) {
                 Log.w("Failed to gracefully close session", ServerWebsocketEndpoint.class);
             }
-            iterator.remove();
         }
+
+        sessions.clear();
     }
 
     public int getClientsCount() {

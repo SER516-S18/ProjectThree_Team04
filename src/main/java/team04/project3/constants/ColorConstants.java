@@ -12,4 +12,8 @@ public class ColorConstants {
     public static final Color BACKGROUND_BLUE = new Color(207, 220, 240);
     public static final Color BACKGROUND_BLUEGRAY = new Color(228,233,239);
     public static final Color BACKGROUND_GRAY = new Color(221,221,221);
+
+    public static final Color INDICATOR_OFF = Color.DARK_GRAY;
+    public static final Color INDICATOR_ON_DIM = new Color(197, 224, 179);
+    public static final Color INDICATOR_ON_BRIGHT = new Color(168,208,141);
 }

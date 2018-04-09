@@ -1,6 +1,8 @@
 package team04.project3.ui.client;
 
-import team04.project3.constants.ColorConstants;
+import team04.project3.model.client.ClientModel;
+import team04.project3.model.server.ServerModel;
+import team04.project3.ui.server.ServerToolbarView;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -10,31 +12,50 @@ import java.awt.*;
  * Main UI for the client application
  * @author  David Henderson (dchende2@asu.edu)
  */
-public class ClientView extends JPanel {
+public class ClientView extends JFrame {
+    private static ClientView instance;
 
-    private ClientSettingsView settingsView;
+    public static ClientView getInstance() {
+        ClientView result = instance;
+        if(result == null){
+            synchronized (ClientView.class) {
+                result = instance;
+                if (result == null)
+                    instance = result = new ClientView();
+            }
+        }
+        return result;
+    }
 
-    JPanel panelBuffer;
+    private ClientToolbarView panelToolbar;
 
     /**
      * Representing the UI for the client application
      */
-    public ClientView(int type) {
-        // Create a transparent border around this view
-        ClientMenuView clientMenuView = new ClientMenuView();
+    private ClientView() {
+        // Start the client model if it isn't running
+        if(!ClientModel.get().isConnected())
+            ClientModel.get().connect();
+    }
+
+    public void init() {
+        this.setTitle("Emotiv Control Panel");
+        this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        this.setMinimumSize(new Dimension(600, 800));
 
         this.setLayout(new BorderLayout());
-        this.setOpaque(false);
-        this.setBorder(new EmptyBorder(0, 8, 8, 8));
+
+        panelToolbar = new ClientToolbarView();
+        this.add(panelToolbar, BorderLayout.PAGE_START);
+
+        // Create a transparent border around this view
+        ClientMenuView clientMenuView = new ClientMenuView();
         this.add(clientMenuView, BorderLayout.NORTH);
 
-
-        // Content goes in here (inside the invisible border)
-        panelBuffer = new JPanel(new GridLayout(1, 2, 8, 8));
-        panelBuffer.setBackground(ColorConstants.BACKGROUND_GRAY);
-        panelBuffer.setBorder(BorderFactory.createLineBorder(Color.black));
-
-        this.add(panelBuffer, BorderLayout.CENTER);
+        // Show frame
+        this.setVisible(true);
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
     }
 
     private void getFaceExpressionView() {
@@ -43,12 +64,12 @@ public class ClientView extends JPanel {
         ClientGraphsView clientGraphsview;
         // Add left (graphical) view
         graphView = new ClientGraphView();
-        panelBuffer.add(graphView, BorderLayout.LINE_START);
+        this.add(graphView, BorderLayout.LINE_START);
 
 
         // Add right (input/output) view
         clientGraphsview = new ClientGraphsView();
-        panelBuffer.add(clientGraphsview, BorderLayout.LINE_END);
+        this.add(clientGraphsview, BorderLayout.LINE_END);
     }
 
     private void getPerformanceMetricView() {
@@ -57,9 +78,9 @@ public class ClientView extends JPanel {
         PerformanceMetricEmotionalStatesView emotionalStateView;
 
         graphView = new PerformanceMetricGraphView ();
-        panelBuffer.add(graphView, BorderLayout.LINE_START);
+        this.add(graphView, BorderLayout.LINE_START);
 
         emotionalStateView = new PerformanceMetricEmotionalStatesView();
-        panelBuffer.add(emotionalStateView, BorderLayout.LINE_END);
+        this.add(emotionalStateView, BorderLayout.LINE_END);
     }
 }
