@@ -286,7 +286,10 @@ public class ClientPerformanceMetricsView extends JPanel {
                 current
         );
 
-        if(input == null || input.equals("") || input.equals("Invisible")) {
+        if(input == null || input.length() == 0)
+            return;
+
+        if(input.equals("Invisible")) {
             emotionColors.put(emotion, null);
             button.setVisible(false);
         } else {
