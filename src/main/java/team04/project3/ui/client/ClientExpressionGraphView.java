@@ -7,8 +7,6 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import team04.project3.constants.ColorConstants;
-import team04.project3.constants.TextConstants;
 import team04.project3.model.Expression;
 import team04.project3.model.ValueTuple;
 import team04.project3.model.client.ClientModel;
@@ -21,30 +19,26 @@ import java.util.List;
  * UI for displaying a single expression's name, most recent value, and graph
  * @author  David Henderson (dchende2@asu.edu)
  */
-public class ClientExpressionGraphView extends JPanel {
+public class ClientExpressionGraphView extends ChartPanel {
     private final Expression expression;
-
     private XYSeriesCollection dataset;
     private JFreeChart chart;
-    private ChartPanel panelChart;
 
     /**
      * Constructor for the ClientExpressionGraphView, showing the name label, graph, and most recent value for an expression
      * @param expression Expression to display
      */
     public ClientExpressionGraphView(Expression expression) {
+        super(null, false);
         this.expression = expression;
-
-        // Graph
-        JPanel panelGraph = this.buildInitialGraph();
-        this.add(panelGraph);
+        this.buildChart();
     }
 
     /**
      * Creates and adds the graph to the panel
      * @return The graph that is created
      */
-    private JPanel buildInitialGraph() {
+    private void buildChart() {
         // Create the chart
         dataset = new XYSeriesCollection();
         this.updateSeries();
@@ -64,12 +58,10 @@ public class ClientExpressionGraphView extends JPanel {
         ((XYPlot) chart.getPlot()).setRangeMinorGridlinesVisible(false);
         ((XYPlot) chart.getPlot()).getRangeAxis().setRange(0.0d, 1.0d);
 
-        // Put chart in panel
-        panelChart = new ChartPanel(chart, false);
-        panelChart.setDomainZoomable(false);
-        panelChart.setRangeZoomable(false);
-
-        return panelChart;
+        this.setChart(chart);
+        this.setDomainZoomable(false);
+        this.setRangeZoomable(false);
+        this.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
     }
 
     /**

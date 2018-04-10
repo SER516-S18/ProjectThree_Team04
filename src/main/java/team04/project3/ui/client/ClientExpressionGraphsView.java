@@ -1,5 +1,6 @@
 package team04.project3.ui.client;
 
+import team04.project3.constants.ColorConstants;
 import team04.project3.constants.TextConstants;
 import team04.project3.listeners.ClientListener;
 import team04.project3.model.EmostatePacket;
@@ -46,7 +47,7 @@ public class ClientExpressionGraphsView extends JPanel {
         });
 
         GridBagConstraints gbc = new GridBagConstraints();
-        this.setLayout(new GridLayout(0, 3));
+        this.setLayout(new GridBagLayout());
         this.graphs = new HashMap<>();
         this.labels = new HashMap<>();
 
@@ -58,20 +59,20 @@ public class ClientExpressionGraphsView extends JPanel {
             labelName.setFont(TextConstants.DEFAULT_FONT);
             labelName.setVerticalAlignment(JLabel.CENTER);
             labelName.setHorizontalAlignment(SwingConstants.LEFT);
-            gbc.gridx = 0; gbc.gridy = i;
-            this.add(labelName);
+            gbc.gridx = 0; gbc.gridy = i; gbc.weightx = 0.1; gbc.weighty = 1.0; gbc.fill = GridBagConstraints.BOTH;
+            this.add(labelName, gbc);
 
             JLabel labelValue = new JLabel("N/A");
             labelValue.setFont(TextConstants.LARGE_FONT);
             labelValue.setVerticalAlignment(JLabel.CENTER);
             labelValue.setHorizontalAlignment(SwingConstants.RIGHT);
-            gbc.gridx = 1; gbc.gridy = i;
-            this.add(labelValue);
+            gbc.gridx = 1; gbc.gridy = i; gbc.weightx = 0.0; gbc.weighty = 1.0; gbc.fill = GridBagConstraints.BOTH;
+            this.add(labelValue, gbc);
             this.labels.put(expression, labelValue);
 
             ClientExpressionGraphView view = new ClientExpressionGraphView(expression);
-            gbc.gridx = 2; gbc.gridy = i;
-            this.add(view);
+            gbc.gridx = 2; gbc.gridy = i; gbc.weightx = 1.0; gbc.weighty = 1.0; gbc.fill = GridBagConstraints.BOTH;
+            this.add(view, gbc);
             this.graphs.put(expression, view);
         }
 
@@ -85,7 +86,7 @@ public class ClientExpressionGraphsView extends JPanel {
     private void updateValueLabels() {
         EmostatePacket packet = ClientModel.get().getNewestPacket();
         for(Expression expression : Expression.values()) {
-            labels.get(expression).setText(Float.toString(packet == null ? 0.0f : packet.getExpression(expression)));
+            labels.get(expression).setText( String.format("%.2f", packet == null ? 0.0f : packet.getExpression(expression)) );
         }
     }
 
