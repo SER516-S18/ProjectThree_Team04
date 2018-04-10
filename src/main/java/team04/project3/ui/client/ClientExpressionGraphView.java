@@ -23,7 +23,6 @@ import java.util.List;
  */
 public class ClientExpressionGraphView extends JPanel {
     private final Expression expression;
-    private JLabel labelValue;
 
     private XYSeriesCollection dataset;
     private JFreeChart chart;
@@ -36,31 +35,9 @@ public class ClientExpressionGraphView extends JPanel {
     public ClientExpressionGraphView(Expression expression) {
         this.expression = expression;
 
-        this.setLayout(new BorderLayout());
-
-        // Labels
-        JPanel panelLabels = new JPanel();
-        panelLabels.setBorder(BorderFactory.createEmptyBorder(0,8,0,16));
-        panelLabels.setLayout(new BorderLayout());
-        panelLabels.setOpaque(false);
-        panelLabels.setPreferredSize(new Dimension(192, 32));
-        this.add(panelLabels, BorderLayout.WEST);
-
-        JLabel labelName = new JLabel(expression.NAME);
-        labelName.setFont(TextConstants.DEFAULT_FONT);
-        labelName.setVerticalAlignment(JLabel.CENTER);
-        labelName.setHorizontalAlignment(SwingConstants.LEFT);
-        panelLabels.add(labelName, BorderLayout.WEST);
-
-        labelValue = new JLabel("N/A");
-        labelValue.setFont(TextConstants.LARGE_FONT);
-        labelValue.setVerticalAlignment(JLabel.CENTER);
-        labelValue.setHorizontalAlignment(SwingConstants.RIGHT);
-        panelLabels.add(labelValue, BorderLayout.EAST);
-
         // Graph
         JPanel panelGraph = this.buildInitialGraph();
-        this.add(panelGraph, BorderLayout.EAST);
+        this.add(panelGraph);
     }
 
     /**
@@ -68,10 +45,6 @@ public class ClientExpressionGraphView extends JPanel {
      * @return The graph that is created
      */
     private JPanel buildInitialGraph() {
-        JPanel panelGraph = new JPanel(new BorderLayout());
-        panelGraph.setBackground(ColorConstants.BACKGROUND_PINK);
-        panelGraph.setBorder(BorderFactory.createLineBorder(Color.black));
-
         // Create the chart
         dataset = new XYSeriesCollection();
         this.updateSeries();
@@ -96,10 +69,7 @@ public class ClientExpressionGraphView extends JPanel {
         panelChart.setDomainZoomable(false);
         panelChart.setRangeZoomable(false);
 
-        // Put in buffer (for border), then in the ClientView
-        panelGraph.add(panelChart, BorderLayout.CENTER);
-
-        return panelGraph;
+        return panelChart;
     }
 
     /**
@@ -133,14 +103,6 @@ public class ClientExpressionGraphView extends JPanel {
         } else {
             dataset.getSeries(0).clear();
         }
-    }
-
-    /**
-     * Sets the label's text to the expression's value
-     * @param value Value to set
-     */
-    public void setValue(float value) {
-        labelValue.setText(Float.toString(value));
     }
 
     /**

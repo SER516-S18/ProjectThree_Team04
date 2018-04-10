@@ -1,19 +1,22 @@
 package team04.project3.ui.client;
 
+import team04.project3.constants.TextConstants;
 import team04.project3.listeners.ClientListener;
 import team04.project3.model.EmostatePacket;
 import team04.project3.model.Expression;
 import team04.project3.model.client.ClientModel;
 
 import javax.swing.*;
-import java.util.ArrayList;
+import java.awt.*;
+import java.util.HashMap;
 
 /**
  * UI for showing all the expression graphs in the ClientView
  * @author  David Henderson (dchende2@asu.edu)
  */
 public class ClientExpressionGraphsView extends JPanel {
-    private ArrayList<ClientExpressionGraphView> graphs;
+    private HashMap<Expression, JLabel> labels;
+    private HashMap<Expression, ClientExpressionGraphView> graphs;
 
     /**
      * Constructor for the ClientExpressionGraphsView, showing all the graphs for each expression
@@ -27,12 +30,12 @@ public class ClientExpressionGraphsView extends JPanel {
 
             @Override
             public void valuesReset() {
-                updateGraphValueLabels();
+                updateValueLabels();
             }
 
             @Override
             public void valuesAdded() {
-                updateGraphValueLabels();
+                updateValueLabels();
             }
 
             @Override
@@ -42,27 +45,47 @@ public class ClientExpressionGraphsView extends JPanel {
             public void shutdown() { }
         });
 
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        this.graphs = new ArrayList<>();
+        GridBagConstraints gbc = new GridBagConstraints();
+        this.setLayout(new GridLayout(0, 3));
+        this.graphs = new HashMap<>();
+        this.labels = new HashMap<>();
 
         // Add graphs
-        for(Expression expression : Expression.values()) {
+        for(int i = 0; i < Expression.values().length; i++) {
+            Expression expression = Expression.values()[i];
+
+            JLabel labelName = new JLabel(expression.NAME);
+            labelName.setFont(TextConstants.DEFAULT_FONT);
+            labelName.setVerticalAlignment(JLabel.CENTER);
+            labelName.setHorizontalAlignment(SwingConstants.LEFT);
+            gbc.gridx = 0; gbc.gridy = i;
+            this.add(labelName);
+
+            JLabel labelValue = new JLabel("N/A");
+            labelValue.setFont(TextConstants.LARGE_FONT);
+            labelValue.setVerticalAlignment(JLabel.CENTER);
+            labelValue.setHorizontalAlignment(SwingConstants.RIGHT);
+            gbc.gridx = 1; gbc.gridy = i;
+            this.add(labelValue);
+            this.labels.put(expression, labelValue);
+
             ClientExpressionGraphView view = new ClientExpressionGraphView(expression);
+            gbc.gridx = 2; gbc.gridy = i;
             this.add(view);
-            this.graphs.add(view);
+            this.graphs.put(expression, view);
         }
 
         // Populate with values
-        updateGraphValueLabels();
+        updateValueLabels();
     }
 
     /**
      * Updates the expression's label value to the latest packet
      */
-    private void updateGraphValueLabels() {
+    private void updateValueLabels() {
         EmostatePacket packet = ClientModel.get().getNewestPacket();
-        for(ClientExpressionGraphView graphView : graphs) {
-            graphView.setValue(packet == null ? 0.0f : packet.getExpression(graphView.getExpression()));
+        for(Expression expression : Expression.values()) {
+            labels.get(expression).setText(Float.toString(packet == null ? 0.0f : packet.getExpression(expression)));
         }
     }
 
@@ -70,8 +93,8 @@ public class ClientExpressionGraphsView extends JPanel {
      * Updates the graphs for each expression
      */
     private void updateGraphs() {
-        for(ClientExpressionGraphView graphView : graphs) {
-            graphView.updateGraphs();
+        for(Expression expression : Expression.values()) {
+            graphs.get(expression).updateGraphs();
         }
     }
 }
