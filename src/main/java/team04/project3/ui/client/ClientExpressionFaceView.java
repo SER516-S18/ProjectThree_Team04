@@ -172,28 +172,29 @@ public class ClientExpressionFaceView extends JPanel {
      * @param eyeDirection Contains the direction values for looking left or right
      */
     public void renderPupils(Graphics g, String eyeDirection, boolean isBlinkLeft, boolean isBlinkRight) {
+        int correctEYE = 2;
         if (eyeDirection.equals(Expression.LOOK_RIGHT.NAME)) {
-            fillOval(g, DimensionConstants.LEFT_EYE_X_POSITION - DimensionConstants.LOOK_LEFT_RIGHT_VAL,
+            fillOval(g, DimensionConstants.LEFT_EYE_X_POSITION + correctEYE - DimensionConstants.LOOK_LEFT_RIGHT_VAL,
                     DimensionConstants.EYE_Y_POSITION, DimensionConstants.PUPIL_SIZE, DimensionConstants.PUPIL_SIZE);
-            fillOval(g, DimensionConstants.RIGHT_EYE_X_POSITION - DimensionConstants.LOOK_LEFT_RIGHT_VAL,
+            fillOval(g, DimensionConstants.RIGHT_EYE_X_POSITION + correctEYE - DimensionConstants.LOOK_LEFT_RIGHT_VAL,
                     DimensionConstants.EYE_Y_POSITION, DimensionConstants.PUPIL_SIZE, DimensionConstants.PUPIL_SIZE);
         } else if (eyeDirection.equals(Expression.LOOK_LEFT.NAME)) {
-            fillOval(g, DimensionConstants.LEFT_EYE_X_POSITION + DimensionConstants.LOOK_LEFT_RIGHT_VAL,
+            fillOval(g, DimensionConstants.LEFT_EYE_X_POSITION + correctEYE + DimensionConstants.LOOK_LEFT_RIGHT_VAL,
                     DimensionConstants.EYE_Y_POSITION, DimensionConstants.PUPIL_SIZE, DimensionConstants.PUPIL_SIZE);
-            fillOval(g, DimensionConstants.RIGHT_EYE_X_POSITION + DimensionConstants.LOOK_LEFT_RIGHT_VAL,
+            fillOval(g, DimensionConstants.RIGHT_EYE_X_POSITION + correctEYE + DimensionConstants.LOOK_LEFT_RIGHT_VAL,
                     DimensionConstants.EYE_Y_POSITION, DimensionConstants.PUPIL_SIZE, DimensionConstants.PUPIL_SIZE);
         } else {
             if (isBlinkLeft && !isBlinkRight) {
-                fillOval(g, DimensionConstants.LEFT_EYE_X_POSITION, DimensionConstants.EYE_Y_POSITION,
+                fillOval(g, DimensionConstants.LEFT_EYE_X_POSITION + correctEYE, DimensionConstants.EYE_Y_POSITION,
                         DimensionConstants.PUPIL_SIZE, DimensionConstants.PUPIL_SIZE);
             } else if (isBlinkRight && !isBlinkLeft) {
-                fillOval(g, DimensionConstants.RIGHT_EYE_X_POSITION, DimensionConstants.EYE_Y_POSITION,
+                fillOval(g, DimensionConstants.RIGHT_EYE_X_POSITION + correctEYE, DimensionConstants.EYE_Y_POSITION,
                         DimensionConstants.PUPIL_SIZE, DimensionConstants.PUPIL_SIZE);
 
             } else if (!isBlinkLeft) {
-                fillOval(g, DimensionConstants.LEFT_EYE_X_POSITION , DimensionConstants.EYE_Y_POSITION,
+                fillOval(g, DimensionConstants.LEFT_EYE_X_POSITION + correctEYE , DimensionConstants.EYE_Y_POSITION,
                         DimensionConstants.PUPIL_SIZE, DimensionConstants.PUPIL_SIZE);
-                fillOval(g, DimensionConstants.RIGHT_EYE_X_POSITION, DimensionConstants.EYE_Y_POSITION,
+                fillOval(g, DimensionConstants.RIGHT_EYE_X_POSITION + correctEYE, DimensionConstants.EYE_Y_POSITION,
                         DimensionConstants.PUPIL_SIZE, DimensionConstants.PUPIL_SIZE);
             }
         }
@@ -263,7 +264,7 @@ public class ClientExpressionFaceView extends JPanel {
         g.setColor(Color.BLACK);
     }
 
-    public double[] renderClench(double x1, double x2,double x3, double y1, double y2, double y3, double y4, double clench) {
+    private double[] renderClench(double x1, double x2,double x3, double y1, double y2, double y3, double y4, double clench) {
 
         x1 = x1 - (clench * 5);
         x2 = x2 + (clench * 5);
@@ -282,7 +283,7 @@ public class ClientExpressionFaceView extends JPanel {
         return data;
     }
 
-    public double[] renderSmile(double x1, double x2,double x3, double y1, double y2, double y3, double y4, double smile) {
+    private double[] renderSmile(double x1, double x2,double x3, double y1, double y2, double y3, double y4, double smile) {
         x1 = x1 - (smile * 5);
         x2 = x2 + (smile * 5);
         y3 = y3 + ((smile / 2.0) * 10);
@@ -300,7 +301,7 @@ public class ClientExpressionFaceView extends JPanel {
         return data;
     }
 
-    public double[] renderSmirkLeft(double x1, double x2,double x3, double y1, double y2, double y3, double y4, double smirkLeft) {
+    private double[] renderSmirkLeft(double x1, double x2,double x3, double y1, double y2, double y3, double y4, double smirkLeft) {
         x1 = x1 + (smirkLeft * 3);
         x2 = x2 + (smirkLeft * 3);
         y2 = y2 - (smirkLeft * 5);
@@ -317,7 +318,7 @@ public class ClientExpressionFaceView extends JPanel {
         return data;
     }
 
-    public double[] renderSmirkRight(double x1, double x2,double x3, double y1, double y2, double y3, double y4, double smirkRight) {
+    private double[] renderSmirkRight(double x1, double x2,double x3, double y1, double y2, double y3, double y4, double smirkRight) {
         x1 = x1 - (smirkRight * 3);
         x2 = x2 - (smirkRight * 3);
         y1 = y1 - (smirkRight * 5);
@@ -334,7 +335,7 @@ public class ClientExpressionFaceView extends JPanel {
         return data;
     }
 
-    public double[] renderLaugh(double x1, double x2,double x3, double y1, double y2, double y3, double y4, double laugh) {
+    private double[] renderLaugh(double x1, double x2,double x3, double y1, double y2, double y3, double y4, double laugh) {
         x1 = x1 - (laugh * 5);
         x2 = x2 + (laugh * 5);
         y4 = y4 + ((laugh / 2.0) * 10);
@@ -351,7 +352,7 @@ public class ClientExpressionFaceView extends JPanel {
         return data;
     }
 
-    public double[] renderDefault(double x1, double x2,double x3, double y1, double y2, double y3, double y4) {
+    private double[] renderDefault(double x1, double x2,double x3, double y1, double y2, double y3, double y4) {
 
         double[] data = new double[7];
         data[0] = x1;
@@ -407,7 +408,7 @@ public class ClientExpressionFaceView extends JPanel {
      * @param radius Contains the radius of the circle to be drawn
      */
     public void createCircle(Graphics g, int x, int y, int radius) {
-        g.fillOval(scale_x(x - radius) + ORIGIN_X_COORD, scale_y(y - radius) + ORIGIN_Y_COORD, scale_x(radius * 2),
+        g.fillOval(scale_x(x - radius) + ORIGIN_X_COORD, scale_y(y - radius) + ORIGIN_Y_COORD, scale_x(radius * 3),
                 scale_y(radius * 2));
     }
 
@@ -419,8 +420,8 @@ public class ClientExpressionFaceView extends JPanel {
      * @param height Contains the height to the oval to be drawn
      * @param width Contains the width of the oval to be drawn
      */
-    public void createOval(Graphics g, int x, int y, int height, int width) {
-        g.fillOval(scale_x(x - width) + ORIGIN_X_COORD, scale_y(y - height) + ORIGIN_Y_COORD, scale_x(width * 2),
+    public void createOval(Graphics g, int x, int y, int width, int height) {
+        g.fillOval(scale_x(x - width) + ORIGIN_X_COORD, scale_y(y - height) + ORIGIN_Y_COORD, scale_x(width * 3),
                 scale_y(height * 2));
     }
 
