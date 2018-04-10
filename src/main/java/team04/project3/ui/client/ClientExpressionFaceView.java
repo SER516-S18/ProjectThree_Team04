@@ -4,12 +4,12 @@ import team04.project3.constants.ColorConstants;
 import team04.project3.constants.DimensionConstants;
 import team04.project3.listeners.ClientListener;
 import team04.project3.model.EmostatePacket;
+import team04.project3.model.EmostatePacketBuilder;
 import team04.project3.model.Expression;
 import team04.project3.model.client.ClientModel;
 
+import javax.swing.*;
 import java.awt.*;
-
-import javax.swing.JPanel;
 
 /**
  * Class to draw a face and represent the facial expressions.
@@ -28,6 +28,7 @@ public class ClientExpressionFaceView extends JPanel {
     private EmostatePacket emostatePacket;
 
     public ClientExpressionFaceView() {
+        emostatePacket = ClientModel.get().getNewestPacket();
 
         ClientModel.get().addListener(new ClientListener() {
             @Override
@@ -36,17 +37,13 @@ public class ClientExpressionFaceView extends JPanel {
             }
 
             @Override
-            public void valuesReset() {
-                emostatePacket = ClientModel.get().getNewestPacket();
-            }
+            public void valuesReset() { }
 
             @Override
-            public void valuesAdded() {
-                emostatePacket = ClientModel.get().getNewestPacket();
-            }
+            public void valuesAdded() { }
 
             @Override
-            public void started() { emostatePacket = ClientModel.get().getNewestPacket();}
+            public void started() { }
 
             @Override
             public void shutdown() { }
@@ -62,11 +59,10 @@ public class ClientExpressionFaceView extends JPanel {
      * @param height Specifies the height of the window
      * @param width Specifies the width of the window
      */
-    private void drawFace(Graphics g, int height, int width) {
 
-        if (emostatePacket == null) {
-            emostatePacket = EmostatePacket.getZeroedEmostatePacket();
-        }
+    public void drawFace(Graphics g, int height, int width) {
+        if (emostatePacket == null)
+            emostatePacket = EmostatePacketBuilder.getZeroedEmostatePacket().build();
 
         String eyeDirection = "";
         boolean leftEyeBlink = false;
@@ -97,7 +93,7 @@ public class ClientExpressionFaceView extends JPanel {
             eyeDirection = Expression.LOOK_RIGHT.NAME;
         }
 
-        initialize(x, y, height, width);
+        initialize(height, width);
         renderFace(g);
         renderEyes(g, leftEyeBlink, rightEyeBlink);
         renderPupils(g, eyeDirection, leftEyeBlink, rightEyeBlink);
@@ -114,7 +110,7 @@ public class ClientExpressionFaceView extends JPanel {
      * @param height Specifies the height of the window
      * @param width Specifies the width of the window
      */
-    private void initialize(int x, int y, int height, int width) {
+    private void initialize(int height, int width) {
         SCALE_X_FACTOR = width / 100.0;
         SCALE_Y_FACTOR = height / 100.0;
     }
