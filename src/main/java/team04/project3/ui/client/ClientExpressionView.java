@@ -15,7 +15,7 @@ public class ClientExpressionView extends JPanel {
         this.setLayout(new BorderLayout());
 
         ClientExpressionFaceView faceView = new ClientExpressionFaceView();
-        this.add(faceView, BorderLayout.EAST);
+        this.add(faceView, BorderLayout.WEST);
 
         ClientExpressionGraphsView graphsView = new ClientExpressionGraphsView();
         this.add(graphsView, BorderLayout.EAST);

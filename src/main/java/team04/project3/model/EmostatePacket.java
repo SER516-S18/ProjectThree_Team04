@@ -67,6 +67,26 @@ public class EmostatePacket {
     }
 
     /**
+     * Get an emostate packet builder with all expressions and emotions set to 0
+     * @return EmostatePacketBuilder with all expressions and emotions set to 0
+     */
+    public static EmostatePacket getZeroedEmostatePacket() {
+
+        HashMap<Expression, Float> expressions = new HashMap<>();
+        HashMap<Emotion, Float> emotions = new HashMap<>();
+
+        for(Expression expression : Expression.values()) {
+            expressions.put(expression, 0f);
+        }
+
+        for(Emotion emotion : Emotion.values()) {
+            emotions.put(emotion, 0.0f);
+        }
+
+        return new EmostatePacket(expressions, emotions);
+    }
+
+    /**
      * Gets an expression's value
      * @param expression Expression to get
      * @return Expression's value
