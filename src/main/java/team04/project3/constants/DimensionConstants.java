@@ -16,7 +16,6 @@ public class DimensionConstants {
     public static final int MOUTH_Y_POSITION = 65;
     public static final int NOSE_X_POSITION = 50;
     public static final int NOSE_Y1_POSITION = 50;
-    public static final int NOSE_Y2_POSITION = 54;
     public static final int NOSE_WIDTH = 8;
 
     public static final int FACE_X_COORDINATE = 37;
