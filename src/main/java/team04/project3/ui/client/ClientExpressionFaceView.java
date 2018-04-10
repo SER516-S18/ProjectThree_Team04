@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 /**
  * Class to draw a face and represent the facial expressions.
  *
- * @SER516 Project3_Team04
+ * @SER516 ProjectThree_Team04
  * @version 1.0
  */
 @SuppressWarnings("serial")
