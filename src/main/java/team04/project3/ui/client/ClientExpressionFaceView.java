@@ -27,6 +27,9 @@ public class ClientExpressionFaceView extends JPanel {
     private int ORIGIN_Y_COORD = 0;
     private EmostatePacket emostatePacket;
 
+    /**
+     * View containing the cartoon face representation
+     */
     public ClientExpressionFaceView() {
         emostatePacket = ClientModel.get().getNewestPacket();
 
@@ -54,8 +57,6 @@ public class ClientExpressionFaceView extends JPanel {
     /**
      * Draws the face with the required expressions
      * @param g Is a Graphics Object
-     * @param x Specifies the starting point on the x axis
-     * @param y Specifies the starting point on the y axis
      * @param height Specifies the height of the window
      * @param width Specifies the width of the window
      */
@@ -105,8 +106,6 @@ public class ClientExpressionFaceView extends JPanel {
 
     /**
      * Finds the scaling factors so as to scale the face according to the background.
-     * @param x Specifies the starting point on the x axis
-     * @param y Specifies the starting point on the y axis
      * @param height Specifies the height of the window
      * @param width Specifies the width of the window
      */
@@ -128,6 +127,9 @@ public class ClientExpressionFaceView extends JPanel {
 
     /**
      * Makes the eyes along with the various expressions needed
+     * @param g Parent graphic
+     * @param isLeftBlink If left winking
+     * @param isRightBlink If right winking
      */
     private void renderEyes(Graphics g, boolean isLeftBlink, boolean isRightBlink) {
         if (isLeftBlink && isRightBlink) {
@@ -165,6 +167,8 @@ public class ClientExpressionFaceView extends JPanel {
      * Makes the pupils along with the various expressions needed.
      * @param g Is a Graphics Object
      * @param eyeDirection Contains the direction values for looking left or right
+     * @param isBlinkLeft If left winking
+     * @param isBlinkRight If right winking
      */
     private void renderPupils(Graphics g, String eyeDirection, boolean isBlinkLeft, boolean isBlinkRight) {
         int correctEYE = 2;
@@ -198,6 +202,8 @@ public class ClientExpressionFaceView extends JPanel {
     /**
      * Makes the eyebrows along with the various expressions needed.
      * @param g Is a Graphics Object
+     * @param p1 Point 1
+     * @param p2 Point 2
      */
     private void renderEyeBrows(Graphics g, double p1, double p2) {
         int y1, y2;
@@ -227,6 +233,11 @@ public class ClientExpressionFaceView extends JPanel {
     /**
      * Makes the mouth along with the expressions needed.
      * @param g Is a Graphics Object
+     * @param clench Amount of clench
+     * @param laugh Amount of laugh
+     * @param smirkLeft Amount of smirk left
+     * @param smirkRight Amount of smirk right
+     * @param smile Amount of smile
      */
     private void renderMouth(Graphics g, double smile, double clench, double smirkLeft, double smirkRight, double laugh) {
         double x1 = 40;
@@ -259,6 +270,18 @@ public class ClientExpressionFaceView extends JPanel {
         g.setColor(Color.BLACK);
     }
 
+    /**
+     * Render the clench
+     * @param x1 X position 1
+     * @param x2 X position 2
+     * @param x3 X position 3
+     * @param y1 Y position 1
+     * @param y2 Y position 2
+     * @param y3 Y position 3
+     * @param y4 Y position 4
+     * @param clench Amount of clench
+     * @return Values to pass in and render
+     */
     private double[] renderClench(double x1, double x2,double x3, double y1, double y2, double y3, double y4, double clench) {
 
         x1 = x1 - (clench * 5);
@@ -278,6 +301,18 @@ public class ClientExpressionFaceView extends JPanel {
         return data;
     }
 
+    /**
+     * Render the smile
+     * @param x1 X position 1
+     * @param x2 X position 2
+     * @param x3 X position 3
+     * @param y1 Y position 1
+     * @param y2 Y position 2
+     * @param y3 Y position 3
+     * @param y4 Y position 4
+     * @param smile Amount of smile
+     * @return Values to pass in and render
+     */
     private double[] renderSmile(double x1, double x2,double x3, double y1, double y2, double y3, double y4, double smile) {
         x1 = x1 - (smile * 5);
         x2 = x2 + (smile * 5);
@@ -296,6 +331,18 @@ public class ClientExpressionFaceView extends JPanel {
         return data;
     }
 
+    /**
+     * Render the smile
+     * @param x1 X position 1
+     * @param x2 X position 2
+     * @param x3 X position 3
+     * @param y1 Y position 1
+     * @param y2 Y position 2
+     * @param y3 Y position 3
+     * @param y4 Y position 4
+     * @param smirkLeft Amount of smirk left
+     * @return Values to pass in and render
+     */
     private double[] renderSmirkLeft(double x1, double x2,double x3, double y1, double y2, double y3, double y4, double smirkLeft) {
         x1 = x1 + (smirkLeft * 3);
         x2 = x2 + (smirkLeft * 3);
@@ -313,6 +360,18 @@ public class ClientExpressionFaceView extends JPanel {
         return data;
     }
 
+    /**
+     * Render the smirk right
+     * @param x1 X position 1
+     * @param x2 X position 2
+     * @param x3 X position 3
+     * @param y1 Y position 1
+     * @param y2 Y position 2
+     * @param y3 Y position 3
+     * @param y4 Y position 4
+     * @param smirkRight Amount of smirk right
+     * @return Values to pass in and render
+     */
     private double[] renderSmirkRight(double x1, double x2,double x3, double y1, double y2, double y3, double y4, double smirkRight) {
         x1 = x1 - (smirkRight * 3);
         x2 = x2 - (smirkRight * 3);
@@ -330,6 +389,18 @@ public class ClientExpressionFaceView extends JPanel {
         return data;
     }
 
+    /**
+     * Render the laugh
+     * @param x1 X position 1
+     * @param x2 X position 2
+     * @param x3 X position 3
+     * @param y1 Y position 1
+     * @param y2 Y position 2
+     * @param y3 Y position 3
+     * @param y4 Y position 4
+     * @param laugh Amount of laugh
+     * @return Values to pass in and render
+     */
     private double[] renderLaugh(double x1, double x2,double x3, double y1, double y2, double y3, double y4, double laugh) {
         x1 = x1 - (laugh * 5);
         x2 = x2 + (laugh * 5);
@@ -347,8 +418,18 @@ public class ClientExpressionFaceView extends JPanel {
         return data;
     }
 
+    /**
+     * Render default face
+     * @param x1 X position 1
+     * @param x2 X position 2
+     * @param x3 X position 3
+     * @param y1 Y position 1
+     * @param y2 Y position 2
+     * @param y3 Y position 3
+     * @param y4 Y position 4
+     * @return Values to pass in and render
+     */
     private double[] renderDefault(double x1, double x2,double x3, double y1, double y2, double y3, double y4) {
-
         double[] data = new double[7];
         data[0] = x1;
         data[1] = x2;

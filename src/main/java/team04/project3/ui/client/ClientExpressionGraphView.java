@@ -36,7 +36,6 @@ public class ClientExpressionGraphView extends ChartPanel {
 
     /**
      * Creates and adds the graph to the panel
-     * @return The graph that is created
      */
     private void buildChart() {
         // Create the chart
