@@ -47,9 +47,9 @@ public class ServerValuesView extends JPanel {
     private JSpinner spinnerLowerFace;
     private JSpinner spinnerEmotion;
 
-    private Expression oldUpperFaceExpression;
-    private Expression oldEyeExpression;
-    private Expression oldLowerFaceExpression;
+    private Expression previousExpressionEyes;
+    private Expression previousExpressionFaceLower;
+    private Expression previousExpressionFaceUpper;
 
     /**
      * Constructor for ServerValuesView, the input for the packet settings to send
@@ -168,13 +168,13 @@ public class ServerValuesView extends JPanel {
         comboExpressionFaceEyes.setModel(new DefaultComboBoxModel<>(expressionEyeValues));
         comboExpressionFaceEyes.setMaximumSize(new Dimension(128, 128));
         comboExpressionFaceEyes.addActionListener(event -> {
-
-            if (null != oldEyeExpression) {
-                emostatePacketBuilder.setExpression(oldEyeExpression, false);
+            // Reset previous value, if applicable
+            if (previousExpressionEyes != null) {
+                emostatePacketBuilder.setExpression(previousExpressionEyes, false);
             }
 
             checkboxEye.setSelected(emostatePacketBuilder.getExpressionBoolean((Expression) comboExpressionFaceEyes.getSelectedItem()));
-            oldEyeExpression = (Expression) comboExpressionFaceEyes.getSelectedItem();
+            previousExpressionEyes = (Expression) comboExpressionFaceEyes.getSelectedItem();
         });
         panelInputEyes.add(comboExpressionFaceEyes, BorderLayout.WEST);
 
@@ -235,12 +235,12 @@ public class ServerValuesView extends JPanel {
         comboExpressionFaceUpper.setModel(new DefaultComboBoxModel<>(expressionFaceUpperValues));
         comboExpressionFaceUpper.setMaximumSize(new Dimension(128, 128));
         comboExpressionFaceUpper.addActionListener(event -> {
-
-            if (null != oldUpperFaceExpression) {
-                emostatePacketBuilder.setExpression(oldUpperFaceExpression, 0f);
+            // Reset previous value, if applicable
+            if (previousExpressionFaceUpper != null) {
+                emostatePacketBuilder.setExpression(previousExpressionFaceUpper, 0f);
             }
             spinnerUpperFace.setValue(emostatePacketBuilder.getExpressionFloating((Expression) comboExpressionFaceUpper.getSelectedItem()).doubleValue());
-            oldUpperFaceExpression = (Expression) comboExpressionFaceUpper.getSelectedItem();
+            previousExpressionFaceUpper = (Expression) comboExpressionFaceUpper.getSelectedItem();
         });
         panelInputFaceUpper.add(comboExpressionFaceUpper, BorderLayout.WEST);
 
@@ -273,12 +273,13 @@ public class ServerValuesView extends JPanel {
         comboExpressionFaceLower.setModel(new DefaultComboBoxModel<>(expressionFaceLowerValues));
         comboExpressionFaceLower.setMaximumSize(new Dimension(128, 128));
         comboExpressionFaceLower.addActionListener(event -> {
-
-            if (null != oldLowerFaceExpression) {
-                emostatePacketBuilder.setExpression(oldLowerFaceExpression, 0f);
+            // Reset previous value, if applicable
+            if (previousExpressionFaceLower != null) {
+                emostatePacketBuilder.setExpression(previousExpressionFaceLower, 0.0f);
             }
+
             spinnerLowerFace.setValue(emostatePacketBuilder.getExpression((Expression) comboExpressionFaceLower.getSelectedItem()).doubleValue());
-            oldLowerFaceExpression = (Expression) comboExpressionFaceLower.getSelectedItem();
+            previousExpressionFaceLower = (Expression) comboExpressionFaceLower.getSelectedItem();
         });
         panelInputFaceLower.add(comboExpressionFaceLower, BorderLayout.WEST);
 

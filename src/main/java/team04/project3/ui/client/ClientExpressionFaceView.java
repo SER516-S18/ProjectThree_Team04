@@ -13,9 +13,6 @@ import java.awt.*;
 
 /**
  * Class to draw a face and represent the facial expressions.
- *
- * @SER516 ProjectThree_Team04
- * @version 1.0
  */
 public class ClientExpressionFaceView extends JPanel {
     private static final int WIDTH = 512;
@@ -104,7 +101,7 @@ public class ClientExpressionFaceView extends JPanel {
         this.repaint();
     }
 
-    /*
+    /**
      * Makes outer structure of the face
      * @param g Is a Graphics Object
      */
@@ -122,6 +119,7 @@ public class ClientExpressionFaceView extends JPanel {
      * @param g Parent graphic
      * @param isLeftBlink If left winking
      * @param isRightBlink If right winking
+     * @param eyeDirection Eye direction to face
      */
     private void renderEyes(Graphics g, String eyeDirection, boolean isLeftBlink, boolean isRightBlink) {
         if (isLeftBlink && isRightBlink) {
@@ -160,7 +158,9 @@ public class ClientExpressionFaceView extends JPanel {
     /**
      * Makes the pupils along with the various expressions needed.
      * @param g Is a Graphics Object
-     * @param eyeDirection
+     * @param eyeDirection Eye direction to look
+     * @param isBlinkLeft If winking left
+     * @param isBlinkRight If winking right
      */
     private void renderPupils(Graphics g, String eyeDirection, boolean isBlinkLeft, boolean isBlinkRight) {
         if (eyeDirection.equals("")) {
@@ -170,6 +170,11 @@ public class ClientExpressionFaceView extends JPanel {
         }
     }
 
+    /**
+     * Render Looking direction
+     * @param g Graphics
+     * @param eyeDirection Direction to look
+     */
     private void renderLookExpressions(Graphics g, String eyeDirection) {
         int correctEYE = 2;
         if (eyeDirection.equals(Expression.LOOK_RIGHT.NAME)) {
@@ -185,6 +190,12 @@ public class ClientExpressionFaceView extends JPanel {
         }
     }
 
+    /**
+     * Winking eyes
+     * @param g Graphics to repaint
+     * @param isBlinkLeft If blinking left
+     * @param isBlinkRight If blinking right
+     */
     private void renderWinkExpressions(Graphics g, boolean isBlinkLeft, boolean isBlinkRight) {
         int correctEYE = 2;
         if (isBlinkLeft && !isBlinkRight) {
@@ -205,6 +216,8 @@ public class ClientExpressionFaceView extends JPanel {
     /**
      * Makes the eyebrows along with the various expressions needed.
      * @param g Is a Graphics Object
+     * @param raiseBrowVal If eyebrow is raised
+     * @param furrowBrowVal If eyebrow is furrowed
      */
     private void renderEyeBrows(Graphics g, double raiseBrowVal, double furrowBrowVal) {
         int y1, y2;
@@ -231,6 +244,10 @@ public class ClientExpressionFaceView extends JPanel {
                 DimensionConstants.NOSE_Y1_POSITION + DimensionConstants.NOSE_WIDTH);
     }
 
+    /**
+     * Rendering ears
+     * @param g Graphic to paint
+     */
     private void renderEars(Graphics g) {
         g.setColor(ColorConstants.BACKGROUND_PINK);
         g.fillOval(30, 250, 30, 60);//Left EAR
@@ -280,6 +297,13 @@ public class ClientExpressionFaceView extends JPanel {
 
     /**
      * Make lips
+     * @param g Graphics to paint
+     * @param x1 X position 1
+     * @param x2 X position 2
+     * @param x3 X position 3
+     * @param y1 Y position 1
+     * @param y2 Y position 2
+     * @param y3 Y position 3
      */
     private void renderLips(Graphics g, double x1, double y1, double x2, double y2, double x3, double y3) {
         int i, x2Coordinate, y2Coordinate, x1Coordinate, y1Coordinate;
@@ -295,7 +319,18 @@ public class ClientExpressionFaceView extends JPanel {
         }
     }
 
-
+    /**
+     * Make lips
+     * @param x1 X position 1
+     * @param x2 X position 2
+     * @param x3 X position 3
+     * @param y1 Y position 1
+     * @param y2 Y position 2
+     * @param y3 Y position 3
+     * @param y4 Y position 4
+     * @param smile Smile
+     * @return Values to pass in and render
+     */
     private double[] renderSmile(double x1, double x2,double x3, double y1, double y2, double y3, double y4, double smile) {
         x1 = x1 - (smile * 5);
         x2 = x2 + (smile * 5);
@@ -484,6 +519,10 @@ public class ClientExpressionFaceView extends JPanel {
 
     /**
      * Creates a Circle
+     * @param g Graphics to paint
+     * @param x X position
+     * @param y Y position
+     * @param radius Radius of circle
      */
     private void createCircle(Graphics g, int x, int y, int radius) {
         g.fillOval(scaleX(x - radius) + ORIGIN_X_COORD, scaleY(y - radius) + ORIGIN_Y_COORD, scaleX(radius * 3),
@@ -492,6 +531,11 @@ public class ClientExpressionFaceView extends JPanel {
 
     /**
      * Creates an Oval
+     * @param g Graphics to paint
+     * @param x X position
+     * @param y Y position
+     * @param width Width
+     * @param height Height
      */
     private void createOval(Graphics g, int x, int y, int width, int height) {
         g.fillOval(scaleX(x - width) + ORIGIN_X_COORD, scaleY(y - height) + ORIGIN_Y_COORD, scaleX(width * 3),
@@ -500,6 +544,11 @@ public class ClientExpressionFaceView extends JPanel {
 
     /**
      * Used to fill the Oval
+     * @param g Graphics to paint
+     * @param x X position
+     * @param y Y position
+     * @param width Width
+     * @param height Height
      */
     private void createFillOval(Graphics g, int x, int y, int height, int width) {
         g.fillOval(scaleX(x - width) + ORIGIN_X_COORD, scaleY(y - height) + ORIGIN_Y_COORD, scaleX(width * 2),
@@ -508,6 +557,11 @@ public class ClientExpressionFaceView extends JPanel {
 
     /**
      * Used to create a line
+     * @param g Graphic to paint onto
+     * @param x1 X position 1
+     * @param y1 Y position 1
+     * @param x2 X position 2
+     * @param y2 Y position 2
      */
     private void renderLine(Graphics g, int x1, int y1, int x2, int y2) {
         g.drawLine(scaleX(x1) + ORIGIN_X_COORD, scaleY(y1) + ORIGIN_X_COORD, scaleX(x2) + ORIGIN_X_COORD, scaleY(y2) + ORIGIN_X_COORD);

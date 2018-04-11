@@ -262,6 +262,11 @@ public class ClientPerformanceMetricsView extends JPanel {
         ((XYPlot) chart.getPlot()).getDomainAxis().setRange(Math.max(0, tick - range), Math.max(tick, range));
     }
 
+    /**
+     * Handles a click for changing the color
+     * @param button JButton to set color
+     * @param emotion Emotion to set color of
+     */
     private void handleChangeColorClick(JButton button, Emotion emotion) {
         ArrayList<String> colors = new ArrayList<>();
         Set<Map.Entry<String, Color>> set = availableColors.entrySet();
