@@ -25,4 +25,8 @@ Run the JAR by double-clicking the file or by running the following command in t
 java -jar team04-projectthree.jar
 ```
 
-Compiling can be done easily through any IDE (natively IntelliJ 2017.3.2), as a Maven project.
+Compiling can be done easily through any IDE (natively IntelliJ 2017.3.2), as a Maven project. 
+
+Opening the project in Eclipse can be done by:
+1. File → Import → Maven → Existing Maven Projects → Browse to project root directory
+2. Navigate to and compile/run EmotivApp.java after dependencies are loaded
