@@ -74,6 +74,22 @@ public class ServerValuesView extends JPanel {
             public void packetSent() {
                 if(textfieldSelected == null)
                     textfieldTime.setText(Float.toString(ServerModel.get().getTick()));
+
+                // Reset eye values to false
+                for(Expression expression : Expression.values()) {
+                    // Reset only if it's a binary expression
+                    if(expression.isBinary()) {
+                        // Except if we're repeating packets and we're holding down the "activate" button
+                        if(ServerModel.get().isPacketRepeatMode() && buttonEye != null && buttonEye.getModel().isPressed())
+                            continue;
+
+                        emostatePacketBuilder.setExpression(expression, false);
+                    }
+                }
+
+                // Reset if the checkbox is checked
+                if(checkboxEye != null)
+                    checkboxEye.setSelected(false);
             }
 
             @Override
@@ -207,10 +223,7 @@ public class ServerValuesView extends JPanel {
             }
 
             @Override
-            public void mouseReleased(MouseEvent e) {
-                if(buttonEye.isVisible())
-                    emostatePacketBuilder.setExpression((Expression) comboExpressionFaceEyes.getSelectedItem(), false);
-            }
+            public void mouseReleased(MouseEvent e) { }
 
             @Override
             public void mouseEntered(MouseEvent e) { }
