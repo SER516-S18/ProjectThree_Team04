@@ -89,6 +89,10 @@ public class ServerWebsocketEndpoint {
                 Log.w("Failed to send packet to session (" + e.getMessage() + ")", ServerWebsocketEndpoint.class);
             }
         }
+
+        if(sessions.size() > 0) {
+            Log.v("Sent EmostatePacket to " + sessions.size() + " clients.", ServerWebsocketEndpoint.class);
+        }
     }
 
     /**
