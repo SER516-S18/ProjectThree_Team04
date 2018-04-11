@@ -116,6 +116,7 @@ public class ClientExpressionFaceView extends JPanel {
         createCircle(g, DimensionConstants.FACE_X_COORDINATE, DimensionConstants.FACE_Y_COORDINATE, DimensionConstants.HEAD_RADIUS);
         g.setColor(Color.BLACK);
         renderNose(g);
+        renderEars(g);
     }
 
     /**
@@ -219,6 +220,13 @@ public class ClientExpressionFaceView extends JPanel {
     public void renderNose(Graphics g) {
         renderLine(g, DimensionConstants.NOSE_X_POSITION, DimensionConstants.NOSE_Y1_POSITION, DimensionConstants.NOSE_X_POSITION ,
                 DimensionConstants.NOSE_Y1_POSITION + DimensionConstants.NOSE_WIDTH);
+    }
+
+    public void renderEars(Graphics g) {
+        g.setColor(ColorConstants.BACKGROUND_PINK);
+        g.fillOval(30, 250, 30, 60);//Left EAR
+        g.fillOval(300, 250, 30, 60);//Right EAR
+        g.setColor(Color.BLACK);
     }
 
     /**
