@@ -39,10 +39,10 @@ public class ClientExpressionFaceView extends JPanel {
             }
 
             @Override
-            public void valuesReset() { }
+            public void valuesReset() {}
 
             @Override
-            public void valuesAdded() { }
+            public void valuesAdded() {}
 
             @Override
             public void started() { }
