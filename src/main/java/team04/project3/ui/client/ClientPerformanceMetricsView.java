@@ -10,7 +10,9 @@ import org.jfree.data.xy.XYSeriesCollection;
 import team04.project3.constants.ColorConstants;
 import team04.project3.constants.TextConstants;
 import team04.project3.listeners.ClientListener;
+import team04.project3.model.EmostatePacket;
 import team04.project3.model.Emotion;
+import team04.project3.model.Expression;
 import team04.project3.model.ValueTuple;
 import team04.project3.model.client.ClientModel;
 import team04.project3.util.Log;
@@ -19,9 +21,10 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.ParseException;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
 
 /**
@@ -29,7 +32,7 @@ import java.util.List;
  * @author  David Henderson (dchende2@asu.edu)
  */
 public class ClientPerformanceMetricsView extends JPanel {
-    private LinkedList<Color> availableColors = new LinkedList<>();
+    private HashMap<String, Color> availableColors = new HashMap<>();
     private HashMap<Emotion, Color> emotionColors = new HashMap<>();
 
     private XYSeriesCollection dataset;
@@ -41,16 +44,18 @@ public class ClientPerformanceMetricsView extends JPanel {
      * Constructor for the ClientPerformanceMetricsView, showing emotion metrics
      */
     public ClientPerformanceMetricsView() {
-        availableColors.add(Color.RED);
-        availableColors.add(Color.ORANGE);
-        availableColors.add(Color.YELLOW);
-        availableColors.add(Color.GREEN);
-        availableColors.add(Color.CYAN);
-        availableColors.add(Color.BLUE);
-        availableColors.add(Color.MAGENTA);
+        availableColors.put("Red", Color.RED);
+        availableColors.put("Orange", Color.ORANGE);
+        availableColors.put("Yellow", Color.YELLOW);
+        availableColors.put("Green", Color.GREEN);
+        availableColors.put("Cyan", Color.CYAN);
+        availableColors.put("Blue", Color.BLUE);
+        availableColors.put("Magenta", Color.MAGENTA);
 
-        for(Emotion emotion : Emotion.values()) {
-            emotionColors.put(emotion, availableColors.removeFirst());
+        Collection colors = availableColors.values();
+        Iterator it = colors.iterator();
+        for(int i = 0; i < Emotion.values().length; i++) {
+            emotionColors.put(Emotion.values()[i], (Color) it.next());
         }
 
         ClientModel.get().addListener(new ClientListener() {
@@ -72,32 +77,29 @@ public class ClientPerformanceMetricsView extends JPanel {
             public void shutdown() { }
         });
 
-        this.setLayout(new BorderLayout());
+        this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
         // Left - Graph
         JPanel panelGraph = buildInitialGraph();
-        this.add(panelGraph, BorderLayout.WEST);
+        this.add(panelGraph);
 
         // Right - Settings
         JPanel panelSettings = new JPanel();
         panelSettings.setLayout(new BorderLayout());
-        this.add(panelSettings, BorderLayout.EAST);
+        this.add(panelSettings);
+
+        JLabel labelColorInstructions = new JLabel("<html><center>Click an emotion<br> to change color/visibility</center></html>");
+        labelColorInstructions.setFont(TextConstants.DEFAULT_FONT);
+        labelColorInstructions.setHorizontalAlignment(SwingConstants.CENTER);
+        panelSettings.add(labelColorInstructions, BorderLayout.PAGE_START);
 
         JPanel panelEmotions = new JPanel();
         panelEmotions.setLayout(new BoxLayout(panelEmotions, BoxLayout.Y_AXIS));
-        panelSettings.add(panelEmotions, BorderLayout.PAGE_START);
+        panelSettings.add(panelEmotions, BorderLayout.CENTER);
         for(Emotion emotion : Emotion.values()) {
             JPanel panelEmotion = new JPanel();
             panelEmotion.setLayout(new BoxLayout(panelEmotion, BoxLayout.X_AXIS));
             panelEmotions.add(panelEmotion);
-
-            JLabel labelName = new JLabel(emotion.NAME);
-            labelName.setFont(TextConstants.LARGE_FONT);
-            labelName.setVerticalAlignment(JLabel.CENTER);
-            labelName.setHorizontalAlignment(SwingConstants.LEFT);
-            panelEmotion.add(labelName);
-
-            panelEmotion.add(Box.createHorizontalStrut(8));
 
             JButton buttonColor = new JButton(Character.toString((char) 0x2022));
             buttonColor.setFont(TextConstants.LARGE_FONT);
@@ -107,11 +109,22 @@ public class ClientPerformanceMetricsView extends JPanel {
             buttonColor.setFocusPainted(false);
             buttonColor.setForeground(emotionColors.get(emotion));
             buttonColor.addActionListener(e -> {
-                availableColors.addLast(emotionColors.get(emotion));
-                emotionColors.put(emotion, availableColors.removeFirst());
-                buttonColor.setForeground(emotionColors.get(emotion));
-                updateGraphColors();
+                handleChangeColorClick(buttonColor, emotion);
             });
+
+            JButton buttonName = new JButton(emotion.NAME);
+            buttonName.setFont(TextConstants.LARGE_FONT);
+            buttonName.setOpaque(false);
+            buttonName.setContentAreaFilled(false);
+            buttonName.setBorderPainted(false);
+            buttonName.setFocusPainted(false);
+            buttonName.addActionListener( e -> {
+                handleChangeColorClick(buttonColor, emotion);
+            });
+            panelEmotion.add(buttonName);
+
+            panelEmotion.add(Box.createHorizontalStrut(8));
+
             panelEmotion.add(buttonColor);
         }
 
@@ -212,7 +225,13 @@ public class ClientPerformanceMetricsView extends JPanel {
     private void updateGraphColors() {
         for(int i = 0; i < Emotion.values().length; i++) {
             Emotion emotion = Emotion.values()[i];
-            chart.getXYPlot().getRenderer().setSeriesPaint(i, emotionColors.get(emotion));
+            Color color = emotionColors.get(emotion);
+            if(color == null)
+                chart.getXYPlot().getRenderer().setSeriesVisible(i, false);
+            else {
+                chart.getXYPlot().getRenderer().setSeriesPaint(i, color);
+                chart.getXYPlot().getRenderer().setSeriesVisible(i, true);
+            }
         }
         panelChart.repaint();
     }
@@ -241,5 +260,44 @@ public class ClientPerformanceMetricsView extends JPanel {
         }
 
         ((XYPlot) chart.getPlot()).getDomainAxis().setRange(Math.max(0, tick - range), Math.max(tick, range));
+    }
+
+    private void handleChangeColorClick(JButton button, Emotion emotion) {
+        ArrayList<String> colors = new ArrayList<>();
+        Set<Map.Entry<String, Color>> set = availableColors.entrySet();
+
+        colors.add("Invisible");
+        String current = "Invisible";
+        Iterator<Map.Entry<String,Color>> it = set.iterator();
+        while (it.hasNext()) {
+            Map.Entry<String, Color> entry = it.next();
+            if(entry.getValue().equals(emotionColors.get(emotion)))
+                current = entry.getKey();
+
+            colors.add(entry.getKey());
+        }
+
+        String input = (String) JOptionPane.showInputDialog(
+                this,
+                "Choose color",
+                emotion.NAME + " color", JOptionPane.QUESTION_MESSAGE,
+                null,
+                colors.toArray(new String[colors.size()]),
+                current
+        );
+
+        if(input == null || input.length() == 0)
+            return;
+
+        if(input.equals("Invisible")) {
+            emotionColors.put(emotion, null);
+            button.setVisible(false);
+        } else {
+            emotionColors.put(emotion, availableColors.get(input));
+            button.setForeground(emotionColors.get(emotion));
+            button.setVisible(true);
+        }
+
+        updateGraphColors();
     }
 }

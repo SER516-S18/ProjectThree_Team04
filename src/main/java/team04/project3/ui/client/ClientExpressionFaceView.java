@@ -20,23 +20,25 @@ import java.util.Vector;
  * @SER516 ProjectThree_Team04
  * @version 1.0
  */
-@SuppressWarnings("serial")
 public class ClientExpressionFaceView extends JPanel {
-    private static final int WIDTH = 300;
-    private static final int HEIGHT = 300;
+    private static final int WIDTH = 512;
+    private static final int HEIGHT = 512;
 
     private double SCALE_X_FACTOR, SCALE_Y_FACTOR;
     private int ORIGIN_X_COORD = 0;
     private int ORIGIN_Y_COORD = 0;
-    private EmostatePacket emostatePacket;
+    private EmostatePacket emostate;
 
+    /**
+     * View containing the cartoon face representation
+     */
     public ClientExpressionFaceView() {
-        emostatePacket = ClientModel.get().getNewestPacket();
+        emostate = ClientModel.get().getNewestPacket();
 
         ClientModel.get().addListener(new ClientListener() {
             @Override
             public void valuesChanged() {
-                emostatePacket = ClientModel.get().getNewestPacket();
+                emostate = ClientModel.get().getNewestPacket();
             }
 
             @Override
@@ -62,8 +64,8 @@ public class ClientExpressionFaceView extends JPanel {
      */
 
     public void drawFace(Graphics g, int height, int width) {
-        if (emostatePacket == null)
-            emostatePacket = EmostatePacketBuilder.getZeroedEmostatePacket().build();
+        if (emostate == null)
+            emostate = EmostatePacketBuilder.getZeroedEmostatePacket().build();
 
         SCALE_X_FACTOR = width / 100.0;
         SCALE_Y_FACTOR = height / 100.0;
@@ -72,28 +74,28 @@ public class ClientExpressionFaceView extends JPanel {
         boolean leftEyeBlink = false;
         boolean rightEyeBlink = false;
 
-        float raiseBrowVal = emostatePacket.getExpression(Expression.BROW_RAISE);
-        float furrowBrowVal = emostatePacket.getExpression(Expression.BROW_FURROW);
+        float raiseBrowVal = emostate.getExpression(Expression.BROW_RAISE);
+        float furrowBrowVal = emostate.getExpression(Expression.BROW_FURROW);
 
-        float smile = emostatePacket.getExpression(Expression.SMILE);
-        float clench = emostatePacket.getExpression(Expression.CLENCH);
-        float smirkLeft = emostatePacket.getExpression(Expression.SMIRK_LEFT);
-        float smirkRight = emostatePacket.getExpression(Expression.SMIRK_RIGHT);
-        float laugh = emostatePacket.getExpression(Expression.LAUGH);
+        float smile = emostate.getExpression(Expression.SMILE);
+        float clench = emostate.getExpression(Expression.CLENCH);
+        float smirkLeft = emostate.getExpression(Expression.SMIRK_LEFT);
+        float smirkRight = emostate.getExpression(Expression.SMIRK_RIGHT);
+        float laugh = emostate.getExpression(Expression.LAUGH);
 
 
-        if (emostatePacket.getExpression(Expression.BLINK) > 0) {
+        if (emostate.getExpression(Expression.BLINK) > 0) {
             leftEyeBlink = true;
             rightEyeBlink = true;
-        } else if (emostatePacket.getExpression(Expression.WINK_LEFT) > 0) {
+        } else if (emostate.getExpression(Expression.WINK_LEFT) > 0) {
             leftEyeBlink = true;
-        } else if (emostatePacket.getExpression(Expression.WINK_RIGHT) > 0) {
+        } else if (emostate.getExpression(Expression.WINK_RIGHT) > 0) {
             rightEyeBlink = true;
         }
 
-        if (emostatePacket.getExpression(Expression.LOOK_LEFT) > 0) {
+        if (emostate.getExpression(Expression.LOOK_LEFT) > 0) {
             eyeDirection = Expression.LOOK_LEFT.NAME;
-        } else if (emostatePacket.getExpression(Expression.LOOK_RIGHT) > 0) {
+        } else if (emostate.getExpression(Expression.LOOK_RIGHT) > 0) {
             eyeDirection = Expression.LOOK_RIGHT.NAME;
         }
         
@@ -105,7 +107,7 @@ public class ClientExpressionFaceView extends JPanel {
         this.repaint();
     }
 
-    /**
+    /*
      * Makes outer structure of the face
      * @param g Is a Graphics Object
      */
@@ -118,6 +120,9 @@ public class ClientExpressionFaceView extends JPanel {
 
     /**
      * Makes the eyes along with the various expressions needed
+     * @param g Parent graphic
+     * @param isLeftBlink If left winking
+     * @param isRightBlink If right winking
      */
     private void renderEyes(Graphics g, String eyeDirection, boolean isLeftBlink, boolean isRightBlink) {
         if (isLeftBlink && isRightBlink) {
@@ -161,27 +166,27 @@ public class ClientExpressionFaceView extends JPanel {
     private void renderPupils(Graphics g, String eyeDirection, boolean isBlinkLeft, boolean isBlinkRight) {
         int correctEYE = 2;
         if (eyeDirection.equals(Expression.LOOK_RIGHT.NAME)) {
-            fillOval(g, DimensionConstants.LEFT_EYE_X_POSITION + correctEYE - DimensionConstants.LOOK_LEFT_RIGHT_VAL,
+            createFillOval(g, DimensionConstants.LEFT_EYE_X_POSITION + correctEYE - DimensionConstants.LOOK_LEFT_RIGHT_VAL,
                     DimensionConstants.EYE_Y_POSITION, DimensionConstants.PUPIL_SIZE, DimensionConstants.PUPIL_SIZE);
-            fillOval(g, DimensionConstants.RIGHT_EYE_X_POSITION + correctEYE - DimensionConstants.LOOK_LEFT_RIGHT_VAL,
+            createFillOval(g, DimensionConstants.RIGHT_EYE_X_POSITION + correctEYE - DimensionConstants.LOOK_LEFT_RIGHT_VAL,
                     DimensionConstants.EYE_Y_POSITION, DimensionConstants.PUPIL_SIZE, DimensionConstants.PUPIL_SIZE);
         } else if (eyeDirection.equals(Expression.LOOK_LEFT.NAME)) {
-            fillOval(g, DimensionConstants.LEFT_EYE_X_POSITION + correctEYE + DimensionConstants.LOOK_LEFT_RIGHT_VAL,
+            createFillOval(g, DimensionConstants.LEFT_EYE_X_POSITION + correctEYE + DimensionConstants.LOOK_LEFT_RIGHT_VAL,
                     DimensionConstants.EYE_Y_POSITION, DimensionConstants.PUPIL_SIZE, DimensionConstants.PUPIL_SIZE);
-            fillOval(g, DimensionConstants.RIGHT_EYE_X_POSITION + correctEYE + DimensionConstants.LOOK_LEFT_RIGHT_VAL,
+            createFillOval(g, DimensionConstants.RIGHT_EYE_X_POSITION + correctEYE + DimensionConstants.LOOK_LEFT_RIGHT_VAL,
                     DimensionConstants.EYE_Y_POSITION, DimensionConstants.PUPIL_SIZE, DimensionConstants.PUPIL_SIZE);
         } else {
             if (isBlinkLeft && !isBlinkRight) {
-                fillOval(g, DimensionConstants.LEFT_EYE_X_POSITION + correctEYE, DimensionConstants.EYE_Y_POSITION,
+                createFillOval(g, DimensionConstants.LEFT_EYE_X_POSITION + correctEYE, DimensionConstants.EYE_Y_POSITION,
                         DimensionConstants.PUPIL_SIZE, DimensionConstants.PUPIL_SIZE);
             } else if (isBlinkRight && !isBlinkLeft) {
-                fillOval(g, DimensionConstants.RIGHT_EYE_X_POSITION + correctEYE, DimensionConstants.EYE_Y_POSITION,
+                createFillOval(g, DimensionConstants.RIGHT_EYE_X_POSITION + correctEYE, DimensionConstants.EYE_Y_POSITION,
                         DimensionConstants.PUPIL_SIZE, DimensionConstants.PUPIL_SIZE);
 
             } else if (!isBlinkLeft) {
-                fillOval(g, DimensionConstants.LEFT_EYE_X_POSITION + correctEYE , DimensionConstants.EYE_Y_POSITION,
+                createFillOval(g, DimensionConstants.LEFT_EYE_X_POSITION + correctEYE , DimensionConstants.EYE_Y_POSITION,
                         DimensionConstants.PUPIL_SIZE, DimensionConstants.PUPIL_SIZE);
-                fillOval(g, DimensionConstants.RIGHT_EYE_X_POSITION + correctEYE, DimensionConstants.EYE_Y_POSITION,
+                createFillOval(g, DimensionConstants.RIGHT_EYE_X_POSITION + correctEYE, DimensionConstants.EYE_Y_POSITION,
                         DimensionConstants.PUPIL_SIZE, DimensionConstants.PUPIL_SIZE);
             }
         }
@@ -219,6 +224,11 @@ public class ClientExpressionFaceView extends JPanel {
     /**
      * Makes the mouth along with the expressions needed.
      * @param g Is a Graphics Object
+     * @param clench Amount of clench
+     * @param laugh Amount of laugh
+     * @param smirkLeft Amount of smirk left
+     * @param smirkRight Amount of smirk right
+     * @param smile Amount of smile
      */
     private void renderMouth(Graphics g, double smile, double clench, double smirkLeft, double smirkRight, double laugh) {
         double x1 = 40;
@@ -269,8 +279,19 @@ public class ClientExpressionFaceView extends JPanel {
         return data;
     }
 
+    /**
+     * Render the clench
+     * @param x1 X position 1
+     * @param x2 X position 2
+     * @param x3 X position 3
+     * @param y1 Y position 1
+     * @param y2 Y position 2
+     * @param y3 Y position 3
+     * @param y4 Y position 4
+     * @param clench Amount of clench
+     * @return Values to pass in and render
+     */
     private double[] renderClench(double x1, double x2,double x3, double y1, double y2, double y3, double y4, double clench) {
-
         x1 = x1 - (clench * 5);
         x2 = x2 + (clench * 5);
         y3 = y3 - ((clench / 2.0) * 10);
@@ -288,6 +309,18 @@ public class ClientExpressionFaceView extends JPanel {
         return data;
     }
 
+    /**
+     * Render the smile
+     * @param x1 X position 1
+     * @param x2 X position 2
+     * @param x3 X position 3
+     * @param y1 Y position 1
+     * @param y2 Y position 2
+     * @param y3 Y position 3
+     * @param y4 Y position 4
+     * @param smirkLeft Amount of smirk left
+     * @return Values to pass in and render
+     */
     private double[] renderSmirkLeft(double x1, double x2,double x3, double y1, double y2, double y3, double y4, double smirkLeft) {
         x1 = x1 + (smirkLeft * 3);
         x2 = x2 + (smirkLeft * 3);
@@ -305,6 +338,18 @@ public class ClientExpressionFaceView extends JPanel {
         return data;
     }
 
+    /**
+     * Render the smirk right
+     * @param x1 X position 1
+     * @param x2 X position 2
+     * @param x3 X position 3
+     * @param y1 Y position 1
+     * @param y2 Y position 2
+     * @param y3 Y position 3
+     * @param y4 Y position 4
+     * @param smirkRight Amount of smirk right
+     * @return Values to pass in and render
+     */
     private double[] renderSmirkRight(double x1, double x2,double x3, double y1, double y2, double y3, double y4, double smirkRight) {
         x1 = x1 - (smirkRight * 3);
         x2 = x2 - (smirkRight * 3);
@@ -322,6 +367,18 @@ public class ClientExpressionFaceView extends JPanel {
         return data;
     }
 
+    /**
+     * Render the laugh
+     * @param x1 X position 1
+     * @param x2 X position 2
+     * @param x3 X position 3
+     * @param y1 Y position 1
+     * @param y2 Y position 2
+     * @param y3 Y position 3
+     * @param y4 Y position 4
+     * @param laugh Amount of laugh
+     * @return Values to pass in and render
+     */
     private double[] renderLaugh(double x1, double x2,double x3, double y1, double y2, double y3, double y4, double laugh) {
         x1 = x1 - (laugh * 5);
         x2 = x2 + (laugh * 5);
@@ -339,8 +396,18 @@ public class ClientExpressionFaceView extends JPanel {
         return data;
     }
 
+    /**
+     * Render default face
+     * @param x1 X position 1
+     * @param x2 X position 2
+     * @param x3 X position 3
+     * @param y1 Y position 1
+     * @param y2 Y position 2
+     * @param y3 Y position 3
+     * @param y4 Y position 4
+     * @return Values to pass in and render
+     */
     private double[] renderDefault(double x1, double x2,double x3, double y1, double y2, double y3, double y4) {
-
         double[] data = new double[7];
         data[0] = x1;
         data[1] = x2;
@@ -384,39 +451,48 @@ public class ClientExpressionFaceView extends JPanel {
      * Creates a Circle
      */
     private void createCircle(Graphics g, int x, int y, int radius) {
-        g.fillOval(xScale(x - radius) + ORIGIN_X_COORD, yScale(y - radius) + ORIGIN_Y_COORD, xScale(radius * 3),
-                yScale(radius * 2));
+        g.fillOval(scaleX(x - radius) + ORIGIN_X_COORD, scaleY(y - radius) + ORIGIN_Y_COORD, scaleX(radius * 3),
+                scaleY(radius * 2));
     }
 
     /**
      * Creates an Oval
      */
     private void createOval(Graphics g, int x, int y, int width, int height) {
-        g.fillOval(xScale(x - width) + ORIGIN_X_COORD, yScale(y - height) + ORIGIN_Y_COORD, xScale(width * 3),
-                yScale(height * 2));
+        g.fillOval(scaleX(x - width) + ORIGIN_X_COORD, scaleY(y - height) + ORIGIN_Y_COORD, scaleX(width * 3),
+                scaleY(height * 2));
     }
 
     /**
      * Used to fill the Oval
      */
-    private void fillOval(Graphics g, int x, int y, int height, int width) {
-        g.fillOval(xScale(x - width) + ORIGIN_X_COORD, yScale(y - height) + ORIGIN_Y_COORD, xScale(width * 2),
-                yScale(height * 2));
+    private void createFillOval(Graphics g, int x, int y, int height, int width) {
+        g.fillOval(scaleX(x - width) + ORIGIN_X_COORD, scaleY(y - height) + ORIGIN_Y_COORD, scaleX(width * 2),
+                scaleY(height * 2));
     }
 
     /**
      * Used to create a line
      */
     private void renderLine(Graphics g, int x1, int y1, int x2, int y2) {
-        g.drawLine(xScale(x1) + ORIGIN_X_COORD, yScale(y1) + ORIGIN_X_COORD, xScale(x2) + ORIGIN_X_COORD, yScale(y2) + ORIGIN_X_COORD);
+        g.drawLine(scaleX(x1) + ORIGIN_X_COORD, scaleY(y1) + ORIGIN_X_COORD, scaleX(x2) + ORIGIN_X_COORD, scaleY(y2) + ORIGIN_X_COORD);
     }
 
-    private int xScale(int x) {
+    /**
+     * Used to scale the input according to the horizontal factor of the background
+     * @param x Parameter needed to be scaled
+     * @return Scaled parameter
+     */
+    private int scaleX(int x) {
         return (int) (x * SCALE_X_FACTOR);
     }
 
-
-    private int yScale(int y) {
+    /**
+     * Used to scale the input according to the vertical factor of the background
+     * @param y Parameter needed to be scaled
+     * @return Scaled parameter
+     */
+    private int scaleY(int y) {
         return (int) (y * SCALE_Y_FACTOR);
     }
 
@@ -431,10 +507,10 @@ public class ClientExpressionFaceView extends JPanel {
 
     /**
      * Gets the dimension of the outer panel.
+     * @return Preferred size
      */
     @Override
     public Dimension getPreferredSize() {
         return new Dimension(WIDTH, HEIGHT);
     }
-
 }

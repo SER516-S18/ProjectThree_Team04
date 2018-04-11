@@ -7,8 +7,6 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import team04.project3.constants.ColorConstants;
-import team04.project3.constants.TextConstants;
 import team04.project3.model.Expression;
 import team04.project3.model.ValueTuple;
 import team04.project3.model.client.ClientModel;
@@ -21,57 +19,25 @@ import java.util.List;
  * UI for displaying a single expression's name, most recent value, and graph
  * @author  David Henderson (dchende2@asu.edu)
  */
-public class ClientExpressionGraphView extends JPanel {
+public class ClientExpressionGraphView extends ChartPanel {
     private final Expression expression;
-    private JLabel labelValue;
-
     private XYSeriesCollection dataset;
     private JFreeChart chart;
-    private ChartPanel panelChart;
 
     /**
      * Constructor for the ClientExpressionGraphView, showing the name label, graph, and most recent value for an expression
      * @param expression Expression to display
      */
     public ClientExpressionGraphView(Expression expression) {
+        super(null, false);
         this.expression = expression;
-
-        this.setLayout(new BorderLayout());
-
-        // Labels
-        JPanel panelLabels = new JPanel();
-        panelLabels.setBorder(BorderFactory.createEmptyBorder(0,8,0,16));
-        panelLabels.setLayout(new BorderLayout());
-        panelLabels.setOpaque(false);
-        panelLabels.setPreferredSize(new Dimension(192, 32));
-        this.add(panelLabels, BorderLayout.WEST);
-
-        JLabel labelName = new JLabel(expression.NAME);
-        labelName.setFont(TextConstants.DEFAULT_FONT);
-        labelName.setVerticalAlignment(JLabel.CENTER);
-        labelName.setHorizontalAlignment(SwingConstants.LEFT);
-        panelLabels.add(labelName, BorderLayout.WEST);
-
-        labelValue = new JLabel("N/A");
-        labelValue.setFont(TextConstants.LARGE_FONT);
-        labelValue.setVerticalAlignment(JLabel.CENTER);
-        labelValue.setHorizontalAlignment(SwingConstants.RIGHT);
-        panelLabels.add(labelValue, BorderLayout.EAST);
-
-        // Graph
-        JPanel panelGraph = this.buildInitialGraph();
-        this.add(panelGraph, BorderLayout.EAST);
+        this.buildChart();
     }
 
     /**
      * Creates and adds the graph to the panel
-     * @return The graph that is created
      */
-    private JPanel buildInitialGraph() {
-        JPanel panelGraph = new JPanel(new BorderLayout());
-        panelGraph.setBackground(ColorConstants.BACKGROUND_PINK);
-        panelGraph.setBorder(BorderFactory.createLineBorder(Color.black));
-
+    private void buildChart() {
         // Create the chart
         dataset = new XYSeriesCollection();
         this.updateSeries();
@@ -91,15 +57,10 @@ public class ClientExpressionGraphView extends JPanel {
         ((XYPlot) chart.getPlot()).setRangeMinorGridlinesVisible(false);
         ((XYPlot) chart.getPlot()).getRangeAxis().setRange(0.0d, 1.0d);
 
-        // Put chart in panel
-        panelChart = new ChartPanel(chart, false);
-        panelChart.setDomainZoomable(false);
-        panelChart.setRangeZoomable(false);
-
-        // Put in buffer (for border), then in the ClientView
-        panelGraph.add(panelChart, BorderLayout.CENTER);
-
-        return panelGraph;
+        this.setChart(chart);
+        this.setDomainZoomable(false);
+        this.setRangeZoomable(false);
+        this.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
     }
 
     /**
@@ -133,14 +94,6 @@ public class ClientExpressionGraphView extends JPanel {
         } else {
             dataset.getSeries(0).clear();
         }
-    }
-
-    /**
-     * Sets the label's text to the expression's value
-     * @param value Value to set
-     */
-    public void setValue(float value) {
-        labelValue.setText(Float.toString(value));
     }
 
     /**
