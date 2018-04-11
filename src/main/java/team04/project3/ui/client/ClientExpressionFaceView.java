@@ -10,9 +10,6 @@ import team04.project3.model.client.ClientModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.QuadCurve2D;
-import java.awt.geom.Rectangle2D;
-import java.util.Vector;
 
 /**
  * Class to draw a face and represent the facial expressions.
@@ -67,8 +64,8 @@ public class ClientExpressionFaceView extends JPanel {
         if (emostate == null)
             emostate = EmostatePacketBuilder.getZeroedEmostatePacket().build();
 
-        SCALE_X_FACTOR = width / 100.0;
-        SCALE_Y_FACTOR = height / 100.0;
+        SCALE_X_FACTOR = width/100.0;
+        SCALE_Y_FACTOR = height/100.0;
         
         String eyeDirection = "";
         boolean leftEyeBlink = false;
@@ -115,6 +112,7 @@ public class ClientExpressionFaceView extends JPanel {
         g.setColor(ColorConstants.BACKGROUND_PINK);
         createCircle(g, DimensionConstants.FACE_X_COORDINATE, DimensionConstants.FACE_Y_COORDINATE, DimensionConstants.HEAD_RADIUS);
         g.setColor(Color.BLACK);
+
         renderNose(g);
         renderEars(g);
     }
@@ -165,6 +163,14 @@ public class ClientExpressionFaceView extends JPanel {
      * @param eyeDirection
      */
     private void renderPupils(Graphics g, String eyeDirection, boolean isBlinkLeft, boolean isBlinkRight) {
+        if (eyeDirection.equals("")) {
+            renderWinkExpressions(g, isBlinkLeft, isBlinkRight);
+        } else {
+            renderLookExpressions(g, eyeDirection);
+        }
+    }
+
+    private void renderLookExpressions(Graphics g, String eyeDirection) {
         int correctEYE = 2;
         if (eyeDirection.equals(Expression.LOOK_RIGHT.NAME)) {
             createFillOval(g, DimensionConstants.LEFT_EYE_X_POSITION + correctEYE - DimensionConstants.LOOK_LEFT_RIGHT_VAL,
@@ -176,20 +182,23 @@ public class ClientExpressionFaceView extends JPanel {
                     DimensionConstants.EYE_Y_POSITION, DimensionConstants.PUPIL_SIZE, DimensionConstants.PUPIL_SIZE);
             createFillOval(g, DimensionConstants.RIGHT_EYE_X_POSITION + correctEYE + DimensionConstants.LOOK_LEFT_RIGHT_VAL,
                     DimensionConstants.EYE_Y_POSITION, DimensionConstants.PUPIL_SIZE, DimensionConstants.PUPIL_SIZE);
-        } else {
-            if (isBlinkLeft && !isBlinkRight) {
-                createFillOval(g, DimensionConstants.LEFT_EYE_X_POSITION + correctEYE, DimensionConstants.EYE_Y_POSITION,
-                        DimensionConstants.PUPIL_SIZE, DimensionConstants.PUPIL_SIZE);
-            } else if (isBlinkRight && !isBlinkLeft) {
-                createFillOval(g, DimensionConstants.RIGHT_EYE_X_POSITION + correctEYE, DimensionConstants.EYE_Y_POSITION,
-                        DimensionConstants.PUPIL_SIZE, DimensionConstants.PUPIL_SIZE);
+        }
+    }
 
-            } else if (!isBlinkLeft) {
-                createFillOval(g, DimensionConstants.LEFT_EYE_X_POSITION + correctEYE , DimensionConstants.EYE_Y_POSITION,
-                        DimensionConstants.PUPIL_SIZE, DimensionConstants.PUPIL_SIZE);
-                createFillOval(g, DimensionConstants.RIGHT_EYE_X_POSITION + correctEYE, DimensionConstants.EYE_Y_POSITION,
-                        DimensionConstants.PUPIL_SIZE, DimensionConstants.PUPIL_SIZE);
-            }
+    private void renderWinkExpressions(Graphics g, boolean isBlinkLeft, boolean isBlinkRight) {
+        int correctEYE = 2;
+        if (isBlinkLeft && !isBlinkRight) {
+            createFillOval(g, DimensionConstants.LEFT_EYE_X_POSITION + correctEYE, DimensionConstants.EYE_Y_POSITION,
+                    DimensionConstants.PUPIL_SIZE, DimensionConstants.PUPIL_SIZE);
+        } else if (isBlinkRight && !isBlinkLeft) {
+            createFillOval(g, DimensionConstants.RIGHT_EYE_X_POSITION + correctEYE, DimensionConstants.EYE_Y_POSITION,
+                    DimensionConstants.PUPIL_SIZE, DimensionConstants.PUPIL_SIZE);
+
+        } else if (!isBlinkLeft) {
+            createFillOval(g, DimensionConstants.LEFT_EYE_X_POSITION + correctEYE , DimensionConstants.EYE_Y_POSITION,
+                    DimensionConstants.PUPIL_SIZE, DimensionConstants.PUPIL_SIZE);
+            createFillOval(g, DimensionConstants.RIGHT_EYE_X_POSITION + correctEYE, DimensionConstants.EYE_Y_POSITION,
+                    DimensionConstants.PUPIL_SIZE, DimensionConstants.PUPIL_SIZE);
         }
     }
 
@@ -217,12 +226,12 @@ public class ClientExpressionFaceView extends JPanel {
      * Make nose.
      * @param g Is a Graphics Object
      */
-    public void renderNose(Graphics g) {
+    private void renderNose(Graphics g) {
         renderLine(g, DimensionConstants.NOSE_X_POSITION, DimensionConstants.NOSE_Y1_POSITION, DimensionConstants.NOSE_X_POSITION ,
                 DimensionConstants.NOSE_Y1_POSITION + DimensionConstants.NOSE_WIDTH);
     }
 
-    public void renderEars(Graphics g) {
+    private void renderEars(Graphics g) {
         g.setColor(ColorConstants.BACKGROUND_PINK);
         g.fillOval(30, 250, 30, 60);//Left EAR
         g.fillOval(300, 250, 30, 60);//Right EAR
@@ -268,6 +277,24 @@ public class ClientExpressionFaceView extends JPanel {
         renderLips(g, data[0],  data[3], data[1], data[4], data[2], data[6]);
         g.setColor(Color.BLACK);
     }
+
+    /**
+     * Make lips
+     */
+    private void renderLips(Graphics g, double x1, double y1, double x2, double y2, double x3, double y3) {
+        int i, x2Coordinate, y2Coordinate, x1Coordinate, y1Coordinate;
+
+        double[] values = doCalculationToRenderLips(x1, y1, x2 ,y2, x3, y3);
+
+        for (i = (int) x1, x1Coordinate = (int) x1, y1Coordinate = (int) y1; i <= x2; i++) {
+            x2Coordinate = i;
+            y2Coordinate = (int) ((values[0] * Math.pow(i, 2)) + (values[1] * i) + values[2]);
+            renderLine(g, x1Coordinate, y1Coordinate, x2Coordinate, y2Coordinate);
+            x1Coordinate = x2Coordinate;
+            y1Coordinate = y2Coordinate;
+        }
+    }
+
 
     private double[] renderSmile(double x1, double x2,double x3, double y1, double y2, double y3, double y4, double smile) {
         x1 = x1 - (smile * 5);
@@ -428,31 +455,31 @@ public class ClientExpressionFaceView extends JPanel {
         return data;
     }
 
-
     /**
-     * Make lips
+     * Calculate values to render lips
+     * @param x1 X position 1
+     * @param x2 X position 2
+     * @param x3 X position 3
+     * @param y1 Y position 1
+     * @param y2 Y position 2
+     * @param y3 Y position 3
+     * @return Values to pass in and render
      */
-    private void renderLips(Graphics g, double x1, double y1, double x2, double y2, double x3, double y3) {
-        int i, new_x, new_y, last_x, last_y;
-        double denom = (Math.pow(x1, 2) * (x2 - x3)) + (x1 * (Math.pow(x3, 2) - Math.pow(x2, 2)))
+    private double[] doCalculationToRenderLips(double x1, double y1, double x2, double y2, double x3, double y3) {
+
+        double d = (Math.pow(x1, 2) * (x2 - x3)) + (x1 * (Math.pow(x3, 2) - Math.pow(x2, 2)))
                 + (Math.pow(x2, 2) * x3) + -(Math.pow(x3, 2) * x2);
 
-        double a = ((y1 * (x2 - x3)) + (x1 * (y3 - y2)) + (y2 * x3) + -(y3 * x2)) / denom;
+        double a = ((y1 * (x2 - x3)) + (x1 * (y3 - y2)) + (y2 * x3) + -(y3 * x2)) / d;
 
-        double bb = ((Math.pow(x1, 2) * (y2 - y3)) + (y1 * (Math.pow(x3, 2) - Math.pow(x2, 2))) + (Math.pow(x2, 2) * y3)
-                + -(Math.pow(x3, 2) * y2)) / denom;
+        double b = ((Math.pow(x1, 2) * (y2 - y3)) + (y1 * (Math.pow(x3, 2) - Math.pow(x2, 2))) + (Math.pow(x2, 2) * y3)
+                + -(Math.pow(x3, 2) * y2)) / d;
 
         double c = ((Math.pow(x1, 2) * ((x2 * y3) - (x3 * y2)))
                 + (x1 * ((Math.pow(x3, 2) * y2) - (Math.pow(x2, 2) * y3)))
-                + (y1 * ((Math.pow(x2, 2) * x3) - (Math.pow(x3, 2) * x2)))) / denom;
+                + (y1 * ((Math.pow(x2, 2) * x3) - (Math.pow(x3, 2) * x2)))) / d;
 
-        for (i = (int) x1, last_x = (int) x1, last_y = (int) y1; i <= x2; i++) {
-            new_x = i;
-            new_y = (int) ((a * Math.pow(i, 2)) + (bb * i) + c);
-            renderLine(g, last_x, last_y, new_x, new_y);
-            last_x = new_x;
-            last_y = new_y;
-        }
+        return new double[]{a, b, c};
     }
 
     /**
