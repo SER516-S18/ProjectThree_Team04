@@ -11,6 +11,7 @@ public class LogRecord {
     private final Class _class;
     private final long _timestamp;
 
+    
     /**
      * Creates a record of a log message
      * @param formattedMessage The full formatted message

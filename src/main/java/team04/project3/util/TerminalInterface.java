@@ -18,6 +18,7 @@ public interface TerminalInterface {
 
     Scanner scan = null;
     boolean run = false;
+    
 
     /**
      * Creates the terminal, and allows shutting down when triggered through a disconnect hook
