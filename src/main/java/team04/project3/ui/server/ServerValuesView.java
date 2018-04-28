@@ -120,16 +120,12 @@ public class ServerValuesView extends JPanel {
         });
         this.init();
     }
-
+    
     /**
-     * Initializes the UI
+     * function to add time input
      */
-    private void init() {
-        this.setLayout(new BorderLayout());
-        this.setBorder(new EmptyBorder(8, 8, 8, 8));
-
-        // Top - Time input
-        JPanel panelTop = new JPanel();
+    private void addTopTimeInput() {
+    	JPanel panelTop = new JPanel();
         panelTop.setLayout(new BoxLayout(panelTop, BoxLayout.X_AXIS));
         panelTop.setBorder(BorderFactory.createEmptyBorder(4,4,16,4));
         this.add(panelTop, BorderLayout.PAGE_START);
@@ -172,17 +168,15 @@ public class ServerValuesView extends JPanel {
         JLabel labelTimeSeconds = new JLabel("sec");
         labelTimeSeconds.setFont(TextConstants.LARGE_FONT);
         panelTop.add(labelTimeSeconds);
-
-        // Bottom - Emotiv input
-        JPanel panelBottom = new JPanel();
-        panelBottom.setBackground(ColorConstants.BACKGROUND_GRAY);
-        panelBottom.setLayout(new BoxLayout(panelBottom, BoxLayout.Y_AXIS));
-        panelBottom.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.BLACK, 1), "Emostate Values",
-                TitledBorder.LEADING, TitledBorder.TOP, TextConstants.DEFAULT_FONT, Color.black));
-        this.add(panelBottom, BorderLayout.CENTER);
-
-        // Eyes
-        JPanel panelInputEyes = new JPanel();
+    }
+    
+    /**
+     * function to add Eyes Input
+     * @param panelBottom
+     */
+    
+    private void addEyesInput(JPanel panelBottom) {
+    	JPanel panelInputEyes = new JPanel();
         panelInputEyes.setOpaque(false);
         panelInputEyes.setLayout(new BoxLayout(panelInputEyes, BoxLayout.X_AXIS));
         panelInputEyes.setMaximumSize(new Dimension(4096, 64));
@@ -242,11 +236,16 @@ public class ServerValuesView extends JPanel {
             public void mouseExited(MouseEvent e) { }
         });
         panelInputEyes.add(buttonEye);
-
         panelBottom.add(Box.createVerticalStrut(16));
-        
-        //BodyMovement
-        JPanel panelInputBodyMovement = new JPanel();
+    }
+    
+    /**
+     * function to add BodyMovement input
+     * @param panelBottom
+     */
+    
+    private void addBodyMovementInput(JPanel panelBottom) {
+    	JPanel panelInputBodyMovement = new JPanel();
         panelInputBodyMovement.setOpaque(false);
         panelInputBodyMovement.setLayout(new BoxLayout(panelInputBodyMovement, BoxLayout.X_AXIS));
         panelInputBodyMovement.setMaximumSize(new Dimension(4096, 64));
@@ -284,10 +283,15 @@ public class ServerValuesView extends JPanel {
         panelInputBodyMovement.add(spinnerBodyMovement, BorderLayout.EAST);
 
         panelBottom.add(Box.createVerticalStrut(16));
-        
-        
-        // Upperface
-        JPanel panelInputFaceUpper = new JPanel();
+    }
+    
+    /**
+     * function to add in the upper face inputs
+     * @param panelBottom
+     */
+    
+    private void addPanelUpperFaceInput(JPanel panelBottom) {
+    		JPanel panelInputFaceUpper = new JPanel();
         panelInputFaceUpper.setOpaque(false);
         panelInputFaceUpper.setLayout(new BoxLayout(panelInputFaceUpper, BoxLayout.X_AXIS));
         panelInputFaceUpper.setMaximumSize(new Dimension(4096, 64));
@@ -324,8 +328,15 @@ public class ServerValuesView extends JPanel {
 
         panelBottom.add(Box.createVerticalStrut(16));
 
-        // Lowerface
-        JPanel panelInputFaceLower = new JPanel();
+    }
+    
+    /**
+     * function to add lower face inputs
+     * @param panelBottom
+     */
+    
+    private void addLowerFaceInput(JPanel panelBottom) {
+    		JPanel panelInputFaceLower = new JPanel();
         panelInputFaceLower.setOpaque(false);
         panelInputFaceLower.setLayout(new BoxLayout(panelInputFaceLower, BoxLayout.X_AXIS));
         panelInputFaceLower.setMaximumSize(new Dimension(4096, 64));
@@ -363,8 +374,15 @@ public class ServerValuesView extends JPanel {
 
         panelBottom.add(Box.createVerticalStrut(16));
 
-        // Emotion
-        JPanel panelInputEmotion = new JPanel();
+    }
+    
+    /**
+     * function to add emotion input 
+     * @param panelBottom
+     */
+    
+    private void addEmotionInput(JPanel panelBottom) {
+    		JPanel panelInputEmotion = new JPanel();
         panelInputEmotion.setOpaque(false);
         panelInputEmotion.setLayout(new BoxLayout(panelInputEmotion, BoxLayout.X_AXIS));
         panelInputEmotion.setMaximumSize(new Dimension(4096, 64));
@@ -393,6 +411,29 @@ public class ServerValuesView extends JPanel {
             }
         });
         panelInputEmotion.add(spinnerEmotion, BorderLayout.EAST);
+    }
+    
+    /**
+     * Initializes the UI
+     */
+    private void init() {
+        this.setLayout(new BorderLayout());
+        this.setBorder(new EmptyBorder(8, 8, 8, 8));
+        addTopTimeInput();
+        
+        // Bottom - Emotiv input
+        JPanel panelBottom = new JPanel();
+        panelBottom.setBackground(ColorConstants.BACKGROUND_GRAY);
+        panelBottom.setLayout(new BoxLayout(panelBottom, BoxLayout.Y_AXIS));
+        panelBottom.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.BLACK, 1), "Emostate Values",
+                TitledBorder.LEADING, TitledBorder.TOP, TextConstants.DEFAULT_FONT, Color.black));
+        this.add(panelBottom, BorderLayout.CENTER);
+        addEyesInput(panelBottom);
+        addBodyMovementInput(panelBottom);
+        addPanelUpperFaceInput(panelBottom);
+        addLowerFaceInput(panelBottom);
+        addEmotionInput(panelBottom);
+        
     }
 
     /**
