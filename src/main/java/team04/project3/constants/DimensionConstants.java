@@ -1,6 +1,6 @@
 package team04.project3.constants;
 
-public class DimensionConstants {
+public interface DimensionConstants {
 
     public static final int HEAD_RADIUS = 25;
     public static final int EYE_RADIUS = 5;
