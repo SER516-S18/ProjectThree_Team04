@@ -94,9 +94,14 @@ public class ClientExpressionFaceView extends JPanel {
         }
         
         renderFace(g);
+        renderBody(g);
         renderEyes(g, eyeDirection, leftEyeBlink, rightEyeBlink);
         renderEyeBrows(g, raiseBrowVal, furrowBrowVal);
         renderMouth(g, smile, clench, smirkLeft, smirkRight, laugh);
+        renderLeftLeg(g, 10);
+        renderRightLeg(g, 10);
+        renderLeftHand(g, 10);
+        renderRightHand(g, 10);
 
         this.repaint();
     }
@@ -112,6 +117,14 @@ public class ClientExpressionFaceView extends JPanel {
 
         renderNose(g);
         renderEars(g);
+    }
+
+    private void renderBody(Graphics g) {
+
+        g.setColor(ColorConstants.BACKGROUND_BLUE);
+        renderRect(g, 32, DimensionConstants.NOSE_Y1_POSITION+25, 35 ,
+                30);
+        g.setColor(Color.BLACK);
     }
 
     /**
@@ -244,14 +257,40 @@ public class ClientExpressionFaceView extends JPanel {
                 DimensionConstants.NOSE_Y1_POSITION + DimensionConstants.NOSE_WIDTH);
     }
 
+    private void renderLeftHand(Graphics g, int y) {
+        renderLine(g, DimensionConstants.NOSE_X_POSITION-25, DimensionConstants.NOSE_Y1_POSITION+30, DimensionConstants.NOSE_X_POSITION-18 ,
+                DimensionConstants.NOSE_Y1_POSITION+30);
+
+        renderLine(g, DimensionConstants.NOSE_X_POSITION-35, DimensionConstants.NOSE_Y1_POSITION+30 - y, DimensionConstants.NOSE_X_POSITION-25 ,
+                DimensionConstants.NOSE_Y1_POSITION+30);
+    }
+
+    private void renderRightHand(Graphics g, int y) {
+        renderLine(g, DimensionConstants.NOSE_X_POSITION+18, DimensionConstants.NOSE_Y1_POSITION+30, DimensionConstants.NOSE_X_POSITION+25 ,
+                DimensionConstants.NOSE_Y1_POSITION+30);
+
+        renderLine(g, DimensionConstants.NOSE_X_POSITION+25, DimensionConstants.NOSE_Y1_POSITION+30, DimensionConstants.NOSE_X_POSITION+35 ,
+                DimensionConstants.NOSE_Y1_POSITION+30-y);
+    }
+
+    private void renderLeftLeg(Graphics g, int x) {
+        renderLine(g, DimensionConstants.NOSE_X_POSITION-10, DimensionConstants.NOSE_Y1_POSITION+55, DimensionConstants.NOSE_X_POSITION-10 -x ,
+                DimensionConstants.NOSE_Y1_POSITION + DimensionConstants.NOSE_WIDTH+60);
+    }
+
+    private void renderRightLeg(Graphics g, int x) {
+        renderLine(g, DimensionConstants.NOSE_X_POSITION+10, DimensionConstants.NOSE_Y1_POSITION+55, DimensionConstants.NOSE_X_POSITION+10 + x,
+                DimensionConstants.NOSE_Y1_POSITION + DimensionConstants.NOSE_WIDTH+60);
+    }
+
     /**
      * Rendering ears
      * @param g Graphic to paint
      */
     private void renderEars(Graphics g) {
         g.setColor(ColorConstants.BACKGROUND_PINK);
-        g.fillOval(30, 250, 30, 60);//Left EAR
-        g.fillOval(300, 250, 30, 60);//Right EAR
+        g.fillOval(30, 110, 30, 60);//Left EAR
+        g.fillOval(300, 110, 30, 60);//Right EAR
         g.setColor(Color.BLACK);
     }
 
@@ -565,6 +604,10 @@ public class ClientExpressionFaceView extends JPanel {
      */
     private void renderLine(Graphics g, int x1, int y1, int x2, int y2) {
         g.drawLine(scaleX(x1) + ORIGIN_X_COORD, scaleY(y1) + ORIGIN_X_COORD, scaleX(x2) + ORIGIN_X_COORD, scaleY(y2) + ORIGIN_X_COORD);
+    }
+
+    private void renderRect(Graphics g, int x ,int y, int width, int height) {
+        g.fillRect(scaleX(x) + ORIGIN_X_COORD, scaleY(y) + ORIGIN_X_COORD, scaleX(width), scaleY(height) );
     }
 
     /**
