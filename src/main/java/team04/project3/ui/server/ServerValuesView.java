@@ -403,7 +403,8 @@ public class ServerValuesView extends JPanel {
     private void handleComboExpressionChange(JComboBox combo, JSpinner spinner) {
         try {
             spinner.commitEdit();
-            emostatePacketBuilder.setExpression((Expression) combo.getSelectedItem(), (float) ((double) spinner.getValue()));
+            float val = (float) ((double) spinner.getValue());
+            emostatePacketBuilder.setExpression((Expression) combo.getSelectedItem(), val);
         } catch(ParseException e) {
             Log.w("Failed to parse " + combo.getSelectedItem() + " value", ServerValuesView.class);
         }

@@ -77,6 +77,15 @@ public class ClientExpressionFaceView extends JPanel {
         float smirkRight = emostate.getExpression(Expression.SMIRK_RIGHT);
         float laugh = emostate.getExpression(Expression.LAUGH);
 
+        float handsUp = emostate.getExpression(Expression.HAND_UP);
+        float handsDown = emostate.getExpression(Expression.HAND_DOWN);
+
+        if (handsDown > 0F) {
+            handsUp = - handsDown;
+        }
+
+        float legsMovement = emostate.getExpression(Expression.LEGS_MOMENT);
+
 
         if (emostate.getExpression(Expression.BLINK) > 0) {
             leftEyeBlink = true;
@@ -98,10 +107,10 @@ public class ClientExpressionFaceView extends JPanel {
         renderEyes(g, eyeDirection, leftEyeBlink, rightEyeBlink);
         renderEyeBrows(g, raiseBrowVal, furrowBrowVal);
         renderMouth(g, smile, clench, smirkLeft, smirkRight, laugh);
-        renderLeftLeg(g, 10);
-        renderRightLeg(g, 10);
-        renderLeftHand(g, 10);
-        renderRightHand(g, 10);
+        renderLeftLeg(g, legsMovement * 2F);
+        renderRightLeg(g, legsMovement * 2F);
+        renderLeftHand(g,  handsUp);
+        renderRightHand(g,  handsUp);
 
         this.repaint();
     }
@@ -257,29 +266,29 @@ public class ClientExpressionFaceView extends JPanel {
                 DimensionConstants.NOSE_Y1_POSITION + DimensionConstants.NOSE_WIDTH);
     }
 
-    private void renderLeftHand(Graphics g, int y) {
+    private void renderLeftHand(Graphics g, float y) {
         renderLine(g, DimensionConstants.NOSE_X_POSITION-25, DimensionConstants.NOSE_Y1_POSITION+30, DimensionConstants.NOSE_X_POSITION-18 ,
                 DimensionConstants.NOSE_Y1_POSITION+30);
 
-        renderLine(g, DimensionConstants.NOSE_X_POSITION-35, DimensionConstants.NOSE_Y1_POSITION+30 - y, DimensionConstants.NOSE_X_POSITION-25 ,
+        renderLine(g, DimensionConstants.NOSE_X_POSITION-35, DimensionConstants.NOSE_Y1_POSITION+30 - (int) (y * SCALE_Y_FACTOR), DimensionConstants.NOSE_X_POSITION-25 ,
                 DimensionConstants.NOSE_Y1_POSITION+30);
     }
 
-    private void renderRightHand(Graphics g, int y) {
+    private void renderRightHand(Graphics g, float y) {
         renderLine(g, DimensionConstants.NOSE_X_POSITION+18, DimensionConstants.NOSE_Y1_POSITION+30, DimensionConstants.NOSE_X_POSITION+25 ,
                 DimensionConstants.NOSE_Y1_POSITION+30);
 
         renderLine(g, DimensionConstants.NOSE_X_POSITION+25, DimensionConstants.NOSE_Y1_POSITION+30, DimensionConstants.NOSE_X_POSITION+35 ,
-                DimensionConstants.NOSE_Y1_POSITION+30-y);
+                DimensionConstants.NOSE_Y1_POSITION+30-(int) (y * SCALE_Y_FACTOR));
     }
 
-    private void renderLeftLeg(Graphics g, int x) {
-        renderLine(g, DimensionConstants.NOSE_X_POSITION-10, DimensionConstants.NOSE_Y1_POSITION+55, DimensionConstants.NOSE_X_POSITION-10 -x ,
+    private void renderLeftLeg(Graphics g, float x) {
+        renderLine(g, DimensionConstants.NOSE_X_POSITION-10, DimensionConstants.NOSE_Y1_POSITION+55, DimensionConstants.NOSE_X_POSITION-10 - (int) (x * SCALE_X_FACTOR) ,
                 DimensionConstants.NOSE_Y1_POSITION + DimensionConstants.NOSE_WIDTH+60);
     }
 
-    private void renderRightLeg(Graphics g, int x) {
-        renderLine(g, DimensionConstants.NOSE_X_POSITION+10, DimensionConstants.NOSE_Y1_POSITION+55, DimensionConstants.NOSE_X_POSITION+10 + x,
+    private void renderRightLeg(Graphics g, float x) {
+        renderLine(g, DimensionConstants.NOSE_X_POSITION+10, DimensionConstants.NOSE_Y1_POSITION+55, DimensionConstants.NOSE_X_POSITION+10 + (int) (x * SCALE_X_FACTOR),
                 DimensionConstants.NOSE_Y1_POSITION + DimensionConstants.NOSE_WIDTH+60);
     }
 
