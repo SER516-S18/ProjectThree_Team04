@@ -263,7 +263,7 @@ public class ServerValuesView extends JPanel {
 	        }
 	
 	        checkboxEye.setSelected(emostatePacketBuilder.getExpressionBoolean((Expression) comboExpressionBodyExpression.getSelectedItem()));
-	        previousExpressionEyes = (Expression) comboExpressionBodyExpression.getSelectedItem();
+            previousBodyMovement = (Expression) comboExpressionBodyExpression.getSelectedItem();
         });
         
         
