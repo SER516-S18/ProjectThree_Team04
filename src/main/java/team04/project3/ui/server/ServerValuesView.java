@@ -36,20 +36,30 @@ public class ServerValuesView extends JPanel {
     private final Expression[] expressionFaceLowerValues = new Expression[] {
             Expression.SMILE, Expression.CLENCH, Expression.SMIRK_LEFT, Expression.SMIRK_RIGHT, Expression.LAUGH
     };
+    
+    //added for body movement
+    private final Expression[] bodyMovement = new Expression[] {
+    	Expression.HAND_UP, Expression.HAND_DOWN, Expression.LEGS_MOMENT	
+    };
+    //till here
+    
     private final Emotion[] emotionValues = Emotion.values();
     private JComboBox<Expression> comboExpressionFaceEyes;
     private JComboBox<Expression> comboExpressionFaceUpper;
     private JComboBox<Expression> comboExpressionFaceLower;
+    private JComboBox<Expression> comboExpressionBodyExpression;
     private JComboBox<Emotion> comboEmotion;
     private JCheckBox checkboxEye;
     private JButton buttonEye;
     private JSpinner spinnerUpperFace;
+    private JSpinner spinnerBodyMovement;
     private JSpinner spinnerLowerFace;
     private JSpinner spinnerEmotion;
 
     private Expression previousExpressionEyes;
     private Expression previousExpressionFaceLower;
     private Expression previousExpressionFaceUpper;
+    private Expression previousBodyMovement;
 
     /**
      * Constructor for ServerValuesView, the input for the packet settings to send
@@ -234,7 +244,48 @@ public class ServerValuesView extends JPanel {
         panelInputEyes.add(buttonEye);
 
         panelBottom.add(Box.createVerticalStrut(16));
+        
+        //BodyMovement
+        JPanel panelInputBodyMovement = new JPanel();
+        panelInputBodyMovement.setOpaque(false);
+        panelInputBodyMovement.setLayout(new BoxLayout(panelInputBodyMovement, BoxLayout.X_AXIS));
+        panelInputBodyMovement.setMaximumSize(new Dimension(4096, 64));
+        panelInputBodyMovement.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.gray), "Body Movement",
+                TitledBorder.LEADING, TitledBorder.TOP, TextConstants.DEFAULT_FONT, Color.black));
+        panelBottom.add(panelInputBodyMovement);
+        
+        comboExpressionBodyExpression = new JComboBox<>();
+        comboExpressionBodyExpression.setModel(new DefaultComboBoxModel<>(bodyMovement));
+        comboExpressionBodyExpression.setMaximumSize(new Dimension(128, 128));
+        comboExpressionBodyExpression.addActionListener(event -> {
+	        if (previousBodyMovement != null) {
+	            emostatePacketBuilder.setExpression(previousBodyMovement, false);
+	        }
+	
+	        checkboxEye.setSelected(emostatePacketBuilder.getExpressionBoolean((Expression) comboExpressionBodyExpression.getSelectedItem()));
+	        previousExpressionEyes = (Expression) comboExpressionBodyExpression.getSelectedItem();
+        });
+        
+        
+        panelInputBodyMovement.add(comboExpressionBodyExpression, BorderLayout.WEST);
 
+        panelInputBodyMovement.add(Box.createHorizontalStrut(8));
+        
+        spinnerBodyMovement = new JSpinner( new SpinnerNumberModel(0.0d, 0.0d, 1d, 0.05d) );
+        spinnerBodyMovement.setMaximumSize(new Dimension(128, 128));
+        spinnerBodyMovement.setBorder(null);
+        spinnerBodyMovement.setFont(TextConstants.LARGE_FONT);
+        spinnerBodyMovement.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                handleComboExpressionChange(comboExpressionBodyExpression, spinnerBodyMovement);
+            }
+        });
+        panelInputBodyMovement.add(spinnerBodyMovement, BorderLayout.EAST);
+
+        panelBottom.add(Box.createVerticalStrut(16));
+        
+        
         // Upperface
         JPanel panelInputFaceUpper = new JPanel();
         panelInputFaceUpper.setOpaque(false);

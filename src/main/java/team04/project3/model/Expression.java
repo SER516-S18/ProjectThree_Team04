@@ -18,8 +18,11 @@ public enum Expression {
     @SerializedName("CLENCH") CLENCH("Clench", true),
     @SerializedName("SMIRK_LEFT") SMIRK_LEFT("Left smirk", true),
     @SerializedName("SMIRK_RIGHT") SMIRK_RIGHT("Right smirk", true),
-    @SerializedName("LAUGH") LAUGH("Laugh", true);
-
+    @SerializedName("LAUGH") LAUGH("Laugh", true),
+    @SerializedName("HAND_UP") HAND_UP("Hands Up", false),
+    @SerializedName("HAND_DOWN") HAND_DOWN("Hands Down", false),
+    @SerializedName("LEG_MOMENT") LEGS_MOMENT("Legs Moment", false);
+    
     /**
      * Enumeration constructor for expression
      * @param name Human-readable name for expression
