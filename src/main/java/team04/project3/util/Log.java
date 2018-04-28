@@ -18,6 +18,7 @@ public class Log {
         INFO(2, "INFO"),
         WARNING(3, "WARNING"),
         ERROR(4, "ERROR");
+    	
 
         private final int _level;
         private final String _name;
